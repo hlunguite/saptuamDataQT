@@ -21,7 +21,8 @@ CnewTransactionDlg::CnewTransactionDlg(bool bankImport, int importID, QWidget *p
     m_currentBankTransDetailIdx(-1),
     m_disableCheckRef(false),
     m_incomeTotal(0),
-    m_paymentTotal(0)
+    m_paymentTotal(0),
+    m_calcTotalCall(false)
 {
     ui->setupUi(this);
     setMaximumHeight(CsdUtils::maxHeight());
@@ -217,6 +218,10 @@ QString CnewTransactionDlg::getErrorString(EtransErrorType error)
 
 EtransErrorType CnewTransactionDlg::calcTotal()
 {
+    if (m_calcTotalCall) {
+        return TRANS_NO_ERROR;
+    }
+    m_calcTotalCall = true;
     m_allRowData.clear();
     m_accountSummaryMap.clear();
     m_bankTotalMap.clear();
@@ -229,17 +234,17 @@ EtransErrorType CnewTransactionDlg::calcTotal()
         QVector<QVariant> rowData(TRANS_END_COL);
         EtransErrorType error = checkForValidityOfRow(i, rowData);
         if (error == TRANS_IGNORE_ROW) {
-            //qDebug()<<"row "<<i<<" ignore row";
             continue;
         } else if (error != TRANS_NO_ERROR) {
-            //qDebug()<<"row "<<i<<" error "<<error<<" "<<getErrorString(error);
             status = error;
             continue;
         }
         m_allRowData.push_back(rowData);
         totalAmount += rowData.at(TRANS_AMOUNT_COL).toDouble();
     }
+
     if (status != TRANS_NO_ERROR) {
+        m_calcTotalCall = false;
         return status;
     }
     status = calcTotalNetTrans();
@@ -248,6 +253,7 @@ EtransErrorType CnewTransactionDlg::calcTotal()
             const SbanktransDetail& bankTransDetail = m_bankTransDetail.at(m_currentBankTransDetailIdx);
             double amount = bankTransDetail.m_amount;
             if (amount != totalAmount) {
+
                 status = TRANS_AMOUNT_NOT_MATCH_ERROR;
             } else {
                 int type = bankTransDetail.m_type;
@@ -256,9 +262,11 @@ EtransErrorType CnewTransactionDlg::calcTotal()
                 } else {
                     if (bankTransDetail.m_isIncome) {
                         if (m_incomeTotal != amount) {
+
                             status = TRANS_AMOUNT_NOT_MATCH_ERROR;
                         }
                     } else if (m_paymentTotal != amount) {
+
                         status = TRANS_AMOUNT_NOT_MATCH_ERROR;
                     }
                 }
@@ -275,6 +283,7 @@ EtransErrorType CnewTransactionDlg::calcTotal()
             status = TRANS_EMPTY_BANK_IMPORT_ERROR;
         }
     }
+    m_calcTotalCall = false;
     return status;
 }
 
@@ -296,8 +305,18 @@ EtransErrorType CnewTransactionDlg::calcTotalNetTrans()
         double amount = iterator1.value().second;
         int accountType = CaccountMap::Object()->getAccountType(accountName);
         if (accountType > REMITTANCE_ACCOUNT_TYPE) {
-            continue;
+            if (accountName == gBankChargeTransactionType ||
+                accountName == gLoanDisburseTransactionType) {
+                accountType = PAYMENT_ACCOUNT_TYPE;
+            } else if (accountName == gBankInterestTransactionType ||
+                       accountName == gBankCashDepositTransactionType ||
+                       accountName == gLoanRecoverTransactionType) {
+                accountType = INCOME_ACCOUNT_TYPE;
+            }  else {
+                continue;
+            }
         }
+
         QString income;
         QString payment;
         if (INCOME_ACCOUNT_TYPE == accountType || REQUEST_ACCOUNT_TYPE == accountType) {
@@ -308,7 +327,10 @@ EtransErrorType CnewTransactionDlg::calcTotalNetTrans()
             payment = QLocale(QLocale::English).toString(amount, 'f', 2);
             m_paymentTotal += amount;
         } else {
-            continue;
+
+
+                continue;
+
         }
         totalcount += count;
         int row = ui->m_summaryTable->rowCount();
@@ -417,7 +439,13 @@ EtransErrorType CnewTransactionDlg::checkForValidityOfRow(int row,  QVector<QVar
         return status;
     }
     QString accountName = account->text().trimmed();
+    QString transType = type->text().trimmed();
     double  value = amount->text().toDouble();
+    if (accountName.compare(gBankAccountName) == 0) {
+        accountName = transType;
+    } else if (accountName.compare("Loan Account") == 0) {
+        accountName = transType;
+    }
     if (m_accountSummaryMap.contains(accountName)) {
         int count = m_accountSummaryMap[accountName].first + 1;
         double accountValue = m_accountSummaryMap[accountName].second + value;
@@ -430,7 +458,7 @@ EtransErrorType CnewTransactionDlg::checkForValidityOfRow(int row,  QVector<QVar
     rowData[TRANS_FROM_TO_COL] = fromTo->text().trimmed();
     rowData[TRANS_AMOUNT_COL]  = value;
     rowData[TRANS_ACCOUNT_COL] = accountName;
-    rowData[TRANS_TYPE_COL] = type->text().trimmed();
+    rowData[TRANS_TYPE_COL] = transType;
     QString modeStr = mode->text().trimmed();
     int modeInt = CtransactionUtils::Object()->getTransactionMode(modeStr);
     rowData[TRANS_MODE_COL] = modeInt;
@@ -523,7 +551,9 @@ void CnewTransactionDlg::addRefAndModeForRow(int row)
             ui->m_transactionTable->setItem(row,TRANS_MODE_COL, mode);
             mode->setText(modeStr);
         } else if (updateMode) {
-            mode->setText(modeStr);
+            if (modeStr != mode->text().trimmed()) {
+                mode->setText(modeStr);
+            }
         }
         mode->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled );
         m_disableCheckRef = false;
@@ -536,18 +566,15 @@ void CnewTransactionDlg::populateBankImport(int importID)
         return;
     }
     QVector<SimportBankTransactionData> importName = CimportBankTransactionTable::Object()->getAllBankImport();
-    //qDebug()<<"import name size "<<importName.size();
     ui->m_bankImportTable->clearContents();
     ui->m_bankImportTable->setRowCount(0);
     m_importTableId.clear();
-    //qDebug()<<"populate import "<<importID<<" "<<importName.size();
     for (int i = 0; i < importName.size(); ++i) {
         int id = importName.at(i).m_id;
         QString daterange = importName.at(i).m_dateRange;
         QTableWidgetItem * row = new QTableWidgetItem(tr("%1").arg(daterange));
 
         row->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-        //qDebug()<<"Checking for id "<<id<<" - "<<importID;
         if (importID > 0 && (id ==	 importID)) {
             row->setCheckState(Qt::Checked);
         } else {
@@ -608,9 +635,7 @@ void CnewTransactionDlg::populateBankTransDetail()
     if (m_bankImport == false) {
         return;
     }
-    //qDebug()<<"populate bank trand detail for "<<m_importID;
    m_bankTransDetail = CbankTransactionTable::Object()->getAllbankTransForSameImport(m_importID);
-   //qDebug()<<"m_bankTransDetail size "<<m_bankTransDetail.size();
    if (m_bankTransDetail.isEmpty() == false) {
         m_currentBankTransDetailIdx = 0;
         displayCurrentBankImport();
@@ -905,6 +930,7 @@ EtransErrorType CnewTransactionDlg::checkRef(QTableWidgetItem *item)
         } else {
             status = TRANS_NO_ERROR;
             if (isModeRequireRef) {
+
                 status = TRANS_REF_EMPTY_ERROR;
                 item->setBackground(QColor(Qt::red));
                 item->setToolTip(getErrorString(status));
@@ -912,6 +938,7 @@ EtransErrorType CnewTransactionDlg::checkRef(QTableWidgetItem *item)
         }
     }
     if (status == TRANS_NO_ERROR && item) {
+
         item->setBackground(QColor(Qt::white));
         QString emptyTooltip;
         item->setToolTip(emptyTooltip);
@@ -933,9 +960,10 @@ EtransErrorType CnewTransactionDlg::checkType(QTableWidgetItem *item)
         bool isPayment = CtransactionUtils::Object()->getIsTransactionPayment(type);
         SbanktransDetail bankTrans = m_bankTransDetail.at(m_currentBankTransDetailIdx);
         if (isIncome && isPayment) {
-            if (bankTrans.m_type != BANK_CASH_DEPOSIT) {
+            Q_ASSERT(0);
+            /*if (bankTrans.m_type != BANK_CASH_DEPOSIT) {
                 return TRANS_BANK_AND_ENTRY_MISMATCH;
-            }
+            }*/
         }
         if (bankTrans.m_isIncome && isPayment) {
             return TRANS_PAYMENT_ACCOUNT_FOR_INCOME;
@@ -946,9 +974,11 @@ EtransErrorType CnewTransactionDlg::checkType(QTableWidgetItem *item)
         }
 
         EbankTransType bankTransType = bankTrans.m_type;
-        if ((bankTransType == BANK_CASH_DEPOSIT && type != BANK_CASH_DEPOSIT_TRANSACTION_TYPE) ||
-            (bankTransType != BANK_CASH_DEPOSIT && type == BANK_CASH_DEPOSIT_TRANSACTION_TYPE))  {
-            return TRANS_TYPE_MISMATCH;
+        if (!(type == BANK_CASH_DEPOSIT_TRANSACTION_TYPE && bankTransType == NOTASIGN)) {
+            if ((bankTransType == BANK_CASH_DEPOSIT && type != BANK_CASH_DEPOSIT_TRANSACTION_TYPE) ||
+                (bankTransType != BANK_CASH_DEPOSIT && type == BANK_CASH_DEPOSIT_TRANSACTION_TYPE))  {
+                return TRANS_TYPE_MISMATCH;
+            }
         }
         if ((bankTransType == BANK_CHARGES && type != BANK_CHARGES_TRANSACTION_TYPE) ||
              (bankTransType != BANK_CHARGES && type == BANK_CHARGES_TRANSACTION_TYPE)) {
@@ -992,6 +1022,7 @@ void CnewTransactionDlg::on_m_cancelButton_clicked()
 
 void CnewTransactionDlg::on_m_okButton_clicked()
 {
+   m_calcTotalCall = false;
     EtransErrorType error = calcTotal();
     if (error != TRANS_NO_ERROR) {
         QString msg = getErrorString(error);
@@ -1000,6 +1031,7 @@ void CnewTransactionDlg::on_m_okButton_clicked()
         return;
     }
     int rowCount = m_allRowData.size();
+
     QSet<int> fromIDSet;
     for (int i = 0; i < rowCount; ++i) {
         const QVector<QVariant>& rowData = m_allRowData.at(i);
@@ -1029,7 +1061,6 @@ void CnewTransactionDlg::on_m_okButton_clicked()
         transData.m_particular = rowData.at(TRANS_PARTICULAR_REMARK_COL).toString();
         transData.save();
 
-        //qDebug()<<"Add for "<<rowData.at(TRANS_FROM_TO_COL).toString()<<" type "<<rowData.at(TRANS_TYPE_COL).toString()<<" "<<transData.m_type<<" amount "<<transData.m_amount<<" account "<<rowData.at(TRANS_ACCOUNT_COL).toString();
     }
     if (m_bankImport) {
         SbanktransDetail bankTrans = m_bankTransDetail.at(m_currentBankTransDetailIdx);
@@ -1075,9 +1106,13 @@ void CnewTransactionDlg::on_m_transactionTable_itemChanged(QTableWidgetItem *ite
         calcTotal();
         return;
     }
+    if (col == TRANS_TYPE_COL) {
+        addRefAndModeForRow(item->row());
 
+    }
     if (col == TRANS_ACCOUNT_COL) {
         checkAccount(item);
+
         calcTotal();
         return;
     }
@@ -1090,6 +1125,7 @@ void CnewTransactionDlg::on_m_transactionTable_itemChanged(QTableWidgetItem *ite
     if (col == TRANS_REF_COL) {
         if (m_disableCheckRef == false) {
             checkRef(item);
+
             calcTotal();
         }
         return;

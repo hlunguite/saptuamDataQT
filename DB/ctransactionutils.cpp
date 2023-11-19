@@ -106,13 +106,13 @@ CtransactionUtils::CtransactionUtils()
         m_modeStrTypeMap.insert(typeStr, type);
     }
 
-    m_transTypeMap.insert(INCOME_TRANSACTION_TYPE, "Income");
-    m_transTypeMap.insert(PAYMENT_TRANSACTION_TYPE, "Expense");
-    m_transTypeMap.insert(LOAN_RECOVERY_TRANSACTION_TYPE, "Loan Recover");
-    m_transTypeMap.insert(LOAN_DISBURSE_TRANSACTION_TYPE, "Loan Disburse");
-    m_transTypeMap.insert(BANK_CHARGES_TRANSACTION_TYPE, "Bank Charges");
-    m_transTypeMap.insert(BANK_INTEREST_TRANSACTION_TYPE, "Bank Interest");
-    m_transTypeMap.insert(BANK_CASH_DEPOSIT_TRANSACTION_TYPE, "Bank Cash deposit");
+    m_transTypeMap.insert(INCOME_TRANSACTION_TYPE, gIncomeTransactionType);
+    m_transTypeMap.insert(PAYMENT_TRANSACTION_TYPE, gExpenseTransactionType);
+    m_transTypeMap.insert(LOAN_RECOVERY_TRANSACTION_TYPE, gLoanRecoverTransactionType);
+    m_transTypeMap.insert(LOAN_DISBURSE_TRANSACTION_TYPE, gLoanDisburseTransactionType);
+    m_transTypeMap.insert(BANK_CHARGES_TRANSACTION_TYPE, gBankChargeTransactionType);
+    m_transTypeMap.insert(BANK_INTEREST_TRANSACTION_TYPE, gBankInterestTransactionType);
+    m_transTypeMap.insert(BANK_CASH_DEPOSIT_TRANSACTION_TYPE, gBankCashDepositTransactionType);
 
     QMapIterator<EtransactionType, QString> iterator2(m_transTypeMap);
 
@@ -195,7 +195,7 @@ bool CtransactionUtils::getIsTransactionPayment(EtransactionType type)
     case PAYMENT_TRANSACTION_TYPE:
     case LOAN_DISBURSE_TRANSACTION_TYPE:
     case BANK_CHARGES_TRANSACTION_TYPE:
-    case BANK_CASH_DEPOSIT_TRANSACTION_TYPE: ret = true; break;
+    /*case BANK_CASH_DEPOSIT_TRANSACTION_TYPE:*/ ret = true; break;
     default:ret = false; break;
     }
 

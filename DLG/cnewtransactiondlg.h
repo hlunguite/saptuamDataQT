@@ -98,6 +98,7 @@ private:
     bool checkRefAlreadyHasTrans();
     void addInPrevTable(QVector<StransactionData*>& allTrns);
     void addInPrevTable(int contactID1, int contactID2);
+    bool		m_calcTotalCall;
     // QWidget interface
 protected:
     virtual void resizeEvent(QResizeEvent *);

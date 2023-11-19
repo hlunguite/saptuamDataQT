@@ -8,7 +8,13 @@
 #define FALSE 0
 #define TRUE 1
 
-
+const QString gIncomeTransactionType = "Income";
+const QString gExpenseTransactionType = "Expense";
+const QString gLoanRecoverTransactionType = "Loan Recover";
+const QString gLoanDisburseTransactionType = "Loan Disburse";
+const QString gBankChargeTransactionType = "Bank Charges";
+const QString gBankInterestTransactionType = "Bank Interest";
+const QString gBankCashDepositTransactionType = "Bank Cash deposit";
 
 enum EtransactionType {
     INVALID_TRANSACTION_TYPE = 0,
