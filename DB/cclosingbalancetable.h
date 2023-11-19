@@ -40,7 +40,7 @@ enum EclosingBalanceDetailTableFieldIndex {
     CLOSING_DETAIL_ACCOUNT_DEPET_TABLE_ID_IDX,
     CLOSING_DETAIL_IS_ACCOUNT_ID_IDX,
     CLOSING_DETAIL_AMOUNT_TABLE_ID_IDX,
-    CLOSING_DETAIL_ACCOUNT_NAME_ID_IDX, // if accuont id is zero. mostly in caseh of bank or cash.
+    CLOSING_DETAIL_CASH_OR_BANK_NAME_IDX, // if accuont id is zero. mostly in caseh of bank or cash.
     MAX_CLOSING_DETAIL_TABLE_FIELD
 };
 

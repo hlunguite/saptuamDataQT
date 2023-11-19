@@ -114,7 +114,7 @@ void CclosingBalanceDetailTable::serializeTable(QDataStream &out, const Tobjects
     data.m_accountOrDeptTableID = obj.at(CLOSING_DETAIL_ACCOUNT_DEPET_TABLE_ID_IDX).toInt();
     data.m_isAccount = obj.at(CLOSING_DETAIL_IS_ACCOUNT_ID_IDX).toBool();
     data.m_amount = obj.at(CLOSING_DETAIL_AMOUNT_TABLE_ID_IDX).toDouble();
-    data.m_cashOrBankName = obj.at(CLOSING_DETAIL_ACCOUNT_NAME_ID_IDX).toString();
+    data.m_cashOrBankName = obj.at(CLOSING_DETAIL_CASH_OR_BANK_NAME_IDX).toString();
 
     data.serialize(out);
 }
@@ -149,7 +149,7 @@ int SclosingDetailData::save()
     data[CLOSING_DETAIL_ACCOUNT_DEPET_TABLE_ID_IDX] = m_accountOrDeptTableID;
     data[CLOSING_DETAIL_IS_ACCOUNT_ID_IDX] = m_isAccount;
     data[CLOSING_DETAIL_AMOUNT_TABLE_ID_IDX] =  m_amount;
-    data[CLOSING_DETAIL_ACCOUNT_NAME_ID_IDX] = m_cashOrBankName;
+    data[CLOSING_DETAIL_CASH_OR_BANK_NAME_IDX] = m_cashOrBankName;
     if (m_id == 0) {
         TfilterObjType filter;
         TobjectList values;
@@ -167,7 +167,7 @@ int SclosingDetailData::save()
         CclosingBalanceDetailTable::Object()->updateValue(m_accountOrDeptTableID, CLOSING_DETAIL_ACCOUNT_DEPET_TABLE_ID_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
         CclosingBalanceDetailTable::Object()->updateValue(m_isAccount, CLOSING_DETAIL_IS_ACCOUNT_ID_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
         CclosingBalanceDetailTable::Object()->updateValue(m_amount, CLOSING_DETAIL_AMOUNT_TABLE_ID_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
-        CclosingBalanceDetailTable::Object()->updateValue(m_cashOrBankName, CLOSING_DETAIL_ACCOUNT_NAME_ID_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
+        CclosingBalanceDetailTable::Object()->updateValue(m_cashOrBankName, CLOSING_DETAIL_CASH_OR_BANK_NAME_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
 
     }
 
