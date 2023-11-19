@@ -499,10 +499,30 @@ void CnewTransactionDlg::addRefAndModeForRow(int row)
             modeStr = CtransactionUtils::Object()->getTransactionModeStr(BANK_INTEREST_TRANSACTION_MODE);
             //modeStr = "Bank Interest";
         }
+
+        QTableWidgetItem * type = ui->m_transactionTable->item(row,TRANS_TYPE_COL);
+        bool updateMode = false;
+        if (type) {
+            int transType = CtransactionUtils::Object()->getTransactionType(type->text());
+            if (transType == (int)BANK_CASH_DEPOSIT_TRANSACTION_TYPE) {
+                modeStr = CtransactionUtils::Object()->getTransactionModeStr(BANK_CASH_DEPOSIT_TRANSACTION_MODE);
+                updateMode = true;
+            } else if (transType == (int)BANK_CHARGES_TRANSACTION_TYPE) {
+                modeStr = CtransactionUtils::Object()->getTransactionModeStr(BANK_CHARGES_TRANSACTION_MODE);
+                updateMode = true;
+            }
+            if (transType == (int)BANK_INTEREST_TRANSACTION_TYPE) {
+                modeStr = CtransactionUtils::Object()->getTransactionModeStr(BANK_INTEREST_TRANSACTION_MODE);
+                updateMode = true;
+            }
+        }
+
         QTableWidgetItem * mode = ui->m_transactionTable->item(row, TRANS_MODE_COL);
         if(mode == NULL){
             mode =   new QTableWidgetItem();
             ui->m_transactionTable->setItem(row,TRANS_MODE_COL, mode);
+            mode->setText(modeStr);
+        } else if (updateMode) {
             mode->setText(modeStr);
         }
         mode->setFlags(Qt::ItemIsSelectable|Qt::ItemIsEnabled );
