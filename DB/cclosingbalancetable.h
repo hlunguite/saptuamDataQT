@@ -11,8 +11,8 @@ enum EclosingBalanceTableFieldIndex {
 struct SclosingData: public SdbObject
 {
 public:
-    SclosingData();
-    ~SclosingData();
+    SclosingData(){}
+    ~SclosingData(){}
     int save();
     void deleteObj();
     virtual void serialize(QDataStream& out);
@@ -48,8 +48,8 @@ enum EclosingBalanceDetailTableFieldIndex {
 struct SclosingDetailData: public SdbObject
 {
 public:
-    SclosingDetailData();
-    ~SclosingDetailData();
+    SclosingDetailData(){}
+    ~SclosingDetailData(){}
     int save();
     void deleteObj();
     virtual void serialize(QDataStream& out);
