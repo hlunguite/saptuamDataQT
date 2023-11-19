@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CsmsDlg</class>
+ <widget class="QDialog" name="CsmsDlg">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>808</width>
+    <height>519</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QDateEdit" name="m_fromDate">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>20</y>
+     <width>110</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="displayFormat">
+    <string>d MMM yyyy</string>
+   </property>
+   <property name="calendarPopup">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QDateEdit" name="m_toDate">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>20</y>
+     <width>110</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="displayFormat">
+    <string>d MMM yyyy</string>
+   </property>
+   <property name="calendarPopup">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="m_table">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>50</y>
+     <width>691</width>
+     <height>192</height>
+    </rect>
+   </property>
+   <column>
+    <property name="text">
+     <string>Date</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>From</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Account</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Amount</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Phone</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QPushButton" name="m_save">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>470</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>CSV</string>
+   </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="m_cancel">
+   <property name="geometry">
+    <rect>
+     <x>660</x>
+     <y>470</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

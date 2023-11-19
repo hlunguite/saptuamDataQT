@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CselectRemittance</class>
+ <widget class="QDialog" name="CselectRemittance">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>671</width>
+    <height>469</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Select Remittance</string>
+  </property>
+  <widget class="QGroupBox" name="m_selectRemittanceBox">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>80</y>
+     <width>511</width>
+     <height>291</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Select remittance action</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_warningLbl">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>40</y>
+     <width>531</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="m_okBtn">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>390</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>OK</string>
+   </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="m_cancelBtn">
+   <property name="geometry">
+    <rect>
+     <x>430</x>
+     <y>390</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CimportTransDlg</class>
+ <widget class="QDialog" name="CimportTransDlg">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>956</width>
+    <height>364</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QPushButton" name="m_selectBtn">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select File</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="m_processBtn">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>310</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Process</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="m_cancelBtn">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>310</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="m_table">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>50</y>
+     <width>911</width>
+     <height>192</height>
+    </rect>
+   </property>
+   <column>
+    <property name="text">
+     <string>Date</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>From</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Account</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Amount</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Mode</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Reference</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Receipt Book</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Receipt Sl</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Trans ID</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QProgressBar" name="m_progressBar">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>20</y>
+     <width>411</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="value">
+    <number>24</number>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

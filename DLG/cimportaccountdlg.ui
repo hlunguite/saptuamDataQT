@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CimportAccountDlg</class>
+ <widget class="QDialog" name="CimportAccountDlg">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>959</width>
+    <height>353</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QPushButton" name="m_selectBtn">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>20</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select File</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="m_table">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>50</y>
+     <width>711</width>
+     <height>192</height>
+    </rect>
+   </property>
+   <column>
+    <property name="text">
+     <string>Import ID</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Account Name</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Account Type</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Account ID</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QPushButton" name="m_processBtn">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>300</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Process</string>
+   </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="m_cancelBtn">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>300</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

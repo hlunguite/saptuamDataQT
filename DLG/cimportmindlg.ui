@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CimportMinDlg</class>
+ <widget class="QDialog" name="CimportMinDlg">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1118</width>
+    <height>525</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QPushButton" name="m_minFileBtn">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>20</y>
+     <width>131</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select Min File</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="m_table">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>50</y>
+     <width>1061</width>
+     <height>341</height>
+    </rect>
+   </property>
+   <column>
+    <property name="text">
+     <string>Import ID</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Title</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>First Name</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Last Name</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Relationship</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Phone</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Parent Fist Name</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Parent Last Name</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Bank Name</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Contact Table ID</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Table ID</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QPushButton" name="m_nextBtn">
+   <property name="geometry">
+    <rect>
+     <x>351</x>
+     <y>461</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Process</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="m_closeBtn">
+   <property name="geometry">
+    <rect>
+     <x>473</x>
+     <y>461</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+  </widget>
+  <widget class="QProgressBar" name="m_progressBar">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>20</y>
+     <width>231</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="value">
+    <number>24</number>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

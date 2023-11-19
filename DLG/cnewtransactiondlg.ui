@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CnewTransactionDlg</class>
+ <widget class="QDialog" name="CnewTransactionDlg">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>861</width>
+    <height>524</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QDateEdit" name="m_date">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>110</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="displayFormat">
+    <string>dd MMM yyyy</string>
+   </property>
+   <property name="calendarPopup">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="m_transactionTable">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>50</y>
+     <width>821</width>
+     <height>192</height>
+    </rect>
+   </property>
+   <property name="rowCount">
+    <number>10</number>
+   </property>
+   <row/>
+   <row/>
+   <row/>
+   <row/>
+   <row/>
+   <row/>
+   <row/>
+   <row/>
+   <row/>
+   <row/>
+   <column>
+    <property name="text">
+     <string>From/To</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Amount</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Account</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Type</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Mode</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Reference</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Particular/Remark</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QTableWidget" name="m_summaryTable">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>340</y>
+     <width>291</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <column>
+    <property name="text">
+     <string>Account</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Count</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Income Amount</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Expense Amount</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QTableWidget" name="m_bankTotalTable">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>280</y>
+     <width>221</width>
+     <height>121</height>
+    </rect>
+   </property>
+   <column>
+    <property name="text">
+     <string>Bank Ref/Cheque No</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Amount</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QPushButton" name="m_okButton">
+   <property name="geometry">
+    <rect>
+     <x>690</x>
+     <y>450</y>
+     <width>113</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string extracomment="Add Transaction"/>
+   </property>
+   <property name="toolTipDuration">
+    <number>3</number>
+   </property>
+   <property name="whatsThis">
+    <string extracomment="Add Transaction"/>
+   </property>
+   <property name="text">
+    <string>OK</string>
+   </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="m_cancelButton">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>450</y>
+     <width>113</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string extracomment="Cancel"/>
+   </property>
+   <property name="toolTipDuration">
+    <number>3</number>
+   </property>
+   <property name="statusTip">
+    <string extracomment="Cancel"/>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_summaryLbl">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>310</y>
+     <width>58</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Summary</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_verifyBankLbl">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>250</y>
+     <width>131</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Verify Bank Amount</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="m_bankImportTable">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>250</y>
+     <width>256</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <column>
+    <property name="text">
+     <string>Select</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QLabel" name="m_bankImportLbl">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>410</y>
+     <width>231</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select Bank Transection to Process</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="m_importLine">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>20</y>
+     <width>661</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="m_previousTable">
+   <property name="geometry">
+    <rect>
+     <x>580</x>
+     <y>370</y>
+     <width>221</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <column>
+    <property name="text">
+     <string>Previous Transaction From same account</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QPushButton" name="m_skipBtn">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>490</y>
+     <width>113</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string extracomment="Skip current transaction. Still available for future "/>
+   </property>
+   <property name="toolTipDuration">
+    <number>3</number>
+   </property>
+   <property name="text">
+    <string>Skip</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="m_rejectBtn">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>490</y>
+     <width>113</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string extracomment="Skip current transaction. Will not available for future"/>
+   </property>
+   <property name="toolTipDuration">
+    <number>3</number>
+   </property>
+   <property name="text">
+    <string>Reject</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

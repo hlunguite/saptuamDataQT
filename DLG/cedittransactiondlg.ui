@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CeditTransactionDlg</class>
+ <widget class="QDialog" name="CeditTransactionDlg">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>598</width>
+    <height>425</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QDateEdit" name="m_dateEdit">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>110</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="displayFormat">
+    <string>d MMM yyyy</string>
+   </property>
+   <property name="calendarPopup">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>380</y>
+     <width>164</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QPushButton" name="m_cancelButton">
+      <property name="text">
+       <string>Cancel</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="m_okButton">
+      <property name="text">
+       <string>OK</string>
+      </property>
+      <property name="default">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>62</y>
+     <width>117</width>
+     <height>311</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="m_fromToLbl">
+      <property name="text">
+       <string>From/To</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="m_amountlbl">
+      <property name="text">
+       <string>Amount</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="m_accountlbl">
+      <property name="text">
+       <string>Account</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="m_typelbl">
+      <property name="text">
+       <string>Type</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="m_modelbl">
+      <property name="text">
+       <string>Mode</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="m_referencelbl">
+      <property name="text">
+       <string>Reference</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="m_receiptBookLbl">
+      <property name="text">
+       <string>Receipt Book</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="m_receiptNoLbl">
+      <property name="text">
+       <string>Receipt No</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="m_particularLbl">
+      <property name="text">
+       <string>Particular/Remark</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="m_invalidCheckbox">
+      <property name="text">
+       <string>Mark Invalid</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>66</y>
+     <width>421</width>
+     <height>312</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <widget class="QLineEdit" name="m_fromTo"/>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="m_amount"/>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="m_account"/>
+    </item>
+    <item>
+     <widget class="QComboBox" name="m_typeCombo"/>
+    </item>
+    <item>
+     <widget class="QComboBox" name="m_modecombo"/>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="m_reference"/>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="m_receiptBook"/>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="m_receiptNo"/>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="m_particular"/>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="m_invalidReason">
+      <property name="placeholderText">
+       <string>Invalid reason</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QLabel" name="m_label">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>390</y>
+     <width>351</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>m_fromTo</tabstop>
+  <tabstop>m_amount</tabstop>
+  <tabstop>m_account</tabstop>
+  <tabstop>m_typeCombo</tabstop>
+  <tabstop>m_modecombo</tabstop>
+  <tabstop>m_reference</tabstop>
+  <tabstop>m_receiptBook</tabstop>
+  <tabstop>m_receiptNo</tabstop>
+  <tabstop>m_particular</tabstop>
+  <tabstop>m_invalidCheckbox</tabstop>
+  <tabstop>m_invalidReason</tabstop>
+  <tabstop>m_cancelButton</tabstop>
+  <tabstop>m_okButton</tabstop>
+  <tabstop>m_dateEdit</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

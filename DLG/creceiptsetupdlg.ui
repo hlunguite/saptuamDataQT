@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CreceiptSetupDlg</class>
+ <widget class="QDialog" name="CreceiptSetupDlg">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1163</width>
+    <height>432</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QGroupBox" name="m_addNewReceiptGroup">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>9</y>
+     <width>771</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Add New Receipt Book</string>
+   </property>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>30</y>
+      <width>671</width>
+      <height>33</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="m_bookNolbl">
+       <property name="text">
+        <string>Book No</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="m_bookNo"/>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="m_startNolbl">
+       <property name="text">
+        <string>Start No</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLineEdit" name="m_startNo"/>
+     </item>
+     <item row="0" column="4">
+      <widget class="QLabel" name="m_endNolbl">
+       <property name="text">
+        <string>End No</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="QLineEdit" name="m_endNo"/>
+     </item>
+     <item row="0" column="6">
+      <widget class="QPushButton" name="m_addReceiptBtn">
+       <property name="text">
+        <string>Add</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QTableWidget" name="m_availableReceiptTable">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>170</y>
+     <width>551</width>
+     <height>241</height>
+    </rect>
+   </property>
+   <column>
+    <property name="text">
+     <string>Select Receipt Book for Account</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Select Account for Receipt Book</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QTableWidget" name="m_receiptAccountMap">
+   <property name="geometry">
+    <rect>
+     <x>770</x>
+     <y>140</y>
+     <width>341</width>
+     <height>192</height>
+    </rect>
+   </property>
+   <column>
+    <property name="text">
+     <string>Select Account to Remove</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Receipt Book</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QPushButton" name="m_cancelBtn">
+   <property name="geometry">
+    <rect>
+     <x>824</x>
+     <y>351</y>
+     <width>69</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="default">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_selectlbl">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>130</y>
+     <width>161</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select Account to assign </string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_accountReceiptlbl">
+   <property name="geometry">
+    <rect>
+     <x>780</x>
+     <y>90</y>
+     <width>141</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Account Receipt</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="m_clearBtn">
+   <property name="geometry">
+    <rect>
+     <x>585</x>
+     <y>130</y>
+     <width>62</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Clear</string>
+   </property>
+   <property name="default">
+    <bool>false</bool>
+   </property>
+   <property name="flat">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="m_addReceiptAccountBtn">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>130</y>
+     <width>211</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Add Receipt Book To Account-&gt;</string>
+   </property>
+   <property name="default">
+    <bool>false</bool>
+   </property>
+   <property name="flat">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="m_removeReceiptAccountBtn">
+   <property name="geometry">
+    <rect>
+     <x>701</x>
+     <y>120</y>
+     <width>241</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;-Remove Receipt Book from Account</string>
+   </property>
+   <property name="default">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="m_selDeptBox">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>130</y>
+     <width>69</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>m_bookNo</tabstop>
+  <tabstop>m_startNo</tabstop>
+  <tabstop>m_endNo</tabstop>
+  <tabstop>m_addReceiptBtn</tabstop>
+  <tabstop>m_addReceiptAccountBtn</tabstop>
+  <tabstop>m_clearBtn</tabstop>
+  <tabstop>m_removeReceiptAccountBtn</tabstop>
+  <tabstop>m_cancelBtn</tabstop>
+  <tabstop>m_availableReceiptTable</tabstop>
+  <tabstop>m_receiptAccountMap</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
