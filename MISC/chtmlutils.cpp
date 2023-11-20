@@ -5,7 +5,10 @@
 ChtmlUtils::ChtmlUtils()
 {
     m_cellHeight = "15";
-    m_fontSize = "100";
+    //m_fontSize = "9";
+    //m_fontSize =" style=\"font-size:" + QString::number(9,'f',1) +"px;\" ";
+    m_fontSize =" style=\"font-size:" + QString::number(9,'f',1) +"px;\" ";
+
     resetTableData();
 
 }
@@ -53,7 +56,9 @@ QString ChtmlUtils::fontSize() const
 
 void ChtmlUtils::setFontSize(const QString &newFontSize)
 {
-    m_fontSize = newFontSize;
+    //m_fontSize = newFontSize;
+    m_fontSize =" style=\"font-size:" + newFontSize +"px;\" ";
+
 }
 
 int ChtmlUtils::tableColCount() const
@@ -110,7 +115,7 @@ void ChtmlUtils::createHeaderRow()
     }
     resetTableData(); // reset everything to be sure
     m_tableStage = CREATE_HTML_TABLE_HEADER;
-    m_htmlTable +="<tr style=\"font-size:" + m_fontSize  + "%;\">";
+    m_htmlTable +="<tr " + m_fontSize  + ">";
 
 
     ++m_tableRowCount;
@@ -161,8 +166,10 @@ void ChtmlUtils::createRow(int defaultcolno)
         Q_ASSERT(0);
     }
     setIsTableHeader(false);
-    m_htmlTable += QString("<tr style=\"font-size:") + m_fontSize + "%;\">";
+    QString line = QString("<tr ") + m_fontSize + ">";
+    m_htmlTable += line;
 
+    //qDebug()<<"html row:"<<line;
 
     m_tableStage = ADD_HTML_TABLE_ROW;
     m_tableColCount = defaultcolno;
@@ -288,9 +295,9 @@ void ChtmlUtils::formatString(QString str, bool paragraph)
     //qDebug()<<"afer "<<str;
 
     if(paragraph){
-        str1 ="<p style=\"font-size:" + m_fontSize+ "%;\">" + str + "</p>";
+        str1 ="<p " + m_fontSize+ ">" + str + "</p>";
     }else {
-       str1  = "<span style=\"font-size:" + m_fontSize + "%;\">"  + str + "</span>";
+       str1  = "<span " + m_fontSize + ">"  + str + "</span>";
 
     }
     m_htmlTable += str1;
