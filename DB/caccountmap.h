@@ -19,6 +19,8 @@ public:
     int 	getAccountID(const QString& accontName) const;
     int		getAccountType(const QString& accountName) const;
     const QStringList& getAccountList() { return m_accountList;}
+    const QStringList& getIncomeAccountList() { return m_incomeAccountList;}
+    const QStringList& getPaymentAccountList() { return m_paymentAccountList;}
     const QStringList& getAccountListWithHqReceipt() { return m_accountListWithHqReceipt;}
     const QSet<int>& getAccountIDListWithHqReceipt() { return m_accountIDListWithHqReceipt;}
     const QStringList& getDeptList() { return m_departmentList;}
@@ -40,6 +42,8 @@ private:
     QMap<QString, int>	m_accountNameIdMap;
     QMap<QString, int>  m_accountNameTypeMap;
     QStringList			m_accountList;
+    QStringList         m_incomeAccountList;
+    QStringList         m_paymentAccountList;
     QStringList			m_accountListWithHqReceipt;
     QSet<int>           m_accountIDListWithHqReceipt;
     std::set<int>       m_allAccount;

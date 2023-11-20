@@ -51,6 +51,16 @@ void CaccountMap::populateAccountMapInt()
             m_allAccount.insert(id);
             QString name = values.at(i).at(ACCOUNT_NAME_IDX).toString();
             EaccountType type = (EaccountType)values.at(i).at(ACCOUNT_TYPE_IDX).toInt();
+            if (type == INCOME_ACCOUNT_TYPE || type == REQUEST_ACCOUNT_TYPE) {
+                m_incomeAccountList.push_back(name);
+            } else if (type == PAYMENT_ACCOUNT_TYPE || type == REMITTANCE_ACCOUNT_TYPE ){
+                m_paymentAccountList.push_back(name);
+            } else if (type == BANK_ACCOUNT_TYPE || type == LOAN_ACCOUNT_TYPE) {
+                m_incomeAccountList.push_back(name);
+                m_paymentAccountList.push_back(name);
+            }
+
+
             m_accountIdNameMap.insert(id, name);
             m_accountNameIdMap.insert(name, id);
             m_accountList.push_back(name);
@@ -68,6 +78,8 @@ void CaccountMap::populateAccountMapInt()
         }
         m_accountList.sort();
         m_accountListWithHqReceipt.sort();
+        m_incomeAccountList.sort();
+        m_paymentAccountList.sort();
     }
 
 

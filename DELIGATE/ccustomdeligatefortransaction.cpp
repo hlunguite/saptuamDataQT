@@ -66,6 +66,10 @@ QWidget *CcustomDeligateForTransaction::createEditor(QWidget *parent, const QSty
             cmb->addItems(accountList);
         } else {
             const QStringList& accountList = CaccountMap::Object()->getAccountList();
+            //const QStringList& accountList = CaccountMap::Object()->getIncomeAccountList();
+            //const QStringList& accountList = CaccountMap::Object()->getPaymentAccountList();
+
+
             cmb->addItems(accountList);
         }
         return cmb;
