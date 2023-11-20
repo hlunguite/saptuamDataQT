@@ -181,7 +181,7 @@ void CsmsDlg::on_m_save_clicked()
                 msg += "*" + name + "*";
                 msg += ", Pathian gam nasepna diang a na thilpiak \n";
                 for (auto amount: keyValueDate.second) {
-                    msg += amount + " \n";
+                    msg += amount + " \r";
                 }
                 msg += date + " niin kipak tak in ka sang hi.\n";
             }
@@ -189,7 +189,7 @@ void CsmsDlg::on_m_save_clicked()
         msg += "\nToupa'n hon vualzawl hen\n";
         msg += "*Sum saite* \n";
         msg += "*" + CsdUtils::getSaptuamMin() + "*";
-        msg = QString::number(count) + "," + phone + ", \"" + msg + "\"\n";
+        msg = QString::number(count) + "," + phone + ",\"" + msg + "\"\n";
         csvList.push_back(msg);
     }
     if (csvList.isEmpty() == false) {
