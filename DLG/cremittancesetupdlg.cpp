@@ -68,12 +68,12 @@ void CremittanceSetupDlg::populateTable()
 
 void CremittanceSetupDlg::populateAllAccount()
 {
-
+    //TODO
 }
 
 void CremittanceSetupDlg::populateRemittance(QString remitName)
 {
-
+    //TODO
 }
 
 void CremittanceSetupDlg::on_m_remitNameLineEdit_editingFinished()
@@ -86,5 +86,11 @@ void CremittanceSetupDlg::on_m_remitNameLineEdit_editingFinished()
 void CremittanceSetupDlg::on_m_remitNameList_currentTextChanged(const QString &arg1)
 {
    populateTable();
+}
+
+
+void CremittanceSetupDlg::on_m_cancelBtn_clicked()
+{
+   emit reject();
 }
 

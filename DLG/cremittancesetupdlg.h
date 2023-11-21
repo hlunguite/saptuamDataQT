@@ -29,6 +29,7 @@ private slots:
    void populateTable();
    void populateAllAccount();
    void populateRemittance(QString remitName);
+   void on_m_cancelBtn_clicked();
 };
 
 #endif // CREMITTANCESETUPDLG_H
