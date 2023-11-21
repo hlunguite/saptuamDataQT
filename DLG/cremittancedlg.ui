@@ -181,29 +181,6 @@
     <string>Cancel</string>
    </property>
   </widget>
-  <widget class="QLabel" name="m_remitCombolbl">
-   <property name="geometry">
-    <rect>
-     <x>21</x>
-     <y>21</y>
-     <width>80</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Remittance For</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="m_remittanceNameCombo">
-   <property name="geometry">
-    <rect>
-     <x>104</x>
-     <y>21</y>
-     <width>221</width>
-     <height>22</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QTableWidget" name="m_table">
    <property name="geometry">
     <rect>
@@ -259,13 +236,13 @@
     </property>
    </column>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>560</x>
-     <y>20</y>
-     <width>179</width>
-     <height>24</height>
+     <x>640</x>
+     <y>10</y>
+     <width>247</width>
+     <height>34</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -288,13 +265,13 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>330</x>
-     <y>20</y>
-     <width>226</width>
-     <height>24</height>
+     <x>280</x>
+     <y>10</y>
+     <width>345</width>
+     <height>34</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -331,6 +308,28 @@
        <bool>true</bool>
       </property>
      </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>221</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="m_remitCombolbl">
+      <property name="text">
+       <string>Remittance For</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QComboBox" name="m_remittanceNameCombo"/>
     </item>
    </layout>
   </widget>
