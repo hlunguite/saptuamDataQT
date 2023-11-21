@@ -174,15 +174,15 @@ void CnewTransactionDlg::resize()
     x = ui->m_transactionTable->x() + ui->m_transactionTable->width() -(3*buttonwidth);
 
     x += buttonwidth;
-
+    int x1 = x;
     ui->m_cancelButton->setGeometry(x,y,buttonwidth,buttonheight);
-    x += buttonwidth;
+    x += buttonwidth + 3;
     ui->m_okButton->setGeometry(x,y,buttonwidth,buttonheight);
     if (m_bankImport) {
-        x -= buttonwidth;
+        x = x1;
         y += buttonheight;
         ui->m_skipBtn->setGeometry(x,y,buttonwidth,buttonheight);
-        x += buttonwidth;
+        x += buttonwidth + 3;
         ui->m_rejectBtn->setGeometry(x,y,buttonwidth,buttonheight);
 
 
