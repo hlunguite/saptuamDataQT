@@ -59,6 +59,8 @@ MainWindow::MainWindow(QWidget *parent) :
                 qApp->primaryScreen()->availableGeometry() ));
     createAction();
     createMenu();
+    m_saptuamDB = new CsaptuamDataDBMgr(CsdUtils::getSaptuamMin());
+
     readSettings();
     if (m_isError == false) {
     setupTab();
@@ -202,6 +204,8 @@ void MainWindow::setting()
 {
     CsettingDlg dlg;
     dlg.exec();
+    readSettings();
+
 }
 
 void MainWindow::minImport()
@@ -456,7 +460,6 @@ bool MainWindow::okToContinue()
 
 void MainWindow::readSettings()
 {
-    m_saptuamDB = new CsaptuamDataDBMgr(CsdUtils::getSaptuamMin());
     m_isError = false;
     bool good = true;
     SsettingData* setting = CsettingTable::Object()->getSetting();

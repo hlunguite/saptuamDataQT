@@ -7,7 +7,8 @@ ChtmlUtils::ChtmlUtils()
     m_cellHeight = "15";
     //m_fontSize = "9";
     //m_fontSize =" style=\"font-size:" + QString::number(9,'f',1) +"px;\" ";
-    m_fontSize =" style=\"font-size:" + QString::number(9,'f',1) +"px;\" ";
+    m_fontSize =" style=\"font-size:" + QString::number(CsdUtils::getFontSize()) +"px;\" ";
+    //m_fontSize = "style=\"font-size:9px;\"";
 
     resetTableData();
 
@@ -48,18 +49,20 @@ void ChtmlUtils::setCellHeight(const QString &newCellHeight)
 {
     m_cellHeight = newCellHeight;
 }
-
+/*
 QString ChtmlUtils::fontSize() const
 {
     return m_fontSize;
-}
+}*/
 
-void ChtmlUtils::setFontSize(const QString &newFontSize)
+/*void ChtmlUtils::setFontSize(const QString &newFontSize)
 {
     //m_fontSize = newFontSize;
     m_fontSize =" style=\"font-size:" + newFontSize +"px;\" ";
+    //m_fontSize =" style=\"font-size:" + QString::number(9) +"px;\" ";
 
-}
+
+}*/
 
 int ChtmlUtils::tableColCount() const
 {
@@ -166,7 +169,7 @@ void ChtmlUtils::createRow(int defaultcolno)
         Q_ASSERT(0);
     }
     setIsTableHeader(false);
-    QString line = QString("<tr ") + m_fontSize + ">";
+    QString line = "<tr " + m_fontSize + ">";
     m_htmlTable += line;
 
     //qDebug()<<"html row:"<<line;

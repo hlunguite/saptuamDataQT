@@ -49,8 +49,8 @@ public:
     QString cellHeight() const;
     void setCellHeight(const QString &newCellHeight);
 
-    QString fontSize() const;
-    void setFontSize(const QString &newFontSize);
+    //QString fontSize() const;
+    //void setFontSize(const QString &newFontSize);
 
     int tableColCount() const;
     void setTableColCount(int newTableColCount);
