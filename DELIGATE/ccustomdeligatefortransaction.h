@@ -12,6 +12,11 @@ enum EtransactionCol {
     TRANS_PARTICULAR_REMARK_COL,
     TRANS_END_COL
 };
+enum EuseAccountMode {
+    USE_FULL_ACCOUNT,
+    USE_PAYMENT_ACCOUNT,
+    USE_INCOME_ACOUNT
+};
 
 class CcustomDeligateForTransaction : public QItemDelegate
 {
@@ -27,6 +32,10 @@ public:
     virtual QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     virtual void setEditorData(QWidget *editor, const QModelIndex &index) const;
     virtual void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+    void setUseAccount(EuseAccountMode newUseAccount);
+
+private:
+    EuseAccountMode m_useAccount;
 };
 
 #endif // CCUSTOMDELIGATEFORTRANSACTION_H

@@ -13,7 +13,7 @@
 CcustomDeligateForTransaction::CcustomDeligateForTransaction(QObject * parent):
      QItemDelegate(parent)
 {
-
+    m_useAccount = USE_FULL_ACCOUNT;
 }
 
 CcustomDeligateForTransaction::~CcustomDeligateForTransaction()
@@ -65,12 +65,21 @@ QWidget *CcustomDeligateForTransaction::createEditor(QWidget *parent, const QSty
             accountList.push_back(gBankAccountName);
             cmb->addItems(accountList);
         } else {
-            const QStringList& accountList = CaccountMap::Object()->getAccountList();
-            //const QStringList& accountList = CaccountMap::Object()->getIncomeAccountList();
-            //const QStringList& accountList = CaccountMap::Object()->getPaymentAccountList();
+            if (m_useAccount == USE_PAYMENT_ACCOUNT) {
+                const QStringList& accountList = CaccountMap::Object()->getPaymentAccountList();
+                cmb->addItems(accountList);
+
+            } else if (m_useAccount == USE_INCOME_ACOUNT) {
+                const QStringList& accountList = CaccountMap::Object()->getIncomeAccountList();
+                cmb->addItems(accountList);
+
+            } else {
+                const QStringList& accountList = CaccountMap::Object()->getAccountList();
+                cmb->addItems(accountList);
+            }
 
 
-            cmb->addItems(accountList);
+
         }
         return cmb;
     }
@@ -162,4 +171,9 @@ void CcustomDeligateForTransaction::setModelData(QWidget *editor, QAbstractItemM
         model->setData(index, str);
         return;
     }
+}
+
+void CcustomDeligateForTransaction::setUseAccount(EuseAccountMode newUseAccount)
+{
+    m_useAccount = newUseAccount;
 }

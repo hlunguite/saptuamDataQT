@@ -247,6 +247,9 @@
      <height>21</height>
     </rect>
    </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QTableWidget" name="m_previousTable">
    <property name="geometry">

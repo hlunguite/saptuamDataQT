@@ -39,6 +39,7 @@ CnewTransactionDlg::CnewTransactionDlg(bool bankImport, int importID, QWidget *p
     connect(m_deleteAllRow, SIGNAL(triggered()), this, SLOT(deleteAllRow()));
     m_rowNumber = -1;
     m_deligateForTransaction = new CcustomDeligateForTransaction();
+    m_deligateForTransaction->setUseAccount(USE_FULL_ACCOUNT);
     ui->m_transactionTable->setItemDelegate(m_deligateForTransaction);
 
     ui->m_summaryTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -131,15 +132,15 @@ void CnewTransactionDlg::resize()
 
     } else {
         int datewidth = ui->m_date->geometry().width();
-        ui->m_importLine->setGeometry(ui->m_date->geometry().x() + datewidth,
+        ui->m_importLine->setGeometry(ui->m_date->geometry().x() + datewidth + 3,
                                       ui->m_date->geometry().y(),
                                       width - datewidth,
-                                      ui->m_importLine->geometry().height());
+                                      ui->m_date->geometry().height());
         width = windowwidth *.20;
         ui->m_summaryLbl->hide();
         ui->m_summaryTable->hide();
 
-        ui->m_importLine->setDisabled(true);
+        //ui->m_importLine->setDisabled(true);
 
         ui->m_bankImportLbl->setGeometry(x,y,width,buttonheight);
         y +=buttonheight;
@@ -616,6 +617,12 @@ void CnewTransactionDlg::displayCurrentBankImport()
            line = "[" + name1 + "] " + line;
         }
         ui->m_importLine->setText(line);
+        if (bankTransDetail.m_isIncome) {
+           m_deligateForTransaction->setUseAccount(USE_INCOME_ACOUNT);
+        } else {
+           m_deligateForTransaction->setUseAccount(USE_PAYMENT_ACCOUNT);
+
+        }
         if (checkRefAlreadyHasTrans() == false) {
             addInPrevTable(contact1 ? contact1->m_idx : 0 , contact2 ? contact2->m_idx : 0);
         } else {
@@ -632,6 +639,8 @@ void CnewTransactionDlg::displayCurrentBankImport()
 
 void CnewTransactionDlg::populateBankTransDetail()
 {
+    m_deligateForTransaction->setUseAccount(USE_FULL_ACCOUNT);
+
     if (m_bankImport == false) {
         return;
     }
@@ -640,6 +649,8 @@ void CnewTransactionDlg::populateBankTransDetail()
         m_currentBankTransDetailIdx = 0;
         displayCurrentBankImport();
    } else {
+        m_deligateForTransaction->setUseAccount(USE_FULL_ACCOUNT);
+
        m_currentBankTransDetailIdx = -1;
    }
 
@@ -658,6 +669,8 @@ void CnewTransactionDlg::moveToNextImport(bool skip)
             if (m_currentBankTransDetailIdx < m_bankTransDetail.size()) {
                 displayCurrentBankImport();
             } else {
+                m_deligateForTransaction->setUseAccount(USE_FULL_ACCOUNT);
+
                 QMessageBox::warning(this, "SaptuamData",
                                      "Reach end of data");
                 m_currentBankTransDetailIdx = -1;
@@ -666,6 +679,9 @@ void CnewTransactionDlg::moveToNextImport(bool skip)
             }
 
         }
+    } else {
+        m_deligateForTransaction->setUseAccount(USE_FULL_ACCOUNT);
+
     }
 
 }
