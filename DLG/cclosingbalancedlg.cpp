@@ -43,10 +43,10 @@ void CclosingBalanceDlg::resize()
     ui->m_table->setGeometry(x, y, width, height);
     ui->m_table->horizontalHeader()->resizeSection(0,width*0.5);
     ui->m_table->horizontalHeader()->resizeSection(1,width*0.5);
-    x = windowwidth/2 - buttonwidth;
+    x = windowwidth/2 - buttonwidth - 2;
     y = y + height + (0.5*buttonheight);
     ui->m_saveCloseBtn->setGeometry(x, y, buttonwidth, buttonheight);
-    x += buttonwidth;
+    x = windowwidth/2 + 1;
     ui->m_cancelBtn->setGeometry(x, y, buttonwidth, buttonheight);
 
 }

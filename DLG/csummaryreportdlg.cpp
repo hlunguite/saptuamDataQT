@@ -54,10 +54,11 @@ void CsummaryReportDlg::resize()
     int height = windowheight - y - (2.5*btnHeight);
     ui->m_textBox->setGeometry(x, y, width, height);
     y = y + height + (0.5*btnHeight);
-    x = x + width - (2.1*btnWidth);
-    ui->m_close->setGeometry(x, y, btnWidth, btnHeight);
-    x += btnWidth + (btnWidth/5);
+    x = windowwidth - x  - btnWidth;
     ui->m_savePDF->setGeometry(x, y, btnWidth, btnHeight);
+    x =x - ( btnWidth + 3);
+
+    ui->m_close->setGeometry(x, y, btnWidth, btnHeight);
 }
 
 void CsummaryReportDlg::populateTable()
