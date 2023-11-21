@@ -105,10 +105,10 @@ void CassignReceiptDlg::resize()
     x = windowwidth/2 - buttonwidth - buttonwidth;
 
     ui->m_clearBtn->setGeometry(x, y, buttonwidth, buttonheight);
-    x = x + buttonwidth;
+    x = x + buttonwidth+3;
 
     ui->m_cancelBtn->setGeometry(x, y, buttonwidth, buttonheight);
-    x = x + buttonwidth;
+    x = x + buttonwidth+3;
     ui->m_okBtn->setGeometry(x, y, buttonwidth, buttonheight);
 
 
