@@ -62,6 +62,7 @@ void CledgerReportDlg::clear()
 
 void CledgerReportDlg::resize()
 {
+
     int windowwidth = geometry().size().width();
     int windowheight = geometry().size().height();
     int x = ui->m_fromDate->geometry().x();
