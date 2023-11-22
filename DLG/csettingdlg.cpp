@@ -44,6 +44,13 @@ CsettingDlg::CsettingDlg(QWidget *parent) :
     } else {
         ui->m_passwordLbl->setText("New Password");
     }
+    int x = ui->m_cwd->geometry().x();
+    int y = ui->m_cwd->geometry().y();
+    int h = ui->m_cwd->geometry().height();
+    int w = ui->m_cwd->geometry().width();
+    x += w + 2;
+    w = ui->m_bwroseDirBtn->geometry().width();
+    ui->m_bwroseDirBtn->setGeometry(x, y, ui->m_bwroseDirBtn->geometry().width(), h);
 }
 /*    QString m_cwd;
     QString m_orgination;

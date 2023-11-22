@@ -203,6 +203,7 @@ void MainWindow::sendSMS()
 void MainWindow::setting()
 {
     CsettingDlg dlg;
+    dlg.setWindowTitle("Setting");
     dlg.exec();
     readSettings();
 

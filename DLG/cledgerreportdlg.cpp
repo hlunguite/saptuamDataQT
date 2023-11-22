@@ -65,14 +65,16 @@ void CledgerReportDlg::resize()
 
     int windowwidth = geometry().size().width();
     int windowheight = geometry().size().height();
-    int x = ui->m_fromDate->geometry().x();
-    int y = ui->m_fromDate->geometry().y();
+    //int x = ui->m_fromDate->geometry().x();
+    //int y = ui->m_fromDate->geometry().y();
     //int width = ui->m_fromDate->geometry().width();
     int height = ui->m_fromDate->geometry().height();
     int btnWidth = ui->m_cancelBtn->geometry().width();
     int btnheight = ui->m_cancelBtn->geometry().height();
     int gap = btnheight/2;
-    y += height + gap;
+    //y += height + gap;
+    int y = ui->m_textBrowser->geometry().y();
+    int x = ui->m_textBrowser->geometry().x();
     int width = windowwidth - 2*x;
     height = windowheight - y - (2*btnheight);
     ui->m_textBrowser->setGeometry(x, y, width, height);
