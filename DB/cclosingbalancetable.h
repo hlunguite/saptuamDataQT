@@ -39,8 +39,7 @@ enum EclosingBalanceDetailTableFieldIndex {
     CLOSING_DETAIL_CLOSING_TABLE_ID_IDX,
     CLOSING_DETAIL_ACCOUNT_DEPET_TABLE_ID_IDX,
     CLOSING_DETAIL_IS_ACCOUNT_ID_IDX,
-    CLOSING_DETAIL_INCOME_AMOUNT_TABLE_ID_IDX,
-    CLOSING_DETAIL_PAYMENT_AMOUNT_TABLE_ID_IDX,
+    CLOSING_DETAIL_AMOUNT_TABLE_ID_IDX,
     CLOSING_DETAIL_CASH_OR_BANK_NAME_IDX, // if accuont id is zero. mostly in caseh of bank or cash.
     MAX_CLOSING_DETAIL_TABLE_FIELD
 };
@@ -59,8 +58,7 @@ public:
     int     m_closingTableID = 0;
     int     m_accountOrDeptTableID = 0;
     bool    m_isAccount = false;
-    double  m_amountIncome = 0;
-    double  m_amountPayment = 0;
+    double  m_amount = 0;
     QString m_cashOrBankName;
 
 

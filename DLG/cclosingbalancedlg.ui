@@ -87,12 +87,7 @@
    </column>
    <column>
     <property name="text">
-     <string>Closing Amount Income</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Closing Amount Payment</string>
+     <string>Closing Amount</string>
     </property>
    </column>
   </widget>

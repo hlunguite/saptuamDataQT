@@ -29,10 +29,10 @@ SclosingData CclosingBalanceTable::getClosingForDate(QDate date, bool dateOnOrBe
 {
     QString condition = getColName(CLOSING_DATE_IDX);
     if (dateOnOrBefore) {
-        condition += "<=" + date.toString("yyyy-MM-dd");
+        condition += "<=\"" + date.toString("yyyy-MM-dd") + "\"";
 
     } else {
-        condition += "=" + date.toString("yyyy-MM-dd");
+        condition += "=\"" + date.toString("yyyy-MM-dd") + "\"";
     }
     condition += " ORDER BY " + getColName(CLOSING_DATE_IDX) + " DESC";
     TobjectList values;
@@ -102,8 +102,7 @@ CclosingBalanceDetailTable::CclosingBalanceDetailTable():
     addTableCol("closingTableID", FIELD_TYPE_INT, "closing table id");
     addTableCol("accountordeptTableID", FIELD_TYPE_INT, "account or dept table id");
     addTableCol("closingisAccount", FIELD_TYPE_BOOL, "Is Account");
-    addTableCol("closingAmountIncome", FIELD_TYPE_DECIMAL, "Amount Income");
-    addTableCol("closingAmountPayment", FIELD_TYPE_DECIMAL, "Amount Payment");
+    addTableCol("closingAmount", FIELD_TYPE_DECIMAL, "Amount Income");
     addTableCol("closingaccname", FIELD_TYPE_STRING, "Cash or Bank account");
 
 }
@@ -114,8 +113,7 @@ void CclosingBalanceDetailTable::serializeTable(QDataStream &out, const Tobjects
     data.m_closingTableID = obj.at(CLOSING_DETAIL_CLOSING_TABLE_ID_IDX).toInt();
     data.m_accountOrDeptTableID = obj.at(CLOSING_DETAIL_ACCOUNT_DEPET_TABLE_ID_IDX).toInt();
     data.m_isAccount = obj.at(CLOSING_DETAIL_IS_ACCOUNT_ID_IDX).toBool();
-    data.m_amountIncome = obj.at(CLOSING_DETAIL_INCOME_AMOUNT_TABLE_ID_IDX).toDouble();
-    data.m_amountPayment = obj.at(CLOSING_DETAIL_PAYMENT_AMOUNT_TABLE_ID_IDX).toDouble();
+    data.m_amount = obj.at(CLOSING_DETAIL_AMOUNT_TABLE_ID_IDX).toDouble();
     data.m_cashOrBankName = obj.at(CLOSING_DETAIL_CASH_OR_BANK_NAME_IDX).toString();
 
     data.serialize(out);
@@ -142,8 +140,7 @@ QVector<SclosingDetailData *> CclosingBalanceDetailTable::getClosingDetailForID(
             data->m_closingTableID = obj.at(CLOSING_DETAIL_CLOSING_TABLE_ID_IDX).toInt();
             data->m_accountOrDeptTableID = obj.at(CLOSING_DETAIL_ACCOUNT_DEPET_TABLE_ID_IDX).toInt();
             data->m_isAccount = obj.at(CLOSING_DETAIL_IS_ACCOUNT_ID_IDX).toBool();
-            data->m_amountIncome = obj.at(CLOSING_DETAIL_INCOME_AMOUNT_TABLE_ID_IDX).toDouble();
-            data->m_amountPayment = obj.at(CLOSING_DETAIL_PAYMENT_AMOUNT_TABLE_ID_IDX).toDouble();
+            data->m_amount = obj.at(CLOSING_DETAIL_AMOUNT_TABLE_ID_IDX).toDouble();
             data->m_cashOrBankName = obj.at(CLOSING_DETAIL_CASH_OR_BANK_NAME_IDX).toString();
             dataV.push_back(data);
         }
@@ -161,8 +158,7 @@ int SclosingDetailData::save()
     data[CLOSING_DETAIL_CLOSING_TABLE_ID_IDX] =  m_closingTableID;
     data[CLOSING_DETAIL_ACCOUNT_DEPET_TABLE_ID_IDX] = m_accountOrDeptTableID;
     data[CLOSING_DETAIL_IS_ACCOUNT_ID_IDX] = m_isAccount;
-    data[CLOSING_DETAIL_INCOME_AMOUNT_TABLE_ID_IDX] =  m_amountIncome;
-    data[CLOSING_DETAIL_PAYMENT_AMOUNT_TABLE_ID_IDX] =  m_amountPayment;
+    data[CLOSING_DETAIL_AMOUNT_TABLE_ID_IDX] =  m_amount;
     data[CLOSING_DETAIL_CASH_OR_BANK_NAME_IDX] = m_cashOrBankName;
     if (m_id == 0) {
         TfilterObjType filter;
@@ -180,8 +176,7 @@ int SclosingDetailData::save()
         CclosingBalanceDetailTable::Object()->updateValue(m_closingTableID, CLOSING_DETAIL_CLOSING_TABLE_ID_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
         CclosingBalanceDetailTable::Object()->updateValue(m_accountOrDeptTableID, CLOSING_DETAIL_ACCOUNT_DEPET_TABLE_ID_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
         CclosingBalanceDetailTable::Object()->updateValue(m_isAccount, CLOSING_DETAIL_IS_ACCOUNT_ID_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
-        CclosingBalanceDetailTable::Object()->updateValue(m_amountIncome, CLOSING_DETAIL_INCOME_AMOUNT_TABLE_ID_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
-        CclosingBalanceDetailTable::Object()->updateValue(m_amountPayment, CLOSING_DETAIL_PAYMENT_AMOUNT_TABLE_ID_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
+        CclosingBalanceDetailTable::Object()->updateValue(m_amount, CLOSING_DETAIL_AMOUNT_TABLE_ID_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
         CclosingBalanceDetailTable::Object()->updateValue(m_cashOrBankName, CLOSING_DETAIL_CASH_OR_BANK_NAME_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
 
     }
@@ -199,12 +194,12 @@ void SclosingDetailData::deleteObj()
 
 void SclosingDetailData::serialize(QDataStream &out)
 {
-    out<<m_id<<m_closingTableID<<m_accountOrDeptTableID<<m_isAccount<<m_amountIncome<<m_amountPayment<<m_cashOrBankName;
+    out<<m_id<<m_closingTableID<<m_accountOrDeptTableID<<m_isAccount<<m_amount<<m_cashOrBankName;
 }
 
 void SclosingDetailData::desserialize(QDataStream &in)
 {
-    in>>m_id>>m_closingTableID>>m_accountOrDeptTableID>>m_isAccount>>m_amountIncome>>m_amountPayment>>m_cashOrBankName;
+    in>>m_id>>m_closingTableID>>m_accountOrDeptTableID>>m_isAccount>>m_amount>>m_cashOrBankName;
 
 }
 

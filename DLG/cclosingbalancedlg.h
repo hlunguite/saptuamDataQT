@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "cdlgbase.h"
+#include <set>
 namespace Ui {
 class CclosingBalanceDlg;
 }
@@ -28,7 +29,10 @@ private:
     Ui::CclosingBalanceDlg *ui;
     void resize();
     void populateTable(QDate date);
-
+    std::map<int, int>  m_accountDeptMap;
+    std::set<int>       m_accounts;
+    std::map<int, std::pair<int, bool> > m_rowAccountMap;
+    QString             m_prefix;
     // QWidget interface
 protected:
     void resizeEvent(QResizeEvent *event) override { resize();}

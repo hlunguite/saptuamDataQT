@@ -682,13 +682,14 @@ bool CremittanceDlg::populateTableUsingTransaction()
                     float localPC = 100;
                     std::map<int, std::pair<float, float> >::iterator fn = m_accountPct.find(accontDepID);
                     double amount = detail.m_amount.toDouble();
-                    double local = (amount*localPC)/100;
-                    double hq = (amount*hqPC)/100;
+
                     //qDebug()<<"local amount "<<local<<" hq "<<hq;
                     if (fn != m_accountPct.end()) {
                         hqPC = fn->second.first;
                         localPC = fn->second.second;
                     }
+                    double local = (amount*localPC)/100;
+                    double hq = (amount*hqPC)/100;
                     if (isAccount) {
                         StransForRemittance& transRemit = m_accountRemittance[accontDepID];
                         transRemit.m_allTrans.push_back(detail);
@@ -1411,27 +1412,4 @@ int CremittanceDlg::saveRemittance()
 
 
 
-CremittanceDlg::SremitTransDetail::SremitTransDetail(QString str)
-{
-    m_transID = 0;
-    QStringList split = str.split("#");
-    if (split.size() == 5) {
-        m_from = split.at(0);
-        m_amount = split.at(1);
-        m_receiptBook = split.at(2);
-        m_receiptNo = split.at(3);
-        m_accountID = split.at(4).toInt();
-    }
-}
 
-QString CremittanceDlg::SremitTransDetail::toString()
-{
-    QString str = m_from + "#" + m_amount + "#" + m_receiptBook + "#" + m_receiptNo+ "#" + QString::number(m_accountID);
-    /*QString m_from;
-    QString m_amount;
-    QString m_receiptBook;
-    QString m_receiptNo;*/
-    QStringList split = str.split("#");
-    //qDebug()<<split;
-    return str;
-}

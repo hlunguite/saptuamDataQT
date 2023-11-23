@@ -8,6 +8,7 @@
 #include <vector>
 #include "MISC/chtmlutils.h"
 #include <QTableWidgetItem>
+#include "cremittancetable.h"
 namespace Ui {
 class CremittanceDlg;
 }
@@ -54,20 +55,7 @@ private slots:
     void on_m_table_itemChanged(QTableWidgetItem *item);
 
 private:
-    struct SremitTransDetail {
-        int m_transID;
-        QString m_from;
-        QString m_amount;
-        QString m_receiptBook;
-        QString m_receiptNo;
-        int     m_accountID;
-        SremitTransDetail(QString str);
-        SremitTransDetail(int id, QString name, QString amount, QString book, QString no, int accountID):
-            m_transID(id),
-            m_from(name), m_amount(amount), m_receiptBook(book), m_receiptNo(no), m_accountID(accountID){}
-        QString toString();
 
-    };
     struct StransForRemittance{
         double                          m_hqShare;
         double                          m_localShare;

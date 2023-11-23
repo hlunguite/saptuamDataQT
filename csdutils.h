@@ -50,6 +50,9 @@ public:
     static QString makeReceiptString(const std::set<int>& receipts);
     static QStringList getHeaderText();
 
+    static QDate getNextDay(QDate date);
+    static QDate getPrevDay(QDate date);
+
 private:
     static QString m_saptuamMin;
     static QString m_developers;

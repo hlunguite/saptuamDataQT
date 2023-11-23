@@ -363,3 +363,28 @@ void SremittanceReconcileData::desserialize(QDataStream &in)
     qDebug()<<"reading remit concile "<<m_id<< ""<<m_str;
 
 }
+
+SremitTransDetail::SremitTransDetail(QString str)
+{
+    m_transID = 0;
+    QStringList split = str.split("#");
+    if (split.size() == 5) {
+        m_from = split.at(0);
+        m_amount = split.at(1);
+        m_receiptBook = split.at(2);
+        m_receiptNo = split.at(3);
+        m_accountID = split.at(4).toInt();
+    }
+}
+
+QString SremitTransDetail::toString()
+{
+    QString str = m_from + "#" + m_amount + "#" + m_receiptBook + "#" + m_receiptNo+ "#" + QString::number(m_accountID);
+    /*QString m_from;
+    QString m_amount;
+    QString m_receiptBook;
+    QString m_receiptNo;*/
+    QStringList split = str.split("#");
+    //qDebug()<<split;
+    return str;
+}

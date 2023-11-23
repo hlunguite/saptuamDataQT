@@ -372,6 +372,62 @@ QStringList CsdUtils::getHeaderText()
     return headers;
 }
 
+QDate CsdUtils::getNextDay(QDate date)
+{
+    //get next day of prevClosing
+    std::vector<int> noofDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    int year = date.year();
+    if (QDate::isLeapYear(year)) {
+        noofDays[1] = 29;
+    } else {
+        noofDays[1] = 28;
+
+    }
+    int day = date.day();
+    int month = date.month();
+    if (noofDays[month -1] == day) { // last day
+        day = 1;
+        if (month == 12) {
+           month = 1;
+        }else {
+           ++month;
+        }
+    } else {
+        day += 1;
+    }
+    date = QDate(year, month, day);
+    return date;
+}
+
+QDate CsdUtils::getPrevDay(QDate date)
+{
+    int day = date.day();
+    int month = date.month();
+    int year = date.year();
+    std::vector<int> noofDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    //get prev date
+    if (day == 1) { // first day of the month get previous month last day;
+        if (month == 1) {
+           month = 12;
+           year -=1;
+        } else {
+           month -=1;
+        }
+        if (QDate::isLeapYear(year)) {
+           noofDays[1] = 29;
+        } else {
+           noofDays[1] = 28;
+
+        }
+        day = noofDays[month -1]; // last day of the month
+    } else {
+        day = day -1;
+    }
+    date = QDate(year, month, day);
+    return date;
+}
+
 
 
 

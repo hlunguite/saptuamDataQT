@@ -126,5 +126,18 @@ private:
     CremittanceReconcileTable();
     ~CremittanceReconcileTable() {}
 };
+struct SremitTransDetail {
+    int m_transID;
+    QString m_from;
+    QString m_amount;
+    QString m_receiptBook;
+    QString m_receiptNo;
+    int     m_accountID;
+    SremitTransDetail(QString str);
+    SremitTransDetail(int id, QString name, QString amount, QString book, QString no, int accountID):
+        m_transID(id),
+        m_from(name), m_amount(amount), m_receiptBook(book), m_receiptNo(no), m_accountID(accountID){}
+    QString toString();
 
+};
 #endif // CREMITTANCE_H

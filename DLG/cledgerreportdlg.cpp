@@ -7,6 +7,7 @@
 #include "ctransactionutils.h"
 #include "MISC/cprintUtils.h"
 #include "csdutils.h"
+#include "MISC/cclosingcalculator.h"
 CledgerReportDlg::CledgerReportDlg(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CledgerReportDlg)
@@ -152,6 +153,12 @@ void CledgerReportDlg::populateTable()
     }
     CaccountLedger cashAccount(true);
     CaccountLedger bankAccount(true);
+
+    CclosingCalculator closingCalc;
+    closingCalc.calculateClosing( ui->m_fromDate->date() ,query);
+
+
+
     //qDebug()<<"qeery is "<<query;
     QVector<StransactionData*> results = CtransactionTable::Object()->getAllTransaction(query);
     //qDebug()<<"Amount Account, From/To Type";
