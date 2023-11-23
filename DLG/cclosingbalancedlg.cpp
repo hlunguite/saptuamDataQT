@@ -105,8 +105,13 @@ void CclosingBalanceDlg::resize()
 void CclosingBalanceDlg::populateTable(QDate date)
 {
     CclosingCalculator calc;
-    calc.calculateClosing(date);
+    calc.calculateClosingAsOn(date);
+    // const accountDeptAmountType& getClosing()
+   //         double cashClosing() const;
+    //double bankClosing() const;
+
     m_rowAccountMap.clear();
+    m_cashBankRow.clear();
     ui->m_table->clearContents();
     ui->m_table->setRowCount(0);
     m_accounts.clear();
@@ -186,6 +191,7 @@ void CclosingBalanceDlg::populateTable(QDate date)
     int row = ui->m_table->rowCount();
     ui->m_table->insertRow(row);
     m_rowAccountMap[row] = std::make_pair(bankAccountID, true);
+    m_cashBankRow.insert({gBankAccountName, row});
     QTableWidgetItem * ac = new QTableWidgetItem(tr("%1").arg(gBankAccountName));
     QTableWidgetItem * amtIncome = new QTableWidgetItem(tr("%1").arg(""));
     //QTableWidgetItem * amtPayment = new QTableWidgetItem(tr("%1").arg(""));
@@ -199,6 +205,7 @@ void CclosingBalanceDlg::populateTable(QDate date)
     row = ui->m_table->rowCount();
     ui->m_table->insertRow(row);
     m_rowAccountMap[row] = std::make_pair(0, true);
+    m_cashBankRow.insert({gCashAccountName, row});
     QTableWidgetItem * acCash = new QTableWidgetItem(tr("%1").arg(gCashAccountName));
     QTableWidgetItem * amtIncomeCash = new QTableWidgetItem(tr("%1").arg(""));
     //QTableWidgetItem * amtPaymentCash = new QTableWidgetItem(tr("%1").arg(""));

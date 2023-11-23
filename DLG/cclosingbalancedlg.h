@@ -32,6 +32,7 @@ private:
     std::map<int, int>  m_accountDeptMap;
     std::set<int>       m_accounts;
     std::map<int, std::pair<int, bool> > m_rowAccountMap;
+    std::map<QString, int>  m_cashBankRow;
     QString             m_prefix;
     // QWidget interface
 protected:

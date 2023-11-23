@@ -34,7 +34,7 @@ enum EtransactionMode {
     BANK_CASH_DEPOSIT_TRANSACTION_MODE,
     BANK_CHARGES_TRANSACTION_MODE,
     BANK_INTEREST_TRANSACTION_MODE,
-    CONTRA_TRANSACTION_MODE
+
 };
 class CtransactionUtils : public CsdSingleton<CtransactionUtils>
 {
