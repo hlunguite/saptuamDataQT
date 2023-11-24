@@ -4,6 +4,8 @@
 #include <QDialog>
 #include "cdlgbase.h"
 #include <set>
+#include <QTableWidgetItem>
+#include <QDate>
 namespace Ui {
 class CclosingBalanceDlg;
 }
@@ -25,6 +27,8 @@ private slots:
 
     void on_m_closingDate_dateChanged(const QDate &date);
 
+    void on_m_table_itemChanged(QTableWidgetItem *item);
+
 private:
     Ui::CclosingBalanceDlg *ui;
     void resize();
@@ -33,7 +37,9 @@ private:
     std::set<int>       m_accounts;
     std::map<int, std::pair<int, bool> > m_rowAccountMap;
     std::map<QString, int>  m_cashBankRow;
-    QString             m_prefix;
+    bool                m_calcTotal;
+    QDate               m_dateToUse;
+
     // QWidget interface
 protected:
     void resizeEvent(QResizeEvent *event) override { resize();}

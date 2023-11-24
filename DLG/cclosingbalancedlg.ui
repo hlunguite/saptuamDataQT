@@ -90,6 +90,11 @@
      <string>Closing Amount</string>
     </property>
    </column>
+   <column>
+    <property name="text">
+     <string>Cumulative Total</string>
+    </property>
+   </column>
   </widget>
  </widget>
  <resources/>

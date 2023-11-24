@@ -26,11 +26,16 @@ public:
     const accountDeptAmountType& getClosing() { return m_closingValues;}
     const accountDeptAmountType& getOpening() { return m_openingValues;}
 
+    QDate lastTransDate() const;
+
 private:
     double              m_cashOpening;
     double              m_cashClosing;
     double              m_bankOpening;
     double              m_bankClosing;
+    int                 m_remittanceID;
+    int                 m_requestID;
+    QDate               m_lastTransDate;
     std::map<int, int>  m_accountDeptMap;
     std::set<int>       m_accountWithoutDept;
     //std::map<int, std::pair<double, double> > m_deptClosing;
@@ -38,9 +43,13 @@ private:
     accountDeptAmountType   m_openingValues;
 
     accountTwoAmountType m_accountIncomeAndPayment;
-    void calculateClosingAsOnInternal(QDate date, accountDeptAmountType& closingValue, accountCashORBankAmountType& cashBankValue);
+    void calculateClosingAsOnInternal(QDate date, accountDeptAmountType& closingValue,
+                                      accountCashORBankAmountType& cashBankValue);
     QString getQeryStr(QDate fromDate, QDate toDate);
-    void getAccountIncomePaymentForQuery(QString query, accountTwoAmountType& processedDate, accountCashORBankAmountType& cashBankValue);
+    void getAccountIncomePaymentForQuery(QString query,
+                                         accountTwoAmountType& processedDate,
+                                         accountCashORBankAmountType& cashBankValue);
+
 
 };
 
