@@ -264,7 +264,7 @@ QString CsummaryReportDlg::addInTable(std::map<QString, double> &amounts, QStrin
         }
         htmlUtils.createRow();
         htmlUtils.createCell(keyvalue.first , HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
-        QString amountStr = CsdUtils::converAmountToString(keyvalue.second,'f',2, "₹");
+        QString amountStr = CsdUtils::convertAmountToStringWithSign(keyvalue.second);
 
         htmlUtils.createCell(amountStr,
                            HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
@@ -279,7 +279,7 @@ QString CsummaryReportDlg::addInTable(std::map<QString, double> &amounts, QStrin
         }
         htmlUtils.createRow();
         htmlUtils.createCell("Total" , HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_TOP_BOTTOM_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
-        QString amountStr = CsdUtils::converAmountToString(totalAmount,'f',2, "₹");
+        QString amountStr = CsdUtils::convertAmountToStringWithSign(totalAmount);
 
         htmlUtils.createCell(amountStr,
                             HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_TOP_BOTTOM_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
@@ -326,10 +326,10 @@ QString CsummaryReportDlg::addInTable(std::map<QString, QPair<double, double> > 
         double income = keyvalue.second.first;
         double payment = keyvalue.second.second;
         if (income > 0) {
-            incomeAmtStr = CsdUtils::converAmountToString(income,'f',2, "₹");
+            incomeAmtStr = CsdUtils::convertAmountToStringWithSign(income);
         }
         if (payment > 0) {
-            paymentAmtStr = CsdUtils::converAmountToString(payment,'f',2, "₹");
+            paymentAmtStr = CsdUtils::convertAmountToStringWithSign(payment);
         }
         htmlUtils.createCell(incomeAmtStr,
                            HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);

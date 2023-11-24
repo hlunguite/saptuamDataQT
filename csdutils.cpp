@@ -298,14 +298,20 @@ void CsdUtils::setMaxWidth(int maxWidth)
     m_maxWidth = maxWidth;
 }
 
-QString CsdUtils::converAmountToString(double d, char format, int precision, QString append)
+QString CsdUtils::convertAmountToStringWithSign(double d)
+{
+    QLocale locale;
+    QString formatStr = locale.toCurrencyString(d, "₹");
+    return formatStr;
+
+}
+
+QString CsdUtils::converAmountToString(double d, char format, int precision)
 {
     QString ret;
     if (d != 0) {
        ret = QString::number(d, format, precision);
-       if (append.isEmpty() == false) {
-            ret = append + ret;
-       }
+
     }
     return ret;
 }

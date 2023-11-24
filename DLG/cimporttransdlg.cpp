@@ -105,7 +105,7 @@ void CimportTransDlg::populateTable()
             cells[0] = new QTableWidgetItem(tr("%1").arg(data->m_date.toString("d MMM yyyy")));
             cells[1] = new QTableWidgetItem(tr("%1").arg(data->m_from));
             cells[2] = new QTableWidgetItem(tr("%1").arg(data->m_account));
-            QString amountStr = CsdUtils::converAmountToString(data->m_amount,'f',2, "₹");
+            QString amountStr = CsdUtils::convertAmountToStringWithSign(data->m_amount);
             cells[3] = new QTableWidgetItem(tr("%1").arg(amountStr));
             cells[4] = new QTableWidgetItem(tr("%1").arg(CtransactionUtils::Object()->getTransactionModeStr((EtransactionMode)data->m_mode)));
             cells[5] = new QTableWidgetItem(tr("%1").arg(data->m_ref));

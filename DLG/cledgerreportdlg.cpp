@@ -488,10 +488,10 @@ QString CaccountLedger::getHTMLTable(int accountID, bool addDeptInCSV, bool indi
             QString incomeAmount;
             QString paymentAmount;
             if (isIncome) {
-                incomeAmount =  CsdUtils::converAmountToString(transData->m_amount,'f',2, "₹" );
+                incomeAmount =  CsdUtils::convertAmountToStringWithSign(transData->m_amount);
                 localIncome += transData->m_amount;
             } else {
-                paymentAmount = CsdUtils::converAmountToString(transData->m_amount,'f',2, "₹");
+                paymentAmount = CsdUtils::convertAmountToStringWithSign(transData->m_amount);
                 localPayment += transData->m_amount;
             }
             QString fromTo = CcontactMap::Object()->getContanceName(transData->m_fromId);
@@ -528,10 +528,10 @@ QString CaccountLedger::getHTMLTable(int accountID, bool addDeptInCSV, bool indi
                 incomeAmount = "";
                 paymentAmount = "";
                 if (localIncome) {
-                    incomeAmount = CsdUtils::converAmountToString(localIncome,'f',2, "₹");
+                    incomeAmount = CsdUtils::convertAmountToStringWithSign(localIncome);
                 }
                 if (localPayment) {
-                    paymentAmount = CsdUtils::converAmountToString(localPayment,'f',2, "₹");
+                    paymentAmount = CsdUtils::convertAmountToStringWithSign(localPayment);
                 }
                 htmlUtils.createCell(incomeAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
                 htmlUtils.createCell(paymentAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
@@ -590,10 +590,10 @@ QString CaccountLedger::getHTMLTable(int accountID, bool addDeptInCSV, bool indi
                     incomeAmount = "";
                     paymentAmount = "";
                     if (localIncome) {
-                        incomeAmount = CsdUtils::converAmountToString(localIncome,'f',2, "₹");
+                        incomeAmount = CsdUtils::convertAmountToStringWithSign(localIncome);
                     }
                     if (localPayment) {
-                        paymentAmount = CsdUtils::converAmountToString(localPayment,'f',2, "₹");
+                        paymentAmount = CsdUtils::convertAmountToStringWithSign(localPayment);
                     }
                     csvLine += CsdUtils::converAmountToString(localIncome,'f',2) + "," + CsdUtils::converAmountToString(localPayment,'f',2) + ",\n";
                     htmlUtils.createCell(incomeAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
@@ -624,8 +624,8 @@ QString CaccountLedger::getHTMLTable(int accountID, bool addDeptInCSV, bool indi
     htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
     htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);// ref
 
-    QString incomeAmount = CsdUtils::converAmountToString(m_totalIncome,'f',2, "₹");
-    QString paymentAmount = CsdUtils::converAmountToString(m_totalPayment,'f',2, "₹");
+    QString incomeAmount = CsdUtils::convertAmountToStringWithSign(m_totalIncome);
+    QString paymentAmount = CsdUtils::convertAmountToStringWithSign(m_totalPayment);
 
     htmlUtils.createCell(incomeAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_TOP_BOTTOM_BORDER, HTML_DOUBLE_BOTTOM_STYLE);
     htmlUtils.createCell(paymentAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_TOP_BOTTOM_BORDER, HTML_DOUBLE_BOTTOM_STYLE);

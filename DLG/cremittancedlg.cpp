@@ -309,13 +309,13 @@ void CremittanceDlg::populateHTMLTable() {
     borderType = HTML_TOP_BOTTOM_BORDER;
     htmlUtils.createCell(data, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
     csvLine += data + ",";
-    QString totalStr = CsdUtils::converAmountToString(totalAll,'f',2, "₹");
+    QString totalStr = CsdUtils::convertAmountToStringWithSign(totalAll);
     QString totalStrCSV = CsdUtils::converAmountToString(totalAll,'f',2);
 
-    QString localStr = CsdUtils::converAmountToString(local,'f',2, "₹");
+    QString localStr = CsdUtils::convertAmountToStringWithSign(local);
     QString localStrCSV = CsdUtils::converAmountToString(local,'f',2);
 
-    QString hqStr = CsdUtils::converAmountToString(hq,'f',2, "₹");
+    QString hqStr = CsdUtils::convertAmountToStringWithSign(hq);
     QString hqStrCSV = CsdUtils::converAmountToString(hq,'f',2);
 
     htmlUtils.createCell(totalStr + " ", HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
@@ -423,13 +423,13 @@ void CremittanceDlg::populateSummaryTable(ChtmlUtils& htmlUtils,
     totalAll += total;
     local +=  keyvalue->second.m_localShare;
     hq += keyvalue->second.m_hqShare;
-    QString totalStr = CsdUtils::converAmountToString(total,'f',2, "₹");
+    QString totalStr = CsdUtils::convertAmountToStringWithSign(total);
     QString totalStrCSV = CsdUtils::converAmountToString(total,'f',2);
 
-    QString localStr = CsdUtils::converAmountToString(keyvalue->second.m_localShare,'f',2, "₹");
+    QString localStr = CsdUtils::convertAmountToStringWithSign(keyvalue->second.m_localShare);
     QString localStrCSV = CsdUtils::converAmountToString(keyvalue->second.m_localShare,'f',2);
 
-    QString hqStr = CsdUtils::converAmountToString(keyvalue->second.m_hqShare,'f',2, "₹");
+    QString hqStr = CsdUtils::convertAmountToStringWithSign(keyvalue->second.m_hqShare);
     QString hqStrCSV = CsdUtils::converAmountToString(keyvalue->second.m_hqShare,'f',2);
 
     htmlUtils.createCell(totalStr + " ", HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
@@ -534,7 +534,7 @@ void CremittanceDlg::populateTransacltionListTable(int accountDept, const Strans
     borderType = HTML_TOP_BOTTOM_BORDER;
     htmlUtils.createCell(data + " ", HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
     csvLine += data + ",";
-    data =  CsdUtils::converAmountToString(total,'f',2, "₹");
+    data =  CsdUtils::convertAmountToStringWithSign(total);
     htmlUtils.createCell(data + " ", HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
     data =  CsdUtils::converAmountToString(total,'f',2);
     csvLine += data + "\n";

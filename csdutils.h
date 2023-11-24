@@ -46,7 +46,8 @@ public:
 
     static int maxWidth();
     static void setMaxWidth(int maxWidth);
-    static QString converAmountToString(double d, char format = 'f', int precision = 2, QString append = QString(""));
+    static QString convertAmountToStringWithSign(double d);
+    static QString converAmountToString(double d, char format = 'f', int precision = 2);
     static QString makeReceiptString(const std::set<int>& receipts);
     static QStringList getHeaderText();
 

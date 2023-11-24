@@ -45,7 +45,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QSize availableSize = qApp->primaryScreen()->availableGeometry().size();
     int width = availableSize.width();
     int height = availableSize.height();
-
+    QLocale l(QLocale::English ,QLocale::India);
+    QLocale::setDefault(l);
 
     width *= 0.98; // 98% of the screen size
     height *= 0.95; // 99% of the screen size

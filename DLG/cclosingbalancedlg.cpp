@@ -3,12 +3,14 @@
 #include "MISC/cclosingcalculator.h"
 #include "caccountmap.h"
 #include "cclosingbalancetable.h"
+#include "cformatforamountdeligate.h"
 
 CclosingBalanceDlg::CclosingBalanceDlg(QWidget *parent) :
     CdlgBase(parent),
     ui(new Ui::CclosingBalanceDlg)
 {
     ui->setupUi(this);
+    ui->m_table->setItemDelegateForColumn(1, new CformatForAmountDeligate(this));
     m_prefix = "   ";
     QDate date = QDate::currentDate();
     ui->m_closingDate->setDate(date);
@@ -106,9 +108,9 @@ void CclosingBalanceDlg::populateTable(QDate date)
 {
     CclosingCalculator calc;
     calc.calculateClosingAsOn(date);
-    // const accountDeptAmountType& getClosing()
-   //         double cashClosing() const;
-    //double bankClosing() const;
+    const accountDeptAmountType& accountDeptClosing = calc.getClosing();
+    double cashClosing = calc.cashClosing();
+    double bankClosing = calc.bankClosing();
 
     m_rowAccountMap.clear();
     m_cashBankRow.clear();
@@ -126,19 +128,24 @@ void CclosingBalanceDlg::populateTable(QDate date)
     for (auto dept : depList) {
 
         int deptID = CaccountMap::Object()->getDeptId(dept);
-
+        auto fn = accountDeptClosing.find(deptID);
+        QString amtStr;
+        if (fn != accountDeptClosing.end()) {
+            amtStr = QString::number(fn->second, 'f', 2);
+        } else {
+            qDebug()<<"not found for "<<dept;
+        }
         int row = ui->m_table->rowCount();
         ui->m_table->insertRow(row);
         m_rowAccountMap[row] = std::make_pair(deptID, false);
         QTableWidgetItem * ac = new QTableWidgetItem(tr("%1").arg(dept));
+        ac->setTextAlignment(Qt::AlignLeft|Qt::AlignVCenter);
         ac->setFlags(ac->flags() & ~Qt::ItemIsEditable);
 
-        QTableWidgetItem * amtIncome = new QTableWidgetItem(tr("%1").arg(""));
-        //QTableWidgetItem * amtPayment = new QTableWidgetItem(tr("%1").arg(""));
-
+        QTableWidgetItem * amtIncome = new QTableWidgetItem(tr("%1").arg(amtStr));
+        amtIncome->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
         ui->m_table->setItem(row, 0, ac);
         ui->m_table->setItem(row, 1, amtIncome);
-        //ui->m_table->setItem(row, 2, amtPayment);
 
         QSet<int> accounts;
         if (CaccountMap::Object()->getAccounsForDept(deptID, accounts)){
@@ -146,22 +153,8 @@ void CclosingBalanceDlg::populateTable(QDate date)
             for (auto accountID : accounts) {
                 m_accountDeptMap[accountID] = deptID;
                 m_accounts.erase(accountID);
-                //accountList.push_back(CaccountMap::Object()->getAccountName(accountID));
             }
-            /*accountList.sort();
-            for (auto accountName: accountList) {
-                QString name = m_prefix + accountName;
-                int row = ui->m_table->rowCount();
-                ui->m_table->insertRow(row);
-                m_nameRowMap[name] = std::make_pair(row, accountName);
-                QTableWidgetItem * ac = new QTableWidgetItem(tr("%1").arg(name));
-                QTableWidgetItem * amtIncome = new QTableWidgetItem(tr("%1").arg(""));
-                QTableWidgetItem * amtPayment = new QTableWidgetItem(tr("%1").arg(""));
 
-                ui->m_table->setItem(row, 0, ac);
-                ui->m_table->setItem(row, 1, amtIncome);
-                ui->m_table->setItem(row, 2, amtPayment);
-            }*/
         } else {
 
         }
@@ -173,18 +166,29 @@ void CclosingBalanceDlg::populateTable(QDate date)
             bankAccountID = accountID;
             continue;
         }
+
+        QString amtStr;
+        auto fn = accountDeptClosing.find(accountID);
+        if (fn != accountDeptClosing.end()) {
+            amtStr = QString::number(fn->second, 'f', 2);
+        } else {
+            qDebug()<<"not found for "<<accountName;
+        }
+
         int row = ui->m_table->rowCount();
         ui->m_table->insertRow(row);
         m_rowAccountMap[row] = std::make_pair(accountID, true);
 
         QTableWidgetItem * ac = new QTableWidgetItem(tr("%1").arg(accountName));
-        QTableWidgetItem * amtIncome = new QTableWidgetItem(tr("%1").arg(""));
-        //QTableWidgetItem * amtPayment = new QTableWidgetItem(tr("%1").arg(""));
+        ac->setTextAlignment(Qt::AlignLeft|Qt::AlignVCenter);
+
+        QTableWidgetItem * amtIncome = new QTableWidgetItem(tr("%1").arg(amtStr));
+        amtIncome->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
+
         ac->setFlags(ac->flags() & ~Qt::ItemIsEditable);
 
         ui->m_table->setItem(row, 0, ac);
         ui->m_table->setItem(row, 1, amtIncome);
-        //ui->m_table->setItem(row, 2, amtPayment);
     }
 
 
@@ -193,13 +197,15 @@ void CclosingBalanceDlg::populateTable(QDate date)
     m_rowAccountMap[row] = std::make_pair(bankAccountID, true);
     m_cashBankRow.insert({gBankAccountName, row});
     QTableWidgetItem * ac = new QTableWidgetItem(tr("%1").arg(gBankAccountName));
-    QTableWidgetItem * amtIncome = new QTableWidgetItem(tr("%1").arg(""));
-    //QTableWidgetItem * amtPayment = new QTableWidgetItem(tr("%1").arg(""));
+    ac->setTextAlignment(Qt::AlignLeft|Qt::AlignVCenter);
     ac->setFlags(ac->flags() & ~Qt::ItemIsEditable);
+
+    QTableWidgetItem * amtIncome = new QTableWidgetItem(tr("%1").arg(QString::number(bankClosing, 'f',2)));
+    amtIncome->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
+
 
     ui->m_table->setItem(row, 0, ac);
     ui->m_table->setItem(row, 1, amtIncome);
-    //ui->m_table->setItem(row, 2, amtPayment);
 
 
     row = ui->m_table->rowCount();
@@ -207,13 +213,14 @@ void CclosingBalanceDlg::populateTable(QDate date)
     m_rowAccountMap[row] = std::make_pair(0, true);
     m_cashBankRow.insert({gCashAccountName, row});
     QTableWidgetItem * acCash = new QTableWidgetItem(tr("%1").arg(gCashAccountName));
-    QTableWidgetItem * amtIncomeCash = new QTableWidgetItem(tr("%1").arg(""));
-    //QTableWidgetItem * amtPaymentCash = new QTableWidgetItem(tr("%1").arg(""));
+    acCash->setTextAlignment(Qt::AlignLeft|Qt::AlignVCenter);
     acCash->setFlags(acCash->flags() & ~Qt::ItemIsEditable);
+
+    QTableWidgetItem * amtIncomeCash = new QTableWidgetItem(tr("%1").arg(QString::number(cashClosing, 'f',2)));
+    amtIncomeCash->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
 
     ui->m_table->setItem(row, 0, acCash);
     ui->m_table->setItem(row, 1, amtIncomeCash);
-    //ui->m_table->setItem(row, 2, amtPaymentCash);
 
 
 }

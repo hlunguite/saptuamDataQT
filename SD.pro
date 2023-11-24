@@ -34,6 +34,7 @@ SOURCES += main.cpp\
     DB/cremittancesetuptable.cpp \
     DELIGATE/ccustomdeligateforreceiptsetup.cpp \
     DELIGATE/ccustomdeligateforremittance.cpp \
+    DELIGATE/cformatforamountdeligate.cpp \
     DLG/cassignreceiptdlg.cpp \
     DLG/cclosingbalancedlg.cpp \
     DLG/cdlgbase.cpp \
@@ -105,6 +106,7 @@ HEADERS  += mainwindow.h \
     DB/cremittancesetuptable.h \
     DELIGATE/ccustomdeligateforreceiptsetup.h \
     DELIGATE/ccustomdeligateforremittance.h \
+    DELIGATE/cformatforamountdeligate.h \
     DLG/cassignreceiptdlg.h \
     DLG/cclosingbalancedlg.h \
     DLG/cdlgbase.h \

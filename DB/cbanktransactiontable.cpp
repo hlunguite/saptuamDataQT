@@ -76,6 +76,7 @@ QString SbanktransDetail::toString() const
         txt += "Piakchan:" + m_piakChan + " ";
     }
     if (m_amount > 0) {
+
         QString amount = "₹ " + QLocale(QLocale::English,QLocale::India).toString(m_amount, 'f', 2) ;
 
         txt += "Amount:" + amount + " ";
