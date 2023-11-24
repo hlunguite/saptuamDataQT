@@ -84,16 +84,7 @@ void CclosingCalculator::calculateClosingAsOn(QDate date)
     calculateClosingAsOnInternal(date, m_closingValues, cashBankValue);
     m_bankClosing = cashBankValue[gBankAccountName];
     m_cashClosing = cashBankValue[gCashAccountName];
-    /*qDebug()<<"Cash  opening "<<m_cashClosing<<" bank opening "<<m_bankClosing;
-    for (auto cval:m_closingValues) {
-        int id = cval.first;
-        double amt = cval.second;
-        QString name = CaccountMap::Object()->getAccountName(id);
-        if (name.isEmpty()) {
-            name = CaccountMap::Object()->getDeptName(id);
-        }
-        qDebug()<<id<<" "<<name<<" "<<amt;
-    }*/
+
 }
 
 double CclosingCalculator::cashOpening() const

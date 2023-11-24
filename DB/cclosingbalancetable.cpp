@@ -168,18 +168,18 @@ int SclosingDetailData::save()
 
         if (CclosingBalanceDetailTable::Object()->isValueExist(filter, values) == false) {
             m_id = CclosingBalanceDetailTable::Object()->insertInTable(data).toInt();
-            //return m_id;
+            return m_id;
         } else {
             m_id = values.at(0).at(CLOSING_DETAIL_TABLE_ID_IDX).toInt();
         }
-    } else {
-        CclosingBalanceDetailTable::Object()->updateValue(m_closingTableID, CLOSING_DETAIL_CLOSING_TABLE_ID_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
-        CclosingBalanceDetailTable::Object()->updateValue(m_accountOrDeptTableID, CLOSING_DETAIL_ACCOUNT_DEPET_TABLE_ID_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
-        CclosingBalanceDetailTable::Object()->updateValue(m_isAccount, CLOSING_DETAIL_IS_ACCOUNT_ID_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
-        CclosingBalanceDetailTable::Object()->updateValue(m_amount, CLOSING_DETAIL_AMOUNT_TABLE_ID_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
-        CclosingBalanceDetailTable::Object()->updateValue(m_cashOrBankName, CLOSING_DETAIL_CASH_OR_BANK_NAME_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
-
     }
+    CclosingBalanceDetailTable::Object()->updateValue(m_closingTableID, CLOSING_DETAIL_CLOSING_TABLE_ID_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
+    CclosingBalanceDetailTable::Object()->updateValue(m_accountOrDeptTableID, CLOSING_DETAIL_ACCOUNT_DEPET_TABLE_ID_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
+    CclosingBalanceDetailTable::Object()->updateValue(m_isAccount, CLOSING_DETAIL_IS_ACCOUNT_ID_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
+    CclosingBalanceDetailTable::Object()->updateValue(m_amount, CLOSING_DETAIL_AMOUNT_TABLE_ID_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
+    CclosingBalanceDetailTable::Object()->updateValue(m_cashOrBankName, CLOSING_DETAIL_CASH_OR_BANK_NAME_IDX, m_id, CLOSING_DETAIL_TABLE_ID_IDX);
+
+
 
     return m_id;
 }

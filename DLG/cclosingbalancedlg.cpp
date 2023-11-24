@@ -4,7 +4,7 @@
 #include "caccountmap.h"
 #include "cclosingbalancetable.h"
 #include "cformatforamountdeligate.h"
-
+#include "csdutils.h"
 CclosingBalanceDlg::CclosingBalanceDlg(QWidget *parent) :
     CdlgBase(parent),
     ui(new Ui::CclosingBalanceDlg)
@@ -29,6 +29,8 @@ void CclosingBalanceDlg::on_m_saveCloseBtn_clicked()
     int rowCount = ui->m_table->rowCount();
     if (rowCount > 0) {
         std::vector<SclosingDetailData> rowData;
+        double cashBankTotal = 0;
+        double othertotal;
         for (int row = 0; row < rowCount; ++row) {
             QTableWidgetItem* accOrDeptItem = ui->m_table->item(row, 0);
             QTableWidgetItem* amountItem = ui->m_table->item(row, 1);
@@ -57,8 +59,23 @@ void CclosingBalanceDlg::on_m_saveCloseBtn_clicked()
             detailData.m_cashOrBankName = "";
             if (name == gBankAccountName || name == gCashAccountName) {
                 detailData.m_cashOrBankName = name;
+                cashBankTotal += detailData.m_amount;
+            } else {
+                othertotal += detailData.m_amount;
             }
             rowData.push_back(detailData);
+        }
+
+        if (cashBankTotal != othertotal) {
+            double diff = cashBankTotal - othertotal;
+            if(diff > 1) {
+                QString cashBankTotalStr = CsdUtils::convertAmountToStringWithSign(cashBankTotal);
+                QString otherTotalStr = CsdUtils::convertAmountToStringWithSign(othertotal);
+                QString diffStr = CsdUtils::convertAmountToStringWithSign(diff);
+                QString msg = "Sum of Cash and Bank " + cashBankTotalStr + " not equal Account/Dept total " + otherTotalStr + " by " + diffStr;
+                message(msg);
+                return;
+            }
         }
         if (rowData.size() > 0) {
             SclosingData closingData;
