@@ -166,7 +166,10 @@ void CclosingBalanceDlg::populateTable(QDate date)
             bankAccountID = accountID;
             continue;
         }
-
+        EaccountType accType = CaccountMap::Object()->getAccountType(accountID);
+        if (accType == REQUEST_ACCOUNT_TYPE || accType == REMITTANCE_ACCOUNT_TYPE) {
+            continue;
+        }
         QString amtStr;
         auto fn = accountDeptClosing.find(accountID);
         if (fn != accountDeptClosing.end()) {

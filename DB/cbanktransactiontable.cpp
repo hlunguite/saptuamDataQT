@@ -1,5 +1,5 @@
 #include "cbanktransactiontable.h"
-
+#include "csdutils.h"
 CbankTransactionTable::CbankTransactionTable():
     CdbTableBase(BANK_TRANSACTION_TABLE)
 {
@@ -77,7 +77,7 @@ QString SbanktransDetail::toString() const
     }
     if (m_amount > 0) {
 
-        QString amount = "₹ " + QLocale(QLocale::English,QLocale::India).toString(m_amount, 'f', 2) ;
+        QString amount = CsdUtils::convertAmountToStringWithSign(m_amount);
 
         txt += "Amount:" + amount + " ";
         if (m_isIncome) {

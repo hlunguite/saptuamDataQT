@@ -3,6 +3,7 @@
 #include "DB/caccountmap.h"
 #include "DB/ccontactmap.h"
 #include "ctransactionutils.h"
+#include "csdutils.h"
 CtransactionTableModel::CtransactionTableModel(QObject *parent, QSqlDatabase db):
      QSqlTableModel(parent,db)
 {
@@ -38,7 +39,7 @@ QVariant CtransactionTableModel::data(const QModelIndex &index, int role) const
         }
         if (col == TRANSACTION_AMOUNT_IDX) {
             QString amount;
-            amount = "₹ " + QLocale(QLocale::English,QLocale::India).toString(d.toDouble(), 'f', 2) ;
+             amount =  CsdUtils::convertAmountToStringWithSign(d.toDouble()) ;
             return amount;
         }
 

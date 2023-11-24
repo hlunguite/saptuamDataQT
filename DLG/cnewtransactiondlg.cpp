@@ -349,8 +349,8 @@ EtransErrorType CnewTransactionDlg::calcTotalNetTrans()
     if (totalcount > 0) {
         int row = ui->m_summaryTable->rowCount();
         ui->m_summaryTable->insertRow(row);
-        QString income = "₹ " + QLocale(QLocale::English,QLocale::India).toString(m_incomeTotal, 'f', 2) ;
-        QString payment = "₹ " + QLocale(QLocale::English,QLocale::India).toString(m_paymentTotal, 'f', 2) ;
+        QString income =  CsdUtils::convertAmountToStringWithSign(m_incomeTotal);
+        QString payment =   CsdUtils::convertAmountToStringWithSign(m_paymentTotal);
 
         QTableWidgetItem * ac = new QTableWidgetItem(tr("%1").arg("Total"));
         QTableWidgetItem * cnt = new QTableWidgetItem(tr("%1").arg(totalcount));
@@ -370,7 +370,7 @@ EtransErrorType CnewTransactionDlg::calcTotalNetTrans()
         iterator2.next();
         QString refname = iterator2.key();
         double amount = iterator2.value();
-        QString number = "₹ " + QLocale(QLocale::English,QLocale::India).toString(amount, 'f', 2) ;
+        QString number =  CsdUtils::convertAmountToStringWithSign(amount);
 
         int row = ui->m_bankTotalTable->rowCount();
         ui->m_bankTotalTable->insertRow(row);
@@ -732,7 +732,7 @@ void CnewTransactionDlg::addInPrevTable(QVector<StransactionData*> &allTrns)
         QTableWidgetItem * row = new QTableWidgetItem(); //tr("%1").arg(daterange));
         QString str =  CcontactMap::Object()->getContanceName(data->m_fromId);
         str += " " + CaccountMap::Object()->getAccountName(data->m_accountId);
-        QString amount = "₹ " + QLocale(QLocale::English,QLocale::India).toString(data->m_amount, 'f', 2) ;
+        QString amount =  CsdUtils::convertAmountToStringWithSign(data->m_amount);
         str += " " + amount;
         int rowCount = ui->m_previousTable->rowCount();
         ui->m_previousTable->insertRow(rowCount);

@@ -504,7 +504,7 @@ void CremittanceDlg::populateTransacltionListTable(int accountDept, const Strans
         htmlUtils.createCell(data + " ", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
         csvLine += data + ",";
 
-        data = trans.m_amount.isEmpty() ? "" : "₹" + trans.m_amount ;
+        data = trans.m_amount.isEmpty() ? "" :  CsdUtils::convertAmountToStringWithSign(trans.m_amount.toDouble());
         total += trans.m_amount.isEmpty() ? 0 : trans.m_amount.toDouble();
         htmlUtils.createCell(data + " ", HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
         csvLine += trans.m_amount + ",\n";
