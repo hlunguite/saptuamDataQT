@@ -95,84 +95,67 @@
     <string>Cancel</string>
    </property>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QLabel" name="m_remitNameLbl">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>10</y>
-     <width>281</width>
-     <height>47</height>
+     <x>21</x>
+     <y>11</y>
+     <width>95</width>
+     <height>16</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QLabel" name="m_remitNameLbl">
-      <property name="text">
-       <string>Remittance Name</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLineEdit" name="m_remitNameLineEdit"/>
-    </item>
-   </layout>
+   <property name="text">
+    <string>Remittance Name</string>
+   </property>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QLineEdit" name="m_remitNameLineEdit">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>10</y>
-     <width>42</width>
-     <height>46</height>
+     <x>21</x>
+     <y>33</y>
+     <width>133</width>
+     <height>22</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_2">
-    <item>
-     <widget class="QLabel" name="m_orLbl">
-      <property name="text">
-       <string>or</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-   </layout>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QLabel" name="m_orLbl">
    <property name="geometry">
     <rect>
-     <x>350</x>
-     <y>10</y>
-     <width>251</width>
-     <height>55</height>
+     <x>301</x>
+     <y>11</y>
+     <width>16</width>
+     <height>16</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_3">
-    <item>
-     <widget class="QLabel" name="m_selectremitnalelbl">
-      <property name="text">
-       <string>Select Remittance Name for Edit</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QComboBox" name="m_remitNameList"/>
-    </item>
-   </layout>
+   <property name="text">
+    <string>or</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_selectremitnalelbl">
+   <property name="geometry">
+    <rect>
+     <x>351</x>
+     <y>11</y>
+     <width>170</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select Remittance Name for Edit</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="m_remitNameList">
+   <property name="geometry">
+    <rect>
+     <x>351</x>
+     <y>42</y>
+     <width>69</width>
+     <height>22</height>
+    </rect>
+   </property>
   </widget>
  </widget>
  <resources/>

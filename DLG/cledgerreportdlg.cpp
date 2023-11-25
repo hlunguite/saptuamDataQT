@@ -8,6 +8,7 @@
 #include "MISC/cprintUtils.h"
 #include "csdutils.h"
 #include "MISC/cclosingcalculator.h"
+#include "MISC/CdlgDefine.h"
 CledgerReportDlg::CledgerReportDlg(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CledgerReportDlg)
@@ -64,24 +65,49 @@ void CledgerReportDlg::clear()
 void CledgerReportDlg::resize()
 {
 
+    ui->m_cancelBtn->setFixedSize(BUTTON_SIZE);
+    ui->m_csvBtn->setFixedSize(BUTTON_SIZE);
+    ui->m_pdfBtn->setFixedSize(BUTTON_SIZE);
+
     int windowwidth = geometry().size().width();
     int windowheight = geometry().size().height();
-    //int x = ui->m_fromDate->geometry().x();
-    //int y = ui->m_fromDate->geometry().y();
-    //int width = ui->m_fromDate->geometry().width();
-    int height = ui->m_fromDate->geometry().height();
     int btnWidth = ui->m_cancelBtn->geometry().width();
     int btnheight = ui->m_cancelBtn->geometry().height();
-    int gap = btnheight/2;
+    //int gap = btnheight/2;
+    ui->m_fromDate->setFixedSize(DATE_SIZE);
+    int x = ui->m_fromDate->geometry().x();
+    int y = ui->m_fromDate->geometry().y();
+    //x = x + DATE_SIZE.width() + GAP;
+    int height = DATE_SIZE.height();
+    int width = DATE_SIZE.width();
+    //ui->m_fromDate->setGeometry(x, y, width, height);
+    x = x + width + GAP;
+    ui->m_toDate->setGeometry(x, y, width, height);
+    x = x + width + GAP;
+    width = 2*width + btnheight;
+    ui->m_DeptBox->setGeometry(x, y, width, height);
+    x = x + width + GAP;
+    ui->m_accountBox->setGeometry(x, y, width, height);
+    x = x + width + GAP;
+    ui->m_nameFilter->setGeometry(x, y, width, height);
+    x = x + width + GAP;
+    ui->m_deptInCSV->setGeometry(x, y, width, height);
+    x = x + width + GAP;
+    ui->m_individualLedger->setGeometry(x, y, width, height);
+
+    //int width = ui->m_fromDate->geometry().width();
+    height = ui->m_fromDate->geometry().height();
+
+
     //y += height + gap;
-    int y = ui->m_textBrowser->geometry().y();
-    int x = ui->m_textBrowser->geometry().x();
-    int width = windowwidth - 2*x;
+    y = ui->m_textBrowser->geometry().y();
+    x = ui->m_textBrowser->geometry().x();
+    width = windowwidth - 2*x;
     height = windowheight - y - (2*btnheight);
     ui->m_textBrowser->setGeometry(x, y, width, height);
 
     x = windowwidth - (3*btnWidth) - x;
-    y = y + height + gap;
+    y = y + height + GAP;
     ui->m_cancelBtn->setGeometry(x, y, btnWidth, btnheight);
     x += btnWidth + 1;
     ui->m_csvBtn->setGeometry(x, y, btnWidth, btnheight);
@@ -100,6 +126,8 @@ void CledgerReportDlg::populateTable()
     clear();
     m_html.clear();
     m_csvTrans.clear();
+    m_htmlList.clear();
+
     ui->m_textBrowser->setHtml(m_html);
 
     QString startDate = ui->m_fromDate->date().toString("yyyy-MM-dd");
@@ -156,18 +184,13 @@ void CledgerReportDlg::populateTable()
 
     CclosingCalculator closingCalc;
     closingCalc.calculateClosing( ui->m_fromDate->date() ,query);
-
-
+    populateForOpeningClosing(&closingCalc);
 
     //qDebug()<<"qeery is "<<query;
     QVector<StransactionData*> results = CtransactionTable::Object()->getAllTransaction(query);
     //qDebug()<<"Amount Account, From/To Type";
     for (auto& transData: results) {
-        /*qDebug()<<transData->m_amount<<" "<<CaccountMap::Object()->getAccountName(transData->m_accountId)
-                 <<" "<<CcontactMap::Object()->getContanceName(transData->m_fromId)
-                 <<" type "<<transData->m_type <<" "<<transData->m_id;*/
-
-        int deptID = CaccountMap::Object()->getDeptForAccount(transData->m_accountId);
+         int deptID = CaccountMap::Object()->getDeptForAccount(transData->m_accountId);
         QString mode = CtransactionUtils::Object()->getTransactionModeTwoTypeStr((EtransactionMode)transData->m_mode);
         if (individualLedger == false) {
             if (BANK_CASH_DEPOSIT_TRANSACTION_TYPE == transData->m_type) {
@@ -206,13 +229,13 @@ void CledgerReportDlg::populateTable()
     }
     bool isDeptInCSV = individualLedger == false ? ui->m_deptInCSV->isChecked() : false;
     QString replaceAccountName = individualLedger ? account : "";
-    QStringList htmlList;
+
     for (auto [firstID, accountLedgerMap] : m_allAccountLedger.asKeyValueRange()) {
         for (auto [secondID, accountLedger] : accountLedgerMap.asKeyValueRange()) {
             QString html = accountLedger->getHTMLTable(secondID, isDeptInCSV, individualLedger, replaceAccountName);
 
             QStringList csvs = accountLedger->getCSVTransList();
-            htmlList.push_back(html);
+            m_htmlList.push_back(html);
             foreach(const QString& line, csvs) {
                 m_csvTrans.push_back(line);
             }
@@ -221,7 +244,7 @@ void CledgerReportDlg::populateTable()
     if (individualLedger == false){
         QString html = bankAccount.getHTMLTable(0, isDeptInCSV, false, "Bank");
         QStringList csvs = bankAccount.getCSVTransList();
-        htmlList.push_back(html);
+        m_htmlList.push_back(html);
         foreach(const QString& line, csvs) {
             m_csvTrans.push_back(line);
         }
@@ -229,7 +252,7 @@ void CledgerReportDlg::populateTable()
     if (individualLedger == false){
         QString html = cashAccount.getHTMLTable(0, isDeptInCSV, false, "Cash");
         QStringList csvs = cashAccount.getCSVTransList();
-        htmlList.push_back(html);
+        m_htmlList.push_back(html);
         foreach(const QString& line, csvs) {
             m_csvTrans.push_back(line);
         }
@@ -237,10 +260,15 @@ void CledgerReportDlg::populateTable()
 
 
     ChtmlUtils htmlUtils;
-    m_html = htmlUtils.getHtmlPage(htmlList);
-   // qDebug()<<"html is "<<m_html;
+    m_html = htmlUtils.getHtmlPage(m_htmlList);
+
     ui->m_textBrowser->setHtml(m_html);
- //QMap<int, CaccountLedger*>& accountLedgerMap =  m_allAccountLedger[deptID];
+
+}
+
+void CledgerReportDlg::populateForOpeningClosing(CclosingCalculator *calc)
+{
+
 }
 
 void CledgerReportDlg::resizeEvent(QResizeEvent *event)

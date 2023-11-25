@@ -12,6 +12,7 @@
 #include "cimportbanktransactiontable.h"
 #include "ccontacttable.h"
 #include <QMessageBox>
+#include "MISC/CdlgDefine.h"
 
 CnewTransactionDlg::CnewTransactionDlg(bool bankImport, int importID, QWidget *parent) :
     QDialog(parent),
@@ -90,11 +91,18 @@ void CnewTransactionDlg::resize()
 {
     int windowwidth = geometry().size().width();
     int windowheight = geometry().size().height();
-    int x = ui->m_transactionTable->geometry().x();
-    int y = ui->m_transactionTable->geometry().y();
-    int buttonheight = ui->m_okButton->geometry().height();
-    int buttonwidth = ui->m_okButton->geometry().width();
+    int x = XCORD;//ui->m_transactionTable->geometry().x();
+    int y = YCORD;//ui->m_transactionTable->geometry().y();
+    int buttonheight = BUTTON_SIZE.height();//ui->m_okButton->geometry().height();
+    int buttonwidth = BUTTON_SIZE.width();//ui->m_okButton->geometry().width();
 
+    ui->m_date->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    ui->m_importLine->setGeometry( x + GAP +  DATE_SIZE.width(),
+                                  y,
+                                  windowwidth - (2*x) - GAP - DATE_SIZE.width(),
+                                  DEFAULT_HEIGHT);
+
+    y = y + DATE_SIZE.height() + GAP;
     int width = windowwidth - x -x;
     int height = windowheight*.5;
     ui->m_transactionTable->setGeometry(x,y,width,height);
@@ -120,9 +128,9 @@ void CnewTransactionDlg::resize()
         ui->m_bankImportLbl->hide();
         ui->m_bankImportTable->hide();
         ui->m_previousTable->hide();
-        ui->m_summaryLbl->setGeometry(x,y,width,buttonheight);
-        y +=buttonheight;
-        height1 = windowheight -  (y + buttonheight);
+        ui->m_summaryLbl->setGeometry(x,y,width,DEFAULT_HEIGHT);
+        y += DEFAULT_HEIGHT + GAP;
+        height1 = windowheight -  (y + YCORD);
         ui->m_summaryTable->setGeometry(x,y,width,height1);
         ui->m_summaryTable->setMinimumWidth(.10*(float)windowwidth);
         ui->m_summaryTable->horizontalHeader()->resizeSection(0,width*0.45);
@@ -131,58 +139,55 @@ void CnewTransactionDlg::resize()
         ui->m_summaryTable->horizontalHeader()->resizeSection(2,width*0.20);
 
     } else {
-        int datewidth = ui->m_date->geometry().width();
-        ui->m_importLine->setGeometry(ui->m_date->geometry().x() + datewidth + 3,
-                                      ui->m_date->geometry().y(),
-                                      width - datewidth,
-                                      ui->m_date->geometry().height());
+        ui->m_importLine->show();
         width = windowwidth *.20;
         ui->m_summaryLbl->hide();
         ui->m_summaryTable->hide();
-
-        //ui->m_importLine->setDisabled(true);
-
-        ui->m_bankImportLbl->setGeometry(x,y,width,buttonheight);
-        y +=buttonheight;
-        height1 = windowheight -  (y + buttonheight);
+        
+        ui->m_bankImportLbl->setGeometry(x,y,width, DEFAULT_HEIGHT);
+        y += GAP + DEFAULT_HEIGHT;
+        height1 = windowheight -  (y + YCORD);
         ui->m_bankImportTable->setGeometry(x,y,width,height1);
         ui->m_bankImportTable->horizontalHeader()->resizeSection(0, width);
         ui->m_okButton->setText("Add");
 
     }
 
-    x = x + width + 3;
+    x = x + width + GAP;
     ui->m_bankTotalTable->setGeometry(x,y,width,height1);
     ui->m_bankTotalTable->setMinimumWidth(.10*(float)windowwidth);
     ui->m_bankTotalTable->horizontalHeader()->resizeSection(0,width*.5);
     ui->m_bankTotalTable->horizontalHeader()->resizeSection(1,width*.5);
-    ui->m_verifyBankLbl->setGeometry(x,(y-buttonheight),width,buttonheight);
+    ui->m_verifyBankLbl->setGeometry(x, (y-DEFAULT_HEIGHT - GAP),width, DEFAULT_HEIGHT);
 
     if (m_bankImport == true) {
-        x += width + 3;
-        width = ui->m_transactionTable->width() - 2*width - ui->m_transactionTable->x() -(2*buttonwidth);
+        x += width + GAP;
+        width = windowwidth - x - 3*GAP - 2*buttonwidth - XCORD;
         ui->m_previousTable->setGeometry(x, y, width, height1);
         ui->m_previousTable->horizontalHeader()->resizeSection(0, width);
         //ui->m_okButton->setGeometry(x + 3, y, buttonwidth, buttonheight);
         y += height1/2;
+        x = x + width + GAP;
+
 
     } else {
         y += height1 - buttonheight;
         ui->m_rejectBtn->hide();;
         ui->m_skipBtn->hide();
-    }
-    x = ui->m_transactionTable->x() + ui->m_transactionTable->width() -(3*buttonwidth);
+        x = (windowwidth - x - width)/2 + x + width - buttonwidth - GAP;
 
-    x += buttonwidth;
+    }
     int x1 = x;
-    ui->m_cancelButton->setGeometry(x,y,buttonwidth,buttonheight);
-    x += buttonwidth + 3;
     ui->m_okButton->setGeometry(x,y,buttonwidth,buttonheight);
+    x += buttonwidth + GAP;
+    ui->m_cancelButton->setGeometry(x,y,buttonwidth,buttonheight);
+
+
     if (m_bankImport) {
         x = x1;
-        y += buttonheight;
+        y += buttonheight + GAP;
         ui->m_skipBtn->setGeometry(x,y,buttonwidth,buttonheight);
-        x += buttonwidth + 3;
+        x += buttonwidth + GAP;
         ui->m_rejectBtn->setGeometry(x,y,buttonwidth,buttonheight);
 
 

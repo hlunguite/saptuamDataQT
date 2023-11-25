@@ -2,6 +2,7 @@
 #include "ui_cremittancesetupdlg.h"
 #include <QRadioButton>
 #include <QDebug>
+#include "MISC/CdlgDefine.h"
 CremittanceSetupDlg::CremittanceSetupDlg(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CremittanceSetupDlg)
@@ -26,13 +27,28 @@ void CremittanceSetupDlg::resize()
     int windowwidth = geometry().size().width();
     int windowheight = geometry().size().height();
 
-    int x = ui->m_accountTable->geometry().x();
-    int y = ui->m_accountTable->geometry().y();
-    int btnWidth = ui->m_okBtn->geometry().width();
-    int btnheight = ui->m_okBtn->geometry().height();
-    //qDebug()<<"btnwidth "<<btnWidth<<" height "<<btnheight;
-    int width = windowwidth - 2*x;
-    int height = windowheight  - y - (2*btnheight);
+    int x = XCORD;//ui->m_accountTable->geometry().x();
+    int y = YCORD;ui->m_accountTable->geometry().y();
+    int btnWidth = BUTTON_SIZE.width();
+    int btnheight = BUTTON_SIZE.height();
+
+    ui->m_remitNameLbl->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x += GAP +  DATE_SIZE.width();
+    ui->m_orLbl->setGeometry(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    x += GAP + DEFAULT_WIDTH;
+    ui->m_selectremitnalelbl->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x = XCORD;
+    y = YCORD + GAP + DEFAULT_HEIGHT;
+    ui->m_remitNameLineEdit->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x += GAP +  DATE_SIZE.width() + GAP + DEFAULT_WIDTH;
+    ui->m_remitNameList->setGeometry(x, y,  DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x = XCORD;
+    y += DEFAULT_HEIGHT + GAP;
+    ui->m_selectAccountLbl->setGeometry(x, y, DATE_SIZE.width()*2, DEFAULT_HEIGHT);
+
+    y += GAP + DEFAULT_HEIGHT;
+    int width = windowwidth - 2*XCORD;
+    int height = windowheight  - y - GAP - btnheight - YCORD;
 
     ui->m_accountTable->setGeometry(x, y, width, height);
     ui->m_accountTable->horizontalHeader()->resizeSection(0, width*.28);
@@ -43,12 +59,13 @@ void CremittanceSetupDlg::resize()
     ui->m_accountTable->horizontalHeader()->resizeSection(5, width*0.055);
 
 
-    y = windowheight - (btnheight*1.5);
-    x = windowwidth/2 - btnWidth;
+    y += height + GAP ;
+    x = windowwidth/2 - btnWidth - GAP/2;
+    ui->m_okBtn->setGeometry(x, y, btnWidth, btnheight);
+    x += GAP + btnWidth;
     //ui->gridLayout->setGeometry(QRect(x, y, 2*btnWidth, btnheight));
     ui->m_cancelBtn->setGeometry(x, y, btnWidth, btnheight);
-    x += btnWidth + 1;
-    ui->m_okBtn->setGeometry(x, y, btnWidth, btnheight);
+
 
 }
 

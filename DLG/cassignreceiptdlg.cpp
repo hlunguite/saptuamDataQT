@@ -5,6 +5,7 @@
 //#include "caccountreceiptbook.h"
 #include "creceiptbookmap.h"
 #include <set>
+#include "MISC/CdlgDefine.h"
 CassignReceiptDlg::CassignReceiptDlg(QWidget *parent) :
     CdlgBase(parent),
     ui(new Ui::CassignReceiptDlg), m_transationTableModel(nullptr)
@@ -80,13 +81,32 @@ void CassignReceiptDlg::resize()
 {
     int windowwidth = geometry().size().width();
     int windowheight = geometry().size().height();
-    int x = ui->m_availableReceiptTable->geometry().x();
-    int y = ui->m_availableReceiptTable->geometry().y();
-    int width = windowwidth*.25;//ui->m_availableReceiptTable->geometry().width();
-    int buttonheight = ui->m_okBtn->geometry().height();
-    int buttonwidth = ui->m_okBtn->geometry().width();
+    int x = XCORD;//ui->m_startDateLbl->geometry().x();
+    int y = YCORD;//ui->m_startDateLbl->geometry().x();
+    ui->m_startDateLbl->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    ui->m_startDate->setGeometry(x, y + GAP + DATE_SIZE.height(), DATE_SIZE.width(), DATE_SIZE.height());
+    x = x + GAP + DATE_SIZE.width();
+    ui->m_endDateLbl->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    ui->m_endDate->setGeometry(x, y + GAP + DATE_SIZE.height(), DATE_SIZE.width(), DATE_SIZE.height());
+    x = x + GAP + DATE_SIZE.width();
+    ui->m_departmentComboBox->setGeometry(x, y, DEPT_ACCOUNT_COMBO_SIZE.width(), DEPT_ACCOUNT_COMBO_SIZE.height() );
+    ui->m_accountComboBox->setGeometry(x, y + GAP + DEPT_ACCOUNT_COMBO_SIZE.height(),
+                                       DEPT_ACCOUNT_COMBO_SIZE.width(),
+                                       DEPT_ACCOUNT_COMBO_SIZE.height());
 
-    int height = windowheight - y - (2*buttonheight);
+    ui->m_autoFillBtn->setGeometry(x + GAP + DEPT_ACCOUNT_COMBO_SIZE.width(),
+                                   y + DEPT_ACCOUNT_COMBO_SIZE.height()/2,
+                                   BUTTON_SIZE.width(),
+                                   BUTTON_SIZE.height());
+
+    y = y + GAP + DEPT_ACCOUNT_COMBO_SIZE.height() + GAP + DEPT_ACCOUNT_COMBO_SIZE.height();
+    x =  ui->m_startDateLbl->geometry().x();
+
+
+    int width = windowwidth*.25;//ui->m_availableReceiptTable->geometry().width();
+    
+    
+    int height = windowheight - y - (2*DEFAULT_HEIGHT);
 
     ui->m_availableReceiptTable->setGeometry(x, y, width, height);
     ui->m_availableReceiptTable->horizontalHeader()->resizeSection(0, width);
@@ -100,15 +120,19 @@ void CassignReceiptDlg::resize()
     ui->m_transTable->horizontalHeader()->resizeSection(TRANSACTION_RECTIPT_BOOK_IDX,0.15*width);
     ui->m_transTable->horizontalHeader()->resizeSection(TRANSACTION_RECTIPT_NO_IDX,0.15*width);
 
+    //x = ui->m_autoFillBtn->geometry().x();
+    //y = ui->m_autoFillBtn->geometry().y();
 
+    int buttonheight = BUTTON_SIZE.height();
+    int buttonwidth = BUTTON_SIZE.width();
     y = y + height + buttonheight/2;
     x = windowwidth/2 - buttonwidth - buttonwidth;
 
     ui->m_clearBtn->setGeometry(x, y, buttonwidth, buttonheight);
-    x = x + buttonwidth+3;
+    x = x + buttonwidth+GAP;
 
     ui->m_cancelBtn->setGeometry(x, y, buttonwidth, buttonheight);
-    x = x + buttonwidth+3;
+    x = x + buttonwidth+GAP;
     ui->m_okBtn->setGeometry(x, y, buttonwidth, buttonheight);
 
 

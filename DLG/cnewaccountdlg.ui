@@ -154,60 +154,6 @@
     </rect>
    </property>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>20</y>
-     <width>101</width>
-     <height>91</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QLabel" name="m_deptLbl">
-      <property name="text">
-       <string>Department</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="m_accountNameLbl">
-      <property name="text">
-       <string>Account Name</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="m_accountType">
-      <property name="text">
-       <string>Account Type</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>20</y>
-     <width>401</width>
-     <height>99</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout_2">
-    <item>
-     <widget class="QComboBox" name="m_deptCombo"/>
-    </item>
-    <item>
-     <widget class="QLineEdit" name="m_accountName"/>
-    </item>
-    <item>
-     <widget class="QComboBox" name="m_accountTypeCombo"/>
-    </item>
-   </layout>
-  </widget>
   <widget class="QPushButton" name="m_okButton">
    <property name="geometry">
     <rect>
@@ -238,6 +184,75 @@
    </property>
    <property name="text">
     <string>Cancel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_accountType">
+   <property name="geometry">
+    <rect>
+     <x>11</x>
+     <y>84</y>
+     <width>72</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Account Type</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_accountNameLbl">
+   <property name="geometry">
+    <rect>
+     <x>11</x>
+     <y>53</y>
+     <width>80</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Account Name</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_deptLbl">
+   <property name="geometry">
+    <rect>
+     <x>11</x>
+     <y>21</y>
+     <width>63</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Department</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="m_deptCombo">
+   <property name="geometry">
+    <rect>
+     <x>121</x>
+     <y>25</y>
+     <width>69</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="m_accountName">
+   <property name="geometry">
+    <rect>
+     <x>121</x>
+     <y>57</y>
+     <width>133</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="m_accountTypeCombo">
+   <property name="geometry">
+    <rect>
+     <x>121</x>
+     <y>89</y>
+     <width>69</width>
+     <height>22</height>
+    </rect>
    </property>
   </widget>
  </widget>

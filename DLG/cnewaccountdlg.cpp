@@ -5,6 +5,7 @@
 #include "caccountmap.h"
 #include "csdutils.h"
 #include "cimportaccounttable.h"
+#include "MISC/CdlgDefine.h"
 CnewAccountDlg::CnewAccountDlg(bool isEdit, QWidget *parent) :
     CdlgBase(parent),
     ui(new Ui::CnewAccountDlg),
@@ -463,8 +464,60 @@ void CnewAccountDlg::resizeEvent(QResizeEvent *)
 
 void CnewAccountDlg::resize()
 {
-   /* int windowwidth = geometry().size().width();
-    int windowheight = geometry().size().height();*/
+    int windowwidth = geometry().size().width();
+    //int windowheight = geometry().size().height();
+    int width = 2*XCORD + (4*DATE_SIZE.width()) + (3*GAP);
+    int xCord = (windowwidth -  width)/2;
+    int x = xCord;
+    int y = YCORD;
+    ui->m_deptLbl->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x += GAP + DATE_SIZE.width();
+    ui->m_deptCombo->setGeometry(x, y, DEPT_ACCOUNT_COMBO_SIZE.width(), DEFAULT_HEIGHT);
+    y += DEFAULT_HEIGHT + GAP;
+    x = xCord;
+    ui->m_accountNameLbl->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x += DATE_SIZE.width() + GAP;
+    ui->m_accountName->setGeometry(x, y, DEPT_ACCOUNT_COMBO_SIZE.width(), DEFAULT_HEIGHT);
+    y += DEFAULT_HEIGHT + GAP;
+    x = xCord;
+    ui->m_accountType->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x += DATE_SIZE.width() + GAP;
+    ui->m_accountTypeCombo->setGeometry(x, y, DEPT_ACCOUNT_COMBO_SIZE.width(), DEFAULT_HEIGHT);
+    x = xCord;
+    y += DEFAULT_HEIGHT + GAP;
+    ui->m_useHqReceipt->setGeometry(x, y, DEPT_ACCOUNT_COMBO_SIZE.width(), DEFAULT_HEIGHT);
+    ui->m_paymentAccuntLbl->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x += DATE_SIZE.width() + GAP;
+    ui->m_paymentAccountCombo->setGeometry(x, y, DEPT_ACCOUNT_COMBO_SIZE.width(), DEFAULT_HEIGHT);
+    x = xCord;
+    y += DEFAULT_HEIGHT + GAP;
+    int height = ((3*DEFAULT_HEIGHT) + (3*GAP));
+    ui->m_remitBox->setGeometry(x, y,  width, height);
+    int y1 = y + height;
+    x = XCORD;
+    y = YCORD;
+    ui->m_localShareLbl->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x += DATE_SIZE.width() + GAP;
+    ui->m_localShare->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x += DATE_SIZE.width() + GAP;
+    ui->m_hqShareLbl->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x += DATE_SIZE.width() + GAP;
+    ui->m_hqShare->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    y += DEFAULT_HEIGHT + GAP;
+
+    x = XCORD;
+    ui->m_remitNmeLbl->setGeometry(x, y,  DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x +=  DATE_SIZE.width() + GAP;
+    width = width - (2*XCORD + DATE_SIZE.width() + GAP);
+    ui->m_remittanceName->setGeometry(x, y, width, DEFAULT_HEIGHT);
+
+    y = y1 + DEFAULT_HEIGHT;
+
+    x = windowwidth/2 - (GAP/2) - BUTTON_SIZE.width();
+    ui->m_okButton->setGeometry(x, y, BUTTON_SIZE.width(), BUTTON_SIZE.height());
+    x += BUTTON_SIZE.width() + GAP;
+    ui->m_cancelButton->setGeometry(x, y, BUTTON_SIZE.width(), BUTTON_SIZE.height());
+
 
 }
 

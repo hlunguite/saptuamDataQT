@@ -14,7 +14,7 @@
 #include "cremittancetable.h"
 #include "cselectremittance.h"
 //#include <QRegularExpression>
-
+#include "MISC/CdlgDefine.h"
 CremittanceDlg::CremittanceDlg(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CremittanceDlg)
@@ -1024,57 +1024,79 @@ void CremittanceDlg::resize()
 
     //int btnwidth = ui->m_pdfBtn->geometry().width();
     int btnheight = ui->m_pdfBtn->geometry().height();
-    int x = ui->m_accountBox->geometry().x();
-    int y = ui->m_accountBox->geometry().y();
-    int height = windowheight - y - (btnheight );
-    ui->m_accountBox->setGeometry(x, y, ui->m_accountBox->geometry().width(), height);
-    int width = windowwidth - (2*x) - ui->m_accountBox->geometry().width() - ui->m_toAddressBox->geometry().width() - 6;
-    x = x + ui->m_accountBox->geometry().width() + 3;
-    y += 14;
-    height = height - 14;
-    int tableHeight = height *.7;
-    int browserHeight = height*.3;
-    ui->m_table->setGeometry(x, y, width, tableHeight);
+    int x = XCORD;//ui->m_accountBox->geometry().x();
+    int y = YCORD;//ui->m_accountBox->geometry().y();
+
+    ui->m_remitCombolbl->setGeometry(x, y, DEFAULT_WIDTH*2, DEFAULT_HEIGHT);
+    x += DEFAULT_WIDTH*2 + GAP;
+    ui->m_remittanceNameCombo->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x += DATE_SIZE.width() + GAP;
+    ui->m_fromLbl->setGeometry(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    x += DEFAULT_WIDTH + GAP;
+    ui->m_periodFrom->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x += DATE_SIZE.width() + GAP;
+    ui->m_toLbl->setGeometry(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    x += DEFAULT_WIDTH + GAP;
+    ui->m_periodTo->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x += DATE_SIZE.width() + GAP;
+    ui->m_submitLbl->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x += DATE_SIZE.width() + GAP;
+    ui->m_submitDate->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+
+    x = XCORD;
+    y += DEFAULT_HEIGHT + GAP;
+    int height = windowheight - y - YCORD - GAP;
+    int width = DEPT_ACCOUNT_COMBO_SIZE.width()*0.6;
+    ui->m_accountBox->setGeometry(x, y, width, height);
+
+
+    int tableWidth = windowwidth - 2*XCORD - 2*width - 2*GAP;
+    x += width + GAP;
+
+    ui->m_table->setGeometry(x, y, tableWidth, height/2);
+    ui->m_textBrowser->setGeometry(x , y + (height/2) + GAP  , tableWidth, (height/2));
+
+
+
+
+   // ui->m_table->setGeometry(x, y, tableWidth, tableHeight);
     ui->m_table->horizontalHeader()->resizeSection(REMIT_DLG_TABLE_ID, 0);
-    ui->m_table->horizontalHeader()->resizeSection(REMIT_DLG_TABLE_DATE, width*0.07);
-    ui->m_table->horizontalHeader()->resizeSection(REMIT_DLG_TABLE_RECEIPT_BOOK_NO, width*0.10);
-    ui->m_table->horizontalHeader()->resizeSection(REMIT_DLG_TABLE_REEIPT_SL_NO, width*0.10);
-    ui->m_table->horizontalHeader()->resizeSection(REMIT_DLG_TABLE_MIN, width*0.20);
-    ui->m_table->horizontalHeader()->resizeSection(REMIT_DLG_TABLE_PIAKSAN, width*0.20);
-    ui->m_table->horizontalHeader()->resizeSection(REMIT_DLG_TABLE_AMOUNT, width*0.11);
-    ui->m_table->horizontalHeader()->resizeSection(REMIT_DLG_TABLE_LOCAL_SHARE, width*0.11);
-    ui->m_table->horizontalHeader()->resizeSection(REMIT_DLG_TABLE_HQ_SHARE, width*0.11);
+    ui->m_table->horizontalHeader()->resizeSection(REMIT_DLG_TABLE_DATE, tableWidth*0.07);
+    ui->m_table->horizontalHeader()->resizeSection(REMIT_DLG_TABLE_RECEIPT_BOOK_NO, tableWidth*0.10);
+    ui->m_table->horizontalHeader()->resizeSection(REMIT_DLG_TABLE_REEIPT_SL_NO, tableWidth*0.10);
+    ui->m_table->horizontalHeader()->resizeSection(REMIT_DLG_TABLE_MIN, tableWidth*0.20);
+    ui->m_table->horizontalHeader()->resizeSection(REMIT_DLG_TABLE_PIAKSAN, tableWidth*0.20);
+    ui->m_table->horizontalHeader()->resizeSection(REMIT_DLG_TABLE_AMOUNT, tableWidth*0.11);
+    ui->m_table->horizontalHeader()->resizeSection(REMIT_DLG_TABLE_LOCAL_SHARE, tableWidth*0.11);
+    ui->m_table->horizontalHeader()->resizeSection(REMIT_DLG_TABLE_HQ_SHARE, tableWidth*0.11);
 
 
-     ui->m_textBrowser->setGeometry(x , y + tableHeight + 2 , width, browserHeight);
-    //ui->m_textBrowser->setHidden(true);
-    x += width + 3;
-    width = ui->m_toAddressBox->geometry().width();
-    height = ui->m_toAddressBox->geometry().height();
+    x += tableWidth + GAP;
+    height = DEFAULT_WIDTH*1.5;
     ui->m_toAddressBox->setGeometry(x, y, width, height);
-    y += height + 3;
+    y += height + GAP;
     ui->m_submitByBox->setGeometry(x, y, width, height);
-    y += height + 3;
+    y += height + GAP;
+    ui->m_modeLbl->setGeometry(x, y, width, DEFAULT_HEIGHT);
+    y += DEFAULT_HEIGHT + GAP;
+    ui->m_modeCombo->setGeometry(x, y, width, DEFAULT_HEIGHT);
+    y += DEFAULT_HEIGHT + GAP;
+    ui->m_referene->setGeometry(x, y, width, DEFAULT_HEIGHT);
+    y += DEFAULT_HEIGHT + GAP;
+    ui->m_transDateLbl->setGeometry(x, y, width, DEFAULT_HEIGHT);
+    y += DEFAULT_HEIGHT + GAP;
 
-    height = btnheight;
-    width = ui->m_modeLbl->geometry().width();
-    ui->m_modeLbl->setGeometry(x, y, width, height);
-    y += height;
-    width = ui->m_modeCombo->geometry().width();
-    ui->m_modeCombo->setGeometry(x, y, width, height);
-    y += height;
-    ui->m_referene->setGeometry(x, y, width, ui->m_referene->geometry().height());
-    y += height;
-    ui->m_transDateLbl->setGeometry(x, y, width, height);
-    y += height;
-    ui->m_transDate->setGeometry(x, y, width, height);
-    y += height;
-    ui->m_pdfBtn->setGeometry(x, y, width, height);
-    y += height;
-    ui->m_csvBtn->setGeometry(x, y, width, height);
-    y += height;
-    ui->m_cancelBtn->setGeometry(x, y, width, height);
-    //y = y + height;
+    ui->m_transDate->setGeometry(x, y, width, DEFAULT_HEIGHT);
+    y += DEFAULT_HEIGHT + GAP;
+
+    ui->m_pdfBtn->setGeometry(x, y, width, DEFAULT_HEIGHT);
+    y += DEFAULT_HEIGHT + GAP;
+
+    ui->m_csvBtn->setGeometry(x, y, width, DEFAULT_HEIGHT);
+    y += DEFAULT_HEIGHT + GAP;
+
+    ui->m_cancelBtn->setGeometry(x, y, width, DEFAULT_HEIGHT);
+
 
 }
 

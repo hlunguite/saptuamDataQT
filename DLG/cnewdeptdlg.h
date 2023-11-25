@@ -32,7 +32,12 @@ private:
     SdepartmentAccountData*	m_deptAccountData;
     QMap<int, QString> 		m_paymentAccountIDNameMap;
     QMap<QString, int> 		m_paymentAccountNameIDMap;
+    void resize();
 
+
+    // QWidget interface
+protected:
+    void resizeEvent(QResizeEvent *event) override {resize();}
 };
 
 #endif // CNEWDEPTDLG_H

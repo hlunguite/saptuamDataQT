@@ -25,54 +25,87 @@
    <property name="title">
     <string>Add New Receipt Book</string>
    </property>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QPushButton" name="m_addReceiptBtn">
     <property name="geometry">
      <rect>
-      <x>11</x>
-      <y>30</y>
-      <width>671</width>
-      <height>33</height>
+      <x>606</x>
+      <y>34</y>
+      <width>75</width>
+      <height>24</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="m_bookNolbl">
-       <property name="text">
-        <string>Book No</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="m_bookNo"/>
-     </item>
-     <item row="0" column="2">
-      <widget class="QLabel" name="m_startNolbl">
-       <property name="text">
-        <string>Start No</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="3">
-      <widget class="QLineEdit" name="m_startNo"/>
-     </item>
-     <item row="0" column="4">
-      <widget class="QLabel" name="m_endNolbl">
-       <property name="text">
-        <string>End No</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="5">
-      <widget class="QLineEdit" name="m_endNo"/>
-     </item>
-     <item row="0" column="6">
-      <widget class="QPushButton" name="m_addReceiptBtn">
-       <property name="text">
-        <string>Add</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <property name="text">
+     <string>Add</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="m_endNo">
+    <property name="geometry">
+     <rect>
+      <x>457</x>
+      <y>35</y>
+      <width>133</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="m_bookNolbl">
+    <property name="geometry">
+     <rect>
+      <x>12</x>
+      <y>34</y>
+      <width>46</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Book No</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="m_startNo">
+    <property name="geometry">
+     <rect>
+      <x>262</x>
+      <y>35</y>
+      <width>133</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="m_startNolbl">
+    <property name="geometry">
+     <rect>
+      <x>213</x>
+      <y>34</y>
+      <width>43</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Start No</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="m_bookNo">
+    <property name="geometry">
+     <rect>
+      <x>64</x>
+      <y>35</y>
+      <width>133</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="m_endNolbl">
+    <property name="geometry">
+     <rect>
+      <x>412</x>
+      <y>34</y>
+      <width>39</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>End No</string>
+    </property>
    </widget>
   </widget>
   <widget class="QTableWidget" name="m_availableReceiptTable">

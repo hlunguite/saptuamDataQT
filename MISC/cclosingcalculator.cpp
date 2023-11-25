@@ -73,11 +73,31 @@ void CclosingCalculator::calculateClosing(QDate fromDate, QString query)
     m_cashOpening = cashBankValue[gCashAccountName];
     m_bankOpening = cashBankValue[gBankAccountName];
 
+    for (auto values : m_openingValues) {
+        int id = values.first;
+        double amt = values.second;
+        m_closingValues[id] += amt;
+    }
 
     accountCashORBankAmountType cashBankValue1;
-
     getAccountIncomePaymentForQuery(query, m_accountIncomeAndPayment, cashBankValue1);
 
+
+    for (auto keyValue : m_accountIncomeAndPayment) {
+        int accountID = keyValue.first;
+        double incomeAmt = keyValue.second.first;
+        double paymentAmt = keyValue.second.second;
+        auto fn =  m_accountDeptMap.find(accountID);
+        int idToUse = accountID;
+        if (fn != m_accountDeptMap.end()) {
+            idToUse = fn->second;
+        }
+        m_closingValues[idToUse] += incomeAmt;
+        m_closingValues[idToUse] -= paymentAmt;
+    }
+
+    m_cashClosing = cashBankValue1[gCashAccountName] + m_cashOpening;
+    m_bankClosing = cashBankValue1[gBankAccountName] + m_bankOpening;
 
 }
 
@@ -123,6 +143,11 @@ QDate CclosingCalculator::lastTransDate() const
 {
     return m_lastTransDate;
 }
+
+accountTwoAmountType CclosingCalculator::accountIncomeAndPayment() const
+{
+    return m_accountIncomeAndPayment;
+}
 void CclosingCalculator::calculateClosingAsOnInternal(QDate openingDate,
                                                       accountDeptAmountType &closingValue,
                                                       accountCashORBankAmountType& cashBankValue)
@@ -160,13 +185,13 @@ void CclosingCalculator::calculateClosingAsOnInternal(QDate openingDate,
         if (prevClosing < openingDate) {
             prevClosing = CsdUtils::getNextDay(prevClosing);
             QString query = getQeryStr(prevClosing, openingDate);
-            accountTwoAmountType accountIncomeAndPayment;
             double diff = abs(prevRemittance + prevRequest);
             if (diff < 1) {
                 closingValue[m_remittanceID] = 0;
                 closingValue[m_requestID] = 0;
             }
 
+            accountTwoAmountType accountIncomeAndPayment;
             getAccountIncomePaymentForQuery(query, accountIncomeAndPayment, cashBankValue);
             for (auto keyValue : accountIncomeAndPayment) {
                 int accountID = keyValue.first;

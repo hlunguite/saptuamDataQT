@@ -4,6 +4,8 @@
 #include "DB/cpaymentaccounttable.h"
 #include <QMessageBox>
 #include "csdutils.h"
+#include "MISC/CdlgDefine.h"
+
 CnewDeptDlg::CnewDeptDlg(bool isEdit, QWidget *parent) :
     CdlgBase(parent),
     ui(new Ui::CnewDeptDlg),
@@ -138,4 +140,33 @@ void CnewDeptDlg::on_pushButton_clicked()
     m_deptAccountData->save();
 
     emit accept();
+}
+
+void CnewDeptDlg::resize()
+{
+    int windowwidth = geometry().size().width();
+    int windowheight = geometry().size().height();
+    int width = DEPT_ACCOUNT_COMBO_SIZE.width()*2 + GAP;
+    int xCord = (windowwidth - width)/2;
+    int yCord = (windowheight - (DEFAULT_HEIGHT*5) - GAP)/2;
+    int x = xCord;
+    int y = yCord;
+    ui->m_deptNameLbl->setGeometry(x, y,  DEPT_ACCOUNT_COMBO_SIZE.width(),  DEPT_ACCOUNT_COMBO_SIZE.height());
+    x = x +  DEPT_ACCOUNT_COMBO_SIZE.width() + GAP;
+    ui->m_deptName->setGeometry(x, y,  DEPT_ACCOUNT_COMBO_SIZE.width(),  DEPT_ACCOUNT_COMBO_SIZE.height());
+    y +=  DEPT_ACCOUNT_COMBO_SIZE.height() + GAP;
+    x = xCord;
+    ui->m_deptShortNameLbl->setGeometry(x, y,  DEPT_ACCOUNT_COMBO_SIZE.width(),  DEPT_ACCOUNT_COMBO_SIZE.height());
+    x = x +  DEPT_ACCOUNT_COMBO_SIZE.width() + GAP;
+    ui->m_deptShortName->setGeometry(x, y,  DEPT_ACCOUNT_COMBO_SIZE.width(),  DEPT_ACCOUNT_COMBO_SIZE.height());
+    x = xCord;
+    y +=  DEPT_ACCOUNT_COMBO_SIZE.height() + GAP;
+    ui->m_paymentAccountLbl->setGeometry(x, y,  DEPT_ACCOUNT_COMBO_SIZE.width(),  DEPT_ACCOUNT_COMBO_SIZE.height());
+    x = x +  DEPT_ACCOUNT_COMBO_SIZE.width() + GAP;
+    ui->m_paymentAccountCombo->setGeometry(x, y,  DEPT_ACCOUNT_COMBO_SIZE.width(),  DEPT_ACCOUNT_COMBO_SIZE.height());
+    y += DEFAULT_HEIGHT + DEFAULT_HEIGHT + GAP ;
+    x = windowwidth/2 - BUTTON_SIZE.width() - GAP/2;
+    ui->pushButton->setGeometry(x, y, BUTTON_SIZE.width(), BUTTON_SIZE.height());
+    x += BUTTON_SIZE.width() + GAP;
+    ui->m_cancelBtn->setGeometry(x, y, BUTTON_SIZE.width(), BUTTON_SIZE.height());
 }

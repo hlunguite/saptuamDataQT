@@ -65,88 +65,96 @@
     </rect>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QDateEdit" name="m_toDate">
    <property name="geometry">
     <rect>
-     <x>21</x>
+     <x>150</x>
      <y>20</y>
-     <width>174</width>
-     <height>24</height>
+     <width>83</width>
+     <height>22</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <item>
-     <widget class="QDateEdit" name="m_fromDate">
-      <property name="displayFormat">
-       <string>dd MMM yyyy</string>
-      </property>
-      <property name="calendarPopup">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QDateEdit" name="m_toDate">
-      <property name="displayFormat">
-       <string>dd MMM yyyy</string>
-      </property>
-      <property name="calendarPopup">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="displayFormat">
+    <string>dd MMM yyyy</string>
+   </property>
+   <property name="calendarPopup">
+    <bool>true</bool>
+   </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QDateEdit" name="m_fromDate">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>20</y>
-     <width>411</width>
-     <height>24</height>
+     <x>23</x>
+     <y>22</y>
+     <width>91</width>
+     <height>22</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
-    <item>
-     <widget class="QComboBox" name="m_DeptBox"/>
-    </item>
-    <item>
-     <widget class="QComboBox" name="m_accountBox"/>
-    </item>
-   </layout>
+   <property name="displayFormat">
+    <string>dd MMM yyyy</string>
+   </property>
+   <property name="calendarPopup">
+    <bool>true</bool>
+   </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QComboBox" name="m_DeptBox">
    <property name="geometry">
     <rect>
-     <x>620</x>
+     <x>241</x>
      <y>20</y>
-     <width>461</width>
-     <height>24</height>
+     <width>69</width>
+     <height>22</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_3">
-    <item>
-     <widget class="QLineEdit" name="m_nameFilter">
-      <property name="placeholderText">
-       <string>Filter name</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QCheckBox" name="m_deptInCSV">
-      <property name="text">
-       <string>CSV with Department</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QCheckBox" name="m_individualLedger">
-      <property name="text">
-       <string>Individual Ledger</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+  </widget>
+  <widget class="QComboBox" name="m_accountBox">
+   <property name="geometry">
+    <rect>
+     <x>316</x>
+     <y>20</y>
+     <width>69</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="m_deptInCSV">
+   <property name="geometry">
+    <rect>
+     <x>532</x>
+     <y>21</y>
+     <width>136</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>CSV with Department</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="m_individualLedger">
+   <property name="geometry">
+    <rect>
+     <x>674</x>
+     <y>21</y>
+     <width>114</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Individual Ledger</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="m_nameFilter">
+   <property name="geometry">
+    <rect>
+     <x>393</x>
+     <y>20</y>
+     <width>133</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Filter name</string>
+   </property>
   </widget>
  </widget>
  <resources/>

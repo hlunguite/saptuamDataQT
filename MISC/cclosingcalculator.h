@@ -28,6 +28,8 @@ public:
 
     QDate lastTransDate() const;
 
+    accountTwoAmountType accountIncomeAndPayment() const;
+
 private:
     double              m_cashOpening;
     double              m_cashClosing;

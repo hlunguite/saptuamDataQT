@@ -23,6 +23,11 @@ private slots:
 private:
     Ui::CpasswordDlg *ui;
     bool m_isPasswordCorrect;
+    void resize();
+
+    // QWidget interface
+protected:
+    void resizeEvent(QResizeEvent *event) override {resize();}
 };
 
 #endif // CPASSWORDDLG_H

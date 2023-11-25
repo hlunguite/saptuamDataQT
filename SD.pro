@@ -124,6 +124,7 @@ HEADERS  += mainwindow.h \
     DLG/csettingdlg.h \
     DLG/csmsdlg.h \
     DLG/csummaryreportdlg.h \
+    MISC/CdlgDefine.h \
     MISC/cclosingcalculator.h \
     MISC/chtmlutils.h \
     MISC/cprintUtils.h \

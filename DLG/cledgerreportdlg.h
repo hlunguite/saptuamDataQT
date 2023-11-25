@@ -7,6 +7,7 @@
 #include <QVector>
 #include <QDate>
 struct StransactionData;
+class CclosingCalculator;
 namespace Ui {
 class CledgerReportDlg;
 }
@@ -44,11 +45,13 @@ private:
     QMap<int, QMap<int,
                    CaccountLedger*> > m_allAccountLedger;
     QStringList                       m_csvTrans;
+    QStringList                       m_htmlList;
     QString                           m_html;
     void clear();
     // QWidget interface
     void resize();
     void populateTable();
+    void populateForOpeningClosing(CclosingCalculator* calc);
 protected:
     void resizeEvent(QResizeEvent *event);
 private slots:
