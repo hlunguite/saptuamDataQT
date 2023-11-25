@@ -8,6 +8,8 @@
 #include "MISC/chtmlutils.h"
 #include "csdutils.h"
 #include "MISC/cprintUtils.h"
+#include "MISC/CdlgDefine.h"
+
 CsummaryReportDlg::CsummaryReportDlg(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CsummaryReportDlg)
@@ -44,20 +46,33 @@ void CsummaryReportDlg::on_m_savePDF_clicked()
 
 void CsummaryReportDlg::resize()
 {
-    int btnWidth  = ui->m_savePDF->geometry().width();
-    int btnHeight = ui->m_savePDF->geometry().height();
+
     int windowwidth = geometry().size().width();
     int windowheight = geometry().size().height();
-    int x = ui->m_textBox->geometry().x();
-    int y = ui->m_textBox->geometry().y();
-    int width = windowwidth - (2*x);
-    int height = windowheight - y - (2.5*btnHeight);
-    ui->m_textBox->setGeometry(x, y, width, height);
-    y = y + height + (0.5*btnHeight);
-    x = windowwidth - x  - btnWidth;
-    ui->m_savePDF->setGeometry(x, y, btnWidth, btnHeight);
-    x =x - ( btnWidth + 3);
+    int x = XCORD;
+    int y = YCORD;
 
+    int btnWidth  = BUTTON_SIZE.width();
+    int btnHeight = BUTTON_SIZE.height();
+
+    ui->m_fromLBL->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    x += GAP + DATE_SIZE.width();
+    ui->m_toLbl->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    x = XCORD;
+    y += GAP + DATE_SIZE.height();
+    ui->m_fromDate->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    x += GAP + DATE_SIZE.width();
+    ui->m_toDate->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    y += GAP + DATE_SIZE.height();
+    x = XCORD;
+
+    int width = windowwidth - 2*XCORD;
+    int height = windowheight - y - GAP - btnHeight - YCORD;
+    ui->m_textBox->setGeometry(x, y, width, height);
+    y += GAP + height;
+    x = windowwidth/2 - GAP/2 - btnWidth;
+    ui->m_savePDF->setGeometry(x, y, btnWidth, btnHeight);
+    x += btnWidth + GAP;
     ui->m_close->setGeometry(x, y, btnWidth, btnHeight);
 }
 

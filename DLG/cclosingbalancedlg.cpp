@@ -5,6 +5,7 @@
 #include "cclosingbalancetable.h"
 #include "cformatforamountdeligate.h"
 #include "csdutils.h"
+#include "MISC/CdlgDefine.h"
 const double gDiffValue = 1;
 CclosingBalanceDlg::CclosingBalanceDlg(QWidget *parent) :
     CdlgBase(parent),
@@ -126,22 +127,28 @@ void CclosingBalanceDlg::resize()
     int windowwidth = geometry().size().width();
     int windowheight = geometry().size().height();
 
-    int x = ui->m_table->geometry().x();
-    int y = ui->m_table->geometry().y();
-    int buttonheight = ui->m_saveCloseBtn->geometry().height();
-    int buttonwidth = ui->m_saveCloseBtn->geometry().width();
+    int x = XCORD;
+    int y = YCORD;
+    int buttonheight = BUTTON_SIZE.height();
+    int buttonwidth = BUTTON_SIZE.width();
 
-    int width = windowwidth - (2*x);
-    int height = windowheight - y - (2*buttonheight);
+    ui->m_closingasonlbl->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    x += GAP + DATE_SIZE.width();
+    ui->m_closingDate->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    x = XCORD;
+    y += GAP + DATE_SIZE.height();
+
+    int width = windowwidth - (2*XCORD);
+    int height = windowheight - y - YCORD - buttonheight - GAP;
     ui->m_table->setGeometry(x, y, width, height);
     ui->m_table->horizontalHeader()->resizeSection(0,width*0.5);
     ui->m_table->horizontalHeader()->resizeSection(1,width*0.24);
     ui->m_table->horizontalHeader()->resizeSection(2,width*0.24);
 
-    x = windowwidth/2 - buttonwidth - 2;
-    y = y + height + (0.5*buttonheight);
+    x =  windowwidth/2 - buttonwidth - GAP/2;
+    y += height + GAP;
     ui->m_saveCloseBtn->setGeometry(x, y, buttonwidth, buttonheight);
-    x = windowwidth/2 + 1;
+    x += buttonwidth + GAP;
     ui->m_cancelBtn->setGeometry(x, y, buttonwidth, buttonheight);
 
 }

@@ -65,54 +65,49 @@ void CledgerReportDlg::clear()
 void CledgerReportDlg::resize()
 {
 
-    ui->m_cancelBtn->setFixedSize(BUTTON_SIZE);
-    ui->m_csvBtn->setFixedSize(BUTTON_SIZE);
-    ui->m_pdfBtn->setFixedSize(BUTTON_SIZE);
+
 
     int windowwidth = geometry().size().width();
     int windowheight = geometry().size().height();
-    int btnWidth = ui->m_cancelBtn->geometry().width();
-    int btnheight = ui->m_cancelBtn->geometry().height();
-    //int gap = btnheight/2;
-    ui->m_fromDate->setFixedSize(DATE_SIZE);
-    int x = ui->m_fromDate->geometry().x();
-    int y = ui->m_fromDate->geometry().y();
-    //x = x + DATE_SIZE.width() + GAP;
-    int height = DATE_SIZE.height();
-    int width = DATE_SIZE.width();
-    //ui->m_fromDate->setGeometry(x, y, width, height);
-    x = x + width + GAP;
-    ui->m_toDate->setGeometry(x, y, width, height);
-    x = x + width + GAP;
-    width = 2*width + btnheight;
-    ui->m_DeptBox->setGeometry(x, y, width, height);
-    x = x + width + GAP;
-    ui->m_accountBox->setGeometry(x, y, width, height);
-    x = x + width + GAP;
-    ui->m_nameFilter->setGeometry(x, y, width, height);
-    x = x + width + GAP;
-    ui->m_deptInCSV->setGeometry(x, y, width, height);
-    x = x + width + GAP;
-    ui->m_individualLedger->setGeometry(x, y, width, height);
-
-    //int width = ui->m_fromDate->geometry().width();
-    height = ui->m_fromDate->geometry().height();
+    int btnWidth = BUTTON_SIZE.width();
+    int btnheight = BUTTON_SIZE.height();
 
 
-    //y += height + gap;
-    y = ui->m_textBrowser->geometry().y();
-    x = ui->m_textBrowser->geometry().x();
-    width = windowwidth - 2*x;
-    height = windowheight - y - (2*btnheight);
+    int x = XCORD;
+    int y = YCORD;
+
+    ui->m_fromDate->setGeometry(x , y, DATE_SIZE.width(), DATE_SIZE.height());
+    x += GAP + DATE_SIZE.width() ;
+    ui->m_toDate->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    x += GAP + DATE_SIZE.width();
+    ui->m_DeptBox->setGeometry(x, y, DEPT_ACCOUNT_COMBO_SIZE.width(),  DEPT_ACCOUNT_COMBO_SIZE.height() );
+    x += GAP +  DEPT_ACCOUNT_COMBO_SIZE.width();
+    ui->m_accountBox->setGeometry(x, y,  DEPT_ACCOUNT_COMBO_SIZE.width(),  DEPT_ACCOUNT_COMBO_SIZE.height());
+    x += GAP + DEPT_ACCOUNT_COMBO_SIZE.width();
+    ui->m_nameFilter->setGeometry(x, y, DATE_SIZE.width() + btnWidth, DATE_SIZE.height());
+    x += GAP + DATE_SIZE.width() + btnWidth;
+
+    ui->m_deptInCSV->setGeometry(x, y, DATE_SIZE.width() + btnWidth, DATE_SIZE.height());
+    x += GAP + DATE_SIZE.width() + btnWidth;
+    ui->m_individualLedger->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    y += GAP +  DATE_SIZE.height();
+
+    x = XCORD;
+    int width = windowwidth - 2*XCORD;
+    int height = windowheight - y - GAP - YCORD - btnheight;
+
+
+
     ui->m_textBrowser->setGeometry(x, y, width, height);
 
-    x = windowwidth - (3*btnWidth) - x;
+    x  = windowwidth/2 - btnWidth - GAP - btnWidth/2;
     y = y + height + GAP;
-    ui->m_cancelBtn->setGeometry(x, y, btnWidth, btnheight);
-    x += btnWidth + 1;
-    ui->m_csvBtn->setGeometry(x, y, btnWidth, btnheight);
-    x += btnWidth + 1;
     ui->m_pdfBtn->setGeometry(x, y, btnWidth, btnheight);
+    x += btnWidth + GAP;
+    ui->m_csvBtn->setGeometry(x, y, btnWidth, btnheight);
+    x += btnWidth + GAP;
+    ui->m_cancelBtn->setGeometry(x, y, btnWidth, btnheight);
+
 
 
 

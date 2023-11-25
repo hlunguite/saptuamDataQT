@@ -6,6 +6,7 @@
 #include "caccountmap.h"
 #include "csdutils.h"
 #include "MISC/cprintUtils.h"
+#include "MISC/CdlgDefine.h"
 CsmsDlg::CsmsDlg(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CsmsDlg)
@@ -15,6 +16,7 @@ CsmsDlg::CsmsDlg(QWidget *parent) :
     QDate date = QDate::currentDate();
     ui->m_fromDate->setDate(date);
     ui->m_toDate->setDate(date);
+    resize();
 }
 
 CsmsDlg::~CsmsDlg()
@@ -28,13 +30,19 @@ void CsmsDlg::resize()
     int windowwidth = geometry().size().width();
     int windowheight = geometry().size().height();
 
-    //int btnwidth = ui->m_pdfBtn->geometry().width();
-    int btnheight = ui->m_save->geometry().height();
-    int btnweight = ui->m_save->geometry().width();
-    int x = ui->m_table->geometry().x();
-    int y = ui->m_table->geometry().y();
-    int width = windowwidth - x - x;
-    int height = windowheight - y - 3*btnheight;
+    int btnheight = BUTTON_SIZE.height();
+    int btnweight = BUTTON_SIZE.width();
+    int x = XCORD;
+    int y = YCORD;
+
+    ui->m_fromDate->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    x += GAP + DATE_SIZE.width();
+    ui->m_toDate->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    x = XCORD;
+    y += GAP  + DATE_SIZE.height();
+
+    int width = windowwidth - 2*XCORD;
+    int height = windowheight - y - YCORD - GAP - btnheight;
 
     ui->m_table->setGeometry(x, y, width, height);
     ui->m_table->horizontalHeader()->resizeSection(0, width*0.2);
@@ -44,10 +52,10 @@ void CsmsDlg::resize()
     ui->m_table->horizontalHeader()->resizeSection(4, width*0.2);
 
 
-    y = y + height + (0.2*btnweight);
-    x = windowwidth - x - (2*btnweight) - 3;
+    y = y + height + GAP;
+    x = windowwidth/2  - btnweight - GAP/2;
     ui->m_save->setGeometry(x, y, btnweight, btnheight);
-    x += btnweight + 3;
+    x += btnweight + GAP;
     ui->m_cancel->setGeometry(x, y, btnweight, btnheight);
 
 }

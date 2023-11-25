@@ -42,74 +42,6 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>11</x>
-     <y>30</y>
-     <width>121</width>
-     <height>271</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QLabel" name="m_orgNameLbl">
-      <property name="text">
-       <string>Orgination Name</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="m_locationLbl">
-      <property name="text">
-       <string>Location</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="m_saptuamMinlbl">
-      <property name="text">
-       <string>Saptuam Min</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="m_fyStartLbl">
-      <property name="text">
-       <string>Finance Year Start</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="m_fyEndLbl">
-      <property name="text">
-       <string>Finance Year End</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="m_fontSizeLbl">
-      <property name="text">
-       <string>Font Size</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="m_passwordLbl">
-      <property name="text">
-       <string>Password</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="m_cwdLbl">
-      <property name="text">
-       <string>Work Directory</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
   <widget class="QLineEdit" name="m_org">
    <property name="geometry">
     <rect>
@@ -192,37 +124,141 @@
     </rect>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QLabel" name="m_orgNameLbl">
    <property name="geometry">
     <rect>
-     <x>141</x>
-     <y>231</y>
-     <width>262</width>
-     <height>41</height>
+     <x>12</x>
+     <y>31</y>
+     <width>92</width>
+     <height>16</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <item>
-     <widget class="QLineEdit" name="m_password">
-      <property name="echoMode">
-       <enum>QLineEdit::Password</enum>
-      </property>
-      <property name="placeholderText">
-       <string>Enter new password</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLineEdit" name="m_password_2">
-      <property name="echoMode">
-       <enum>QLineEdit::Password</enum>
-      </property>
-      <property name="placeholderText">
-       <string>Re- enter password</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="text">
+    <string>Orgination Name</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_saptuamMinlbl">
+   <property name="geometry">
+    <rect>
+     <x>12</x>
+     <y>100</y>
+     <width>71</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Saptuam Min</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_locationLbl">
+   <property name="geometry">
+    <rect>
+     <x>12</x>
+     <y>65</y>
+     <width>46</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Location</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_fyStartLbl">
+   <property name="geometry">
+    <rect>
+     <x>12</x>
+     <y>134</y>
+     <width>93</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Finance Year Start</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_fyEndLbl">
+   <property name="geometry">
+    <rect>
+     <x>12</x>
+     <y>169</y>
+     <width>89</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Finance Year End</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_fontSizeLbl">
+   <property name="geometry">
+    <rect>
+     <x>12</x>
+     <y>203</y>
+     <width>47</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Font Size</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_passwordLbl">
+   <property name="geometry">
+    <rect>
+     <x>12</x>
+     <y>237</y>
+     <width>50</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Password</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_cwdLbl">
+   <property name="geometry">
+    <rect>
+     <x>12</x>
+     <y>272</y>
+     <width>79</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Work Directory</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="m_password_2">
+   <property name="geometry">
+    <rect>
+     <x>275</x>
+     <y>240</y>
+     <width>127</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
+   </property>
+   <property name="placeholderText">
+    <string>Re- enter password</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="m_password">
+   <property name="geometry">
+    <rect>
+     <x>142</x>
+     <y>240</y>
+     <width>127</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
+   </property>
+   <property name="placeholderText">
+    <string>Enter new password</string>
+   </property>
   </widget>
  </widget>
  <resources/>

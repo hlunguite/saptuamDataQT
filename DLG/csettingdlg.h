@@ -23,6 +23,10 @@ private slots:
 private:
     Ui::CsettingDlg *ui;
     bool m_isNew;
+    void resize();
+    // QWidget interface
+protected:
+    void resizeEvent(QResizeEvent *event) override {resize();}
 };
 
 #endif // CSETTINGDLG_H

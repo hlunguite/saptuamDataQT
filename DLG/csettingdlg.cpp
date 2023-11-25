@@ -3,6 +3,8 @@
 #include "csettingtable.h"
 #include <QMessageBox>
 #include <QFileDialog>
+#include "MISC/CdlgDefine.h"
+
 CsettingDlg::CsettingDlg(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CsettingDlg)
@@ -173,5 +175,69 @@ void CsettingDlg::on_m_bwroseDirBtn_clicked()
     QFileDialog fileDlg;
     QString str = fileDlg.getExistingDirectory(nullptr, "Select Folder");
     ui->m_cwd->setText(str);
+}
+
+void CsettingDlg::resize()
+{
+    int lblWidth = DATE_SIZE.width();
+    int height = DATE_SIZE.height();
+    int dateSize = DATE_SIZE.width();
+    int passWordWidth = dateSize;
+    int cwdWidth = DEFAULT_WIDTH*3;
+    int txtWidth = cwdWidth + GAP + DEFAULT_WIDTH;
+    int x = XCORD;
+    int y = YCORD;
+    ui->m_orgNameLbl->setGeometry(x, y, lblWidth, height);
+    x += lblWidth + GAP;
+    ui->m_org->setGeometry(x, y, txtWidth, height);
+    x = XCORD;
+    y += height + GAP;
+
+    ui->m_locationLbl->setGeometry(x, y, lblWidth, height);
+    x += lblWidth + GAP;
+    ui->m_location->setGeometry(x, y, txtWidth, height);
+    x = XCORD;
+    y += height + GAP;
+    ui->m_saptuamMinlbl->setGeometry(x, y, lblWidth, height);
+    x += lblWidth + GAP;
+    ui->m_saptuamMin->setGeometry(x, y, txtWidth, height);
+    x = XCORD;
+    y += height + GAP;
+
+    ui->m_fyStartLbl->setGeometry(x, y, lblWidth, height);
+    x += lblWidth + GAP;
+    ui->m_fyStart->setGeometry(x , y, dateSize, height);
+    x = XCORD;
+    y += height + GAP;
+
+    ui->m_fyEndLbl->setGeometry(x, y, lblWidth, height);
+    x += lblWidth + GAP;
+    ui->m_fyEnd->setGeometry(x , y, dateSize, height);
+    x = XCORD;
+    y += height + GAP;
+
+    ui->m_fontSizeLbl->setGeometry(x, y, lblWidth, height);
+    x += lblWidth + GAP;
+    ui->m_fontSize->setGeometry(x , y, dateSize, height);
+    x = XCORD;
+    y += height + GAP;
+
+    ui->m_passwordLbl->setGeometry(x, y, lblWidth, height);
+    x += lblWidth + GAP;
+    ui->m_password->setGeometry(x , y, passWordWidth, height);
+    x += GAP + passWordWidth;
+    ui->m_password_2->setGeometry(x , y, passWordWidth, height);
+    x = XCORD;
+    y += height + GAP;
+
+    ui->m_cwdLbl->setGeometry(x, y, lblWidth, height);
+    x += lblWidth + GAP;
+    ui->m_cwd->setGeometry(x, y, cwdWidth, height);
+    x += cwdWidth + GAP;
+    ui->m_bwroseDirBtn->setGeometry(x, y, DEFAULT_WIDTH, height);
+    x =  geometry().size().width()/2 - DEFAULT_WIDTH/2;
+    y += height + GAP;
+    ui->m_closeBtn->setGeometry(x, y, DEFAULT_WIDTH, height);
+
 }
 
