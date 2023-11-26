@@ -31,6 +31,10 @@ private slots:
 private:
     Ui::CfilterTransactionDlg *ui;
     QString     m_filter;
+    void resize();
+    // QWidget interface
+protected:
+    void resizeEvent(QResizeEvent *event) override {resize();}
 };
 
 #endif // CFILTERTRANSACTIONDLG_H

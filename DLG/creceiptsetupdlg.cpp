@@ -74,7 +74,7 @@ void CreceiptSetupDlg::resize()
     int bx = windowwidth/2 - buttonwidth/2;
     ui->m_clearBtn->setGeometry(bx, y, buttonwidth, buttonheight);
     bx =  windowwidth/2 + buttonwidth/2 + GAP;
-    int addRemovBtnWidth = buttonwidth*4;
+    int addRemovBtnWidth = buttonwidth*3;
     ui->m_removeReceiptAccountBtn->setGeometry(bx, y, addRemovBtnWidth, buttonheight);
 
     ui->m_accountReceiptlbl->setGeometry( windowwidth - x - DEPT_ACCOUNT_COMBO_SIZE.width(), y,

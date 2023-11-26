@@ -133,8 +133,12 @@ private:
     QString getFullName(int id);
     void populatePersonForEdit();
     void populateOtherForEdit();
+    void resize();
 
 
+    // QWidget interface
+protected:
+    void resizeEvent(QResizeEvent *event) override {resize();}
 };
 
 #endif // CCONTACTDLG_H

@@ -514,7 +514,7 @@ void MainWindow::readSettings()
         orgination = orgination.isEmpty() ? "EVANGELICAL BAPTIST CONVENTION CHURCH" : orgination;
         location = location.isEmpty() ?  "DELHI" : location;
         saptuamMin = saptuamMin.isEmpty() ? "CENTRAL DELHI" : saptuamMin;
-        //TODO newDirectory();
+
     }else if(orgination.isEmpty()){
         currentDirectory = currentDirectory.isEmpty() ?  "." : currentDirectory;
         orgination = "EVANGELICAL BAPTIST CONVENTION CHURCH";

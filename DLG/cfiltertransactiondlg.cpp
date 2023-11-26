@@ -4,6 +4,7 @@
 #include "caccountmap.h";
 #include "ctransactiontable.h"
 #include <set>
+#include "MISC/CdlgDefine.h"
 CfilterTransactionDlg::CfilterTransactionDlg(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CfilterTransactionDlg)
@@ -185,6 +186,49 @@ void CfilterTransactionDlg::on_m_accountBox_currentTextChanged(const QString &ar
     for (auto type: types) {
         ui->m_transTypeBox->addItem(type);
     }
+
+}
+
+void CfilterTransactionDlg::resize()
+{
+    int windowwidth = geometry().size().width();
+    //int windowheight = geometry().size().height();
+    int x = XCORD;
+    int y = YCORD;
+    int labelWidth = DEFAULT_WIDTH;
+    int btnWidth  = BUTTON_SIZE.width();
+    int btnHeight = BUTTON_SIZE.height();
+
+    ui->m_deptLbl->setGeometry(x, y, labelWidth, DEFAULT_HEIGHT);
+    x += GAP + labelWidth;
+    ui->m_deptBox->setGeometry(x, y, DEPT_ACCOUNT_COMBO_SIZE.width(), DEFAULT_HEIGHT);
+    x = XCORD;
+    y += DEFAULT_HEIGHT + GAP;
+    ui->m_accountLbl->setGeometry(x, y, labelWidth, DEFAULT_HEIGHT);
+    x += GAP + labelWidth;
+    ui->m_accountBox->setGeometry(x, y, DEPT_ACCOUNT_COMBO_SIZE.width(), DEFAULT_HEIGHT);
+    x = XCORD;
+    y += DEFAULT_HEIGHT + GAP;
+
+    ui->m_transTypeLbl->setGeometry(x, y, labelWidth, DEFAULT_HEIGHT);
+    x += GAP + labelWidth;
+    ui->m_transTypeBox->setGeometry(x, y, DEPT_ACCOUNT_COMBO_SIZE.width(), DEFAULT_HEIGHT);
+    x = XCORD;
+    y += DEFAULT_HEIGHT + GAP;
+    ui->m_filterDateCheckbox->setGeometry(x , y, DEPT_ACCOUNT_COMBO_SIZE.width(), DEFAULT_HEIGHT);
+    y += DEFAULT_HEIGHT + GAP;
+
+    ui->m_filterDateLbl->setGeometry(x, y, labelWidth, DEFAULT_HEIGHT);
+    //y += DEFAULT_HEIGHT + GAP;
+    x += GAP +  labelWidth;
+    ui->m_filterDateStart->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    x += GAP + DATE_SIZE.width();
+    ui->m_filterDateEnd->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    y+= GAP + DATE_SIZE.height() + DEFAULT_HEIGHT;
+
+    x = windowwidth/2 - btnWidth/2;
+    ui->pushButton->setGeometry(x, y, btnWidth, btnHeight);
+
 
 }
 

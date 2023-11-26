@@ -7,6 +7,7 @@
 #include "DB/cothercontacttable.h"
 #include "ccontactmap.h"
 #include "cimportmintable.h"
+#include "MISC/CdlgDefine.h"
 CcontactDLG::CcontactDLG(QWidget *parent) :
     CdlgBase(parent),
     ui(new Ui::CcontactDLG),
@@ -461,6 +462,98 @@ void CcontactDLG::populateOtherForEdit()
         m_phone = values.at(0).at(OTHER_PHONE_IDX).toString();
     }
 
+
+}
+
+void CcontactDLG::resize()
+{
+    int windowwidth = geometry().size().width();
+    int windowheight = geometry().size().height();
+    int x = XCORD;
+    int y = YCORD;
+
+    int btnWidth  = BUTTON_SIZE.width();
+    int btnHeight = BUTTON_SIZE.height();
+
+    ui->m_dataForPersoncheckBox->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    int width = windowwidth - (2*XCORD + GAP + DATE_SIZE.width());
+    x +=  GAP + DATE_SIZE.width();
+    ui->m_name->setGeometry(x, y, width, DEFAULT_HEIGHT);
+    x = XCORD;
+    y += GAP +  DEFAULT_HEIGHT;
+    width = windowwidth - 2*XCORD;
+    int height = DEFAULT_HEIGHT*2 + (6*GAP);
+    ui->m_nameBox->setGeometry(x, y, width, height);
+    int y1 = y;
+    x = GAP;
+    y = 2*GAP;
+
+    //width = DEFAULT_WIDTH*4.2;
+    int titleWidth = (DEFAULT_WIDTH*2);
+    width = (width - (titleWidth + 4*GAP))/2;
+    ui->m_titleLbl->setGeometry(x, y, titleWidth , DEFAULT_HEIGHT);
+    x += GAP + titleWidth;
+    ui->m_firstNameLbl->setGeometry(x, y, width, DEFAULT_HEIGHT);
+    x += GAP + width;
+    ui->m_lastNameLbl->setGeometry(x, y,  width, DEFAULT_HEIGHT);
+    x = GAP;
+    y += GAP + DEFAULT_HEIGHT;
+    ui->m_titleComboBox->setGeometry(x, y, titleWidth, DEFAULT_HEIGHT);
+    x += GAP + titleWidth;
+    ui->m_firstNameLineEdit->setGeometry(x, y, width, DEFAULT_HEIGHT);
+    x += GAP + width;
+    ui->m_lastName->setGeometry(x, y,  width, DEFAULT_HEIGHT);
+
+
+    y = y1 + height + GAP;
+    x = XCORD;
+    ui->m_relationShipLbl->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x += GAP + DATE_SIZE.width();
+    ui->m_genderLbl->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x += GAP + DATE_SIZE.width();
+    ui->m_parentSpuseLbl->setGeometry(x, y, DEPT_ACCOUNT_COMBO_SIZE.width(), DEFAULT_HEIGHT);
+    y += GAP + DEFAULT_HEIGHT;
+    x = XCORD;
+    ui->m_relationShipCombo->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x += GAP + DATE_SIZE.width();
+    ui->m_genderCombo->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    x += GAP + DATE_SIZE.width();
+    width = windowwidth - (2*XCORD + GAP + DATE_SIZE.width() +GAP + DATE_SIZE.width() );
+    ui->m_parentSpouse->setGeometry(x, y, width, DEFAULT_HEIGHT);
+    y += GAP + DEFAULT_HEIGHT;
+    x = XCORD;
+    ui->m_phoneLbl->setGeometry(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    width = windowwidth - ((2*XCORD) + GAP +  DEFAULT_WIDTH);
+    x += DEFAULT_WIDTH + GAP;
+    ui->m_phone->setGeometry(x, y, width, DEFAULT_HEIGHT);
+    y += GAP + DEFAULT_HEIGHT;
+    y1 = y;
+
+    x = XCORD;
+    width = windowwidth - 2*XCORD;
+    ui->m_parentgroupBox->setGeometry(x, y, width, height);
+    width = (width - (titleWidth + 4*GAP))/2;
+    x = GAP;
+    y = 2*GAP;
+    ui->m_parentTitleLbl->setGeometry(x, y, titleWidth , DEFAULT_HEIGHT);
+    x += GAP + titleWidth;
+    ui->m_parentFirstNameLbl->setGeometry(x, y, width, DEFAULT_HEIGHT);
+    x += GAP + width;
+    ui->m_parentLastNameLbl->setGeometry(x, y,  width, DEFAULT_HEIGHT);
+    x = GAP;
+    y += GAP + DEFAULT_HEIGHT;
+    ui->m_parentTitleCombo->setGeometry(x, y, titleWidth, DEFAULT_HEIGHT);
+    x += GAP + titleWidth;
+    ui->m_parentFirstName->setGeometry(x, y, width, DEFAULT_HEIGHT);
+    x += GAP + width;
+    ui->m_parentLastName->setGeometry(x, y,  width, DEFAULT_HEIGHT);
+
+    y = y1 + height + DEFAULT_HEIGHT;
+
+    x = windowwidth/2 - BUTTON_SIZE.width() -GAP/2;
+    ui->m_okButton->setGeometry(x, y, BUTTON_SIZE.width(), BUTTON_SIZE.height());
+    x += BUTTON_SIZE.width() + GAP;
+    ui->m_cancelButton->setGeometry(x, y,  BUTTON_SIZE.width(), BUTTON_SIZE.height());
 
 }
 QString CcontactDLG::phone() const

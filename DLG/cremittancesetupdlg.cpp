@@ -36,7 +36,8 @@ void CremittanceSetupDlg::resize()
     x += GAP +  DATE_SIZE.width();
     ui->m_orLbl->setGeometry(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     x += GAP + DEFAULT_WIDTH;
-    ui->m_selectremitnalelbl->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
+    int width = 2*DATE_SIZE.width();
+    ui->m_selectremitnalelbl->setGeometry(x, y, width, DEFAULT_HEIGHT);
     x = XCORD;
     y = YCORD + GAP + DEFAULT_HEIGHT;
     ui->m_remitNameLineEdit->setGeometry(x, y, DATE_SIZE.width(), DEFAULT_HEIGHT);
@@ -47,7 +48,7 @@ void CremittanceSetupDlg::resize()
     ui->m_selectAccountLbl->setGeometry(x, y, DATE_SIZE.width()*2, DEFAULT_HEIGHT);
 
     y += GAP + DEFAULT_HEIGHT;
-    int width = windowwidth - 2*XCORD;
+    width = windowwidth - 2*XCORD;
     int height = windowheight  - y - GAP - btnheight - YCORD;
 
     ui->m_accountTable->setGeometry(x, y, width, height);
@@ -86,6 +87,7 @@ void CremittanceSetupDlg::populateTable()
 void CremittanceSetupDlg::populateAllAccount()
 {
     //TODO
+    //TODO also dlg for payment account
 }
 
 void CremittanceSetupDlg::populateRemittance(QString remitName)

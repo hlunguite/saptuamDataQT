@@ -87,59 +87,74 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QLabel" name="m_deptLbl">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>40</y>
-     <width>101</width>
-     <height>91</height>
+     <x>31</x>
+     <y>41</y>
+     <width>63</width>
+     <height>16</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QLabel" name="m_deptLbl">
-      <property name="text">
-       <string>Department</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="m_accountLbl">
-      <property name="text">
-       <string>Account</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="m_transTypeLbl">
-      <property name="text">
-       <string>Transaction Type</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="text">
+    <string>Department</string>
+   </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QLabel" name="m_accountLbl">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>40</y>
-     <width>301</width>
-     <height>91</height>
+     <x>31</x>
+     <y>73</y>
+     <width>45</width>
+     <height>16</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_2">
-    <item>
-     <widget class="QComboBox" name="m_deptBox"/>
-    </item>
-    <item>
-     <widget class="QComboBox" name="m_accountBox"/>
-    </item>
-    <item>
-     <widget class="QComboBox" name="m_transTypeBox"/>
-    </item>
-   </layout>
+   <property name="text">
+    <string>Account</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_transTypeLbl">
+   <property name="geometry">
+    <rect>
+     <x>31</x>
+     <y>104</y>
+     <width>87</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Transaction Type</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="m_deptBox">
+   <property name="geometry">
+    <rect>
+     <x>141</x>
+     <y>43</y>
+     <width>69</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="m_transTypeBox">
+   <property name="geometry">
+    <rect>
+     <x>141</x>
+     <y>103</y>
+     <width>69</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="m_accountBox">
+   <property name="geometry">
+    <rect>
+     <x>141</x>
+     <y>73</y>
+     <width>69</width>
+     <height>22</height>
+    </rect>
+   </property>
   </widget>
  </widget>
  <resources/>

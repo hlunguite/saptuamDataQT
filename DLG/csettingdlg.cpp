@@ -183,7 +183,7 @@ void CsettingDlg::resize()
     int height = DATE_SIZE.height();
     int dateSize = DATE_SIZE.width();
     int passWordWidth = dateSize;
-    int cwdWidth = DEFAULT_WIDTH*3;
+    int cwdWidth = DEFAULT_WIDTH*2;
     int txtWidth = cwdWidth + GAP + DEFAULT_WIDTH;
     int x = XCORD;
     int y = YCORD;

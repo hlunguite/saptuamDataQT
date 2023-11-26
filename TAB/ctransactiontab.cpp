@@ -307,7 +307,7 @@ void CtransactionTab::addToolBar()
     connect(m_filterTable, SIGNAL(triggered()), this, SLOT(filterTable()));
 
     m_searchLabel = new QLabel();
-    m_searchLabel->setText("Search");
+    m_searchLabel->setText("Search ");
     m_toolBar->addWidget(m_searchLabel);
 
     m_searchLine = new QLineEdit();

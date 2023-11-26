@@ -13,7 +13,7 @@ CcontactTab::CcontactTab(QWidget *parent) : QWidget(parent)
     m_toolBar->addAction(m_editAction);
     m_toolBar->addSeparator();
 
-    m_searchLabel = new QLabel("Search");
+    m_searchLabel = new QLabel("Search ");
     m_toolBar->addWidget(m_searchLabel);
 
     m_searchLine = new QLineEdit();
