@@ -5,6 +5,7 @@
 #include <QAction>
 #include <QVector>
 #include <QMap>
+#include <set>
 #include <QTableWidgetItem>
 #include "ccustomdeligatefortransaction.h"
 #include "cbanktransactiontable.h"
@@ -60,6 +61,12 @@ private slots:
     void on_m_rejectBtn_clicked();
 
 private:
+    struct SaccountSummary {
+        double m_incomeAmount = 0;
+        double m_paymentAmount = 0;
+        int    m_incomeCount = 0;
+        int    m_paymentCount;
+    };
     Ui::CnewTransactionDlg *ui;
     bool								m_bankImport;
     int 								m_importID;
@@ -72,7 +79,7 @@ private:
     double								m_paymentTotal;
     CcustomDeligateForTransaction* 		m_deligateForTransaction;
     QVector<QVector<QVariant> >			m_allRowData;
-    QMap<QString, QPair<int, double > >	m_accountSummaryMap;
+    QMap<QString, SaccountSummary >	    m_accountSummaryMap;
     QMap<QString, double>				m_bankTotalMap;
     QVector<SbanktransDetail>			m_bankTransDetail;
     QVector<int>						m_importTableId;
@@ -97,7 +104,8 @@ private:
     void addBankName(QSet<int>& fromIDs, QString bankName);
     bool checkRefAlreadyHasTrans();
     void addInPrevTable(QVector<StransactionData*>& allTrns);
-    void addInPrevTable(int contactID1, int contactID2);
+    void addInPrevTable(const std::set<int>& ids);
+    void displatBankTotal();
     bool		m_calcTotalCall;
     // QWidget interface
 protected:

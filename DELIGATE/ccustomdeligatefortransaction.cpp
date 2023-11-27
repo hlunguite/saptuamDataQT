@@ -116,7 +116,20 @@ QWidget *CcustomDeligateForTransaction::createEditor(QWidget *parent, const QSty
             } else {
                 QString account = index.model()->data(idx  ).toString();
                 int type = CaccountMap::Object()->getAccountType(account);
-                QStringList types = CtransactionUtils::Object()->getTransactionTypesForAccountType(type);
+                 QStringList types = CtransactionUtils::Object()->getTransactionTypesForAccountType(type);
+                if (LOAN_ACCOUNT_TYPE == type) {
+                    if (m_useAccount == USE_PAYMENT_ACCOUNT) {
+                        QString transType = CtransactionUtils::Object()->getTransactionTypeStr(LOAN_DISBURSE_TRANSACTION_TYPE);
+                        types.clear();
+                        types.push_back(transType);
+                    } else if (m_useAccount == USE_INCOME_ACOUNT) {
+                        QString transType = CtransactionUtils::Object()->getTransactionTypeStr(LOAN_RECOVERY_TRANSACTION_TYPE);
+                        types.clear();
+                        types.push_back(transType);
+                    }
+
+                }
+
                 cmb->addItems(types);
             }
             return cmb;

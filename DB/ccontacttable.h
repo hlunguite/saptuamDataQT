@@ -44,8 +44,8 @@ public:
     ~CcontactTable();
     QVector<QVariant> findName(QString name);
     void addBankName(int contactID, QString bankName);
-    ScontactData* getContactFromBankName(QString bankName);
-    ScontactData* getContactFromPhone(QString phone);
+    QVector<ScontactData *>     getContactFromBankName(QString bankName);
+     QVector<ScontactData *>    getContactFromPhone(QString phone);
     ScontactData* getContactFromPersonId(int id);
     ScontactData* getContactFromOtherId(int id);
     ScontactData* getContactFromID(int id);
@@ -54,6 +54,7 @@ protected:
     virtual void desserializeTable(QDataStream& in) override;
 private:
     ScontactData* getContact(QString query);
+    QVector<ScontactData*> getContacts(QString query);
 
 };
 

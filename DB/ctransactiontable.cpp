@@ -62,8 +62,9 @@ QVector<StransactionData*> CtransactionTable::getAllTransactionForContact(int co
     if (contactID > 0) {
         QString whenstatement = " WHERE " +  getColName(TRANSACTION_FROM_IDX);
         whenstatement += "=" + QString::number(contactID);
-        query = "SELECT * FROM " + getTableName() + whenstatement;
+        query = "SELECT * FROM " + getTableName() + whenstatement +  + " ORDER BY " + getColName(TRANSACTION_DATE_IDX) + " DESC LIMIT 15";
     }
+   // qDebug()<<"get all trans "<<query;
     return getAllTransaction(query);
 }
 

@@ -54,28 +54,29 @@ void CcontactTable::addBankName(int contactID, QString bankName)
     }
 }
 
-ScontactData*
+QVector<ScontactData *>
 CcontactTable::getContactFromBankName(QString bankName)
 {
     if (bankName.isEmpty() == false) {
         QString whenstatement = " WHERE " +  getColName(CONTACT_BANK_NAME_IDX);
         whenstatement += " LIKE \"%" + bankName +"%\"";
         QString query = "SELECT * FROM " + getTableName() + whenstatement;
-        return getContact(query);
+        return getContacts(query);
+
     }
-    return nullptr;
+    return  QVector<ScontactData *>();
 }
 
-ScontactData*
+ QVector<ScontactData *>
 CcontactTable::getContactFromPhone(QString phone)
 {
     if (phone.isEmpty() == false) {
         QString whenstatement = " WHERE " +  CcontactTable::Object()->getColName(CONTACT_PHONE_IDX);
         whenstatement += " LIKE \"%" + phone +"%\"";
         QString query = "SELECT * FROM " + getTableName() + whenstatement;
-        return getContact(query);
+        return getContacts(query);
     }
-    return nullptr;
+    return QVector<ScontactData *>();
 }
 
 ScontactData*
@@ -159,6 +160,31 @@ CcontactTable::getContact(QString query)
     }
 
     return contact;
+}
+
+QVector<ScontactData *> CcontactTable::getContacts(QString query)
+{
+    QVector<ScontactData*> contacts;
+    if (query.isEmpty() == false) {
+        QSqlQuery q(getDataBase());
+        if(q.exec(query)){
+            while(q.next()){
+                 ScontactData*contact =  new ScontactData;
+                contact->m_idx = q.value(CONTACT_ID_IDX).toInt();
+                contact->m_fullName = q.value(CONTACT_FULL_NAME_IDX).toString();
+                contact->m_fullNameWithSpouse = q.value(CONTACT_FULL_NAME_WITH_SPOUSE_IDX).toString();
+                contact->m_fullNameWithoutTitle = q.value(CONTACT_FULL_NAME_IDX_WITHOUT_TITLE).toString();
+                contact->m_personTableID = q.value(CONTACT_PERSON_ID_IDX).toInt();
+                contact->m_otherContactTableId = q.value(CONTACT_OTHER_ID_IDX).toInt();
+                contact->m_phone = q.value(CONTACT_PHONE_IDX).toString();
+                contact->m_bankName = q.value(CONTACT_BANK_NAME_IDX).toString();
+                contacts.push_back(contact);
+            }
+
+        }
+    }
+
+    return contacts;
 }
 
 

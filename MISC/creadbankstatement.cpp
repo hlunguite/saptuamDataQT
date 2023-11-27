@@ -142,8 +142,8 @@ int CreadBankStatement::read()
                     }
                 }
             }
-            amtMuhna = amtMuhna.trimmed();
-            amtZatna = amtZatna.trimmed();
+            amtMuhna = amtMuhna.trimmed().simplified();
+            amtZatna = amtZatna.trimmed().simplified();
             if (amtMuhna.isEmpty() == false || amtZatna.isEmpty() == false) {
                 SbanktransDetail  transDetail = processDescription(description);
                 //qDebug()<<"From description:"<<transDetail.toString();
@@ -162,13 +162,13 @@ int CreadBankStatement::read()
                 }
                 if (transDetailFromRef.m_min.isEmpty() == false) {
                     if (transDetail.m_min.isEmpty()) {
-                        transDetail.m_min = transDetailFromRef.m_min;
+                        transDetail.m_min = transDetailFromRef.m_min.simplified();
                     } else {
                         //qDebug()<<"Fond tow name";
-                        transDetail.m_min += transDetailFromRef.m_min;
+                        transDetail.m_min += transDetailFromRef.m_min.simplified();
                     }
                 }
-
+                transDetail.m_min = transDetail.m_min.simplified();
                 transDetail.m_date = date;
                 if (startDate.isEmpty()) {
                     startDate = date;
@@ -249,7 +249,7 @@ CreadBankStatement::processDescription(QString description)
     if (match.hasMatch()) {
         transDetail.m_piakChan = "CHEQUE DEPOSIT";
         transDetail.m_type = CHEQUE;
-        transDetail.m_refID = match.captured(1).trimmed();
+        transDetail.m_refID = match.captured(1).trimmed().simplified();
         return transDetail;
     }
     //CHEQUE WDL-CHEQUE TRANSFER TO--
@@ -258,16 +258,16 @@ CreadBankStatement::processDescription(QString description)
     if (match.hasMatch()) {
         transDetail.m_piakChan = "CHEQUE PAYMENT";
         transDetail.m_type = CHEQUE;
-        transDetail.m_refID = match.captured(1).trimmed();
+        transDetail.m_refID = match.captured(1).trimmed().simplified();
         return transDetail;
     }
     //CDM SERVICE CHARGES---aaaaa
     rx.setPattern("(CDM SERVICE CHARGES)---(.*)");
     match = rx.match(description);
     if (match.hasMatch()) {
-        transDetail.m_piakChan = match.captured(1).trimmed();
+        transDetail.m_piakChan = match.captured(1).trimmed().simplified();
         transDetail.m_type = BANK_CHARGES;
-        transDetail.m_refID = match.captured(2).trimmed();
+        transDetail.m_refID = match.captured(2).trimmed().simplified();
         return transDetail;
     }
     //CREDIT INTEREST---
@@ -301,8 +301,8 @@ CreadBankStatement::processDescription(QString description)
     rx.setPattern("TO CLEARING-(.*)\\s+(.*)--(\\d+)");
     match = rx.match(description);
     if (match.hasMatch()) {
-        transDetail.m_min = match.captured(2).trimmed();
-        transDetail.m_refID = match.captured(3).trimmed();
+        transDetail.m_min = match.captured(2).trimmed().simplified();
+        transDetail.m_refID = match.captured(3).trimmed().simplified();
         transDetail.m_piakChan = "CHEQUE PAYMENT";
         transDetail.m_type = CHEQUE;
         return transDetail;
@@ -310,11 +310,11 @@ CreadBankStatement::processDescription(QString description)
     //TO TRANSFER-INB NEFT UTR NO: SBIN223101026491--min
     rx.setPattern("TO TRANSFER-(.*)UTR NO:(.*)--(.*)");
     match = rx.match(description);
-    if (match.hasMatch()) {
+     if (match.hasMatch()) {
 
         transDetail.m_type = NOTASIGN;
-        transDetail.m_piakChan = match.captured(3).trimmed();
-        transDetail.m_refID =  match.captured(2).trimmed();
+        transDetail.m_piakChan = match.captured(3).trimmed().simplified();
+        transDetail.m_refID =  match.captured(2).trimmed().simplified();
         return transDetail;
     }
     description = description.replace("*--", "");
@@ -327,14 +327,14 @@ CreadBankStatement::processDescription(QString description)
     rx.setPattern("BY TRANSFER-NEFT(.*)");
     match = rx.match(description);
     if (match.hasMatch()) {
-        QString matchString = match.captured(1).trimmed();
+        QString matchString = match.captured(1).trimmed().simplified();
         rx.setPattern("#(.*)#(.*)#(.*)#(.*)");
         match = rx.match(matchString);
         if (match.hasMatch()) {
             QString ifsc = match.captured(1);
-            transDetail.m_refID = match.captured(2).trimmed();
-            transDetail.m_min = match.captured(3).trimmed();
-            QString piakziak = match.captured(4).trimmed();
+            transDetail.m_refID = match.captured(2).trimmed().simplified();
+            transDetail.m_min = match.captured(3).trimmed().simplified();
+            QString piakziak = match.captured(4).trimmed().simplified();
             if (ifsc.contains(piakziak) == false) {
                 transDetail.m_piakChan = piakziak;
             }
@@ -344,8 +344,8 @@ CreadBankStatement::processDescription(QString description)
             rx.setPattern("#(.*)#(.*)#(.*)");
             match = rx.match(matchString);
             if (match.hasMatch()) {
-                transDetail.m_refID = match.captured(2).trimmed();
-                transDetail.m_min = match.captured(3).trimmed();
+                transDetail.m_refID = match.captured(2).trimmed().simplified();
+                transDetail.m_min = match.captured(3).trimmed().simplified();
                 return transDetail;
             }
 
@@ -355,16 +355,19 @@ CreadBankStatement::processDescription(QString description)
     rx.setPattern("BY TRANSFER-UPI/CR/(.*)/(.*)/(.*)/(.*)/(.*)");
     match = rx.match(description);
     if (match.hasMatch()) {
-       transDetail.m_refID =  match.captured(1).trimmed();
-       transDetail.m_min = match.captured(2).trimmed();
-       QString piakchan = match.captured(5).trimmed();
+       transDetail.m_refID =  match.captured(1).trimmed().simplified();
+       transDetail.m_min = match.captured(2).trimmed().simplified();
+       QString piakchan = match.captured(5).trimmed().simplified();
         if (IGNORE.contains(piakchan)) {
             piakchan = "";
         }
         transDetail.m_piakChan = piakchan;
-        QString phone = match.captured(4).trimmed();
-        bool ok;
-        phone.toLong(&ok);
+        QString phone = match.captured(4).trimmed().simplified();
+        bool ok = false;
+        if (phone.size() == 10 || phone.size() == 12) {
+            phone.toLongLong(&ok);
+        }
+
         if (ok)
             transDetail.m_phone = phone;
         else {
@@ -376,13 +379,13 @@ CreadBankStatement::processDescription(QString description)
     rx.setPattern("BY TRANSFER-INB MBS(.*)");
     match = rx.match(description);
     if (match.hasMatch()) {
-        transDetail.m_piakChan = match.captured(1).trimmed();
+        transDetail.m_piakChan = match.captured(1).trimmed().simplified();
         return transDetail;
     }
     match = rx.match(description);
     rx.setPattern("BY TRANSFER-INB IMPS/(.*)/(.*)/(.*)");
     if (match.hasMatch()) {
-        transDetail.m_refID = match.captured(2).trimmed();
+        transDetail.m_refID = match.captured(2).trimmed().simplified();
         return transDetail;
     }
 
@@ -392,16 +395,16 @@ CreadBankStatement::processDescription(QString description)
     rx.setPattern("BY TRANSFER-INB IMPS(.*)/(.*)/(.*)/(.*)");
     match = rx.match(description);
     if (match.hasMatch()) {
-       transDetail.m_refID =  match.captured(1).trimmed();
-       transDetail.m_phone = match.captured(2).trimmed();
+       transDetail.m_refID =  match.captured(1).trimmed().simplified();
+       transDetail.m_phone = match.captured(2).trimmed().simplified();
        if (transDetail.m_refID.isEmpty() == false) {
             transDetail.m_refID = "IMPS" +  transDetail.m_refID;
        } else {
-            transDetail.m_refID =  match.captured(3).trimmed();
+            transDetail.m_refID =  match.captured(3).trimmed().simplified();
             transDetail.m_phone = "";
 
        }
-       QString piakchan = match.captured(4).trimmed();
+       QString piakchan = match.captured(4).trimmed().simplified();
 
        if (not IGNORE.contains(piakchan))  {
            transDetail.m_piakChan = piakchan;
@@ -412,7 +415,7 @@ CreadBankStatement::processDescription(QString description)
     rx.setPattern("BY TRANSFER-INB (.*)");
     match = rx.match(description);
     if (match.hasMatch()) {
-        QString ref = match.captured(1).trimmed();
+        QString ref = match.captured(1).trimmed().simplified();
         if (not IGNORE.contains(ref)) {
             transDetail.m_piakChan = ref;
         }
@@ -422,15 +425,15 @@ CreadBankStatement::processDescription(QString description)
     rx.setPattern("BY TRANSFER-SBILT(\\d+)-(.*)");
     match = rx.match(description);
     if (match.hasMatch()) {
-        transDetail.m_refID  = match.captured(1).trimmed();
-        transDetail.m_piakChan = match.captured(2).trimmed();
+        transDetail.m_refID  = match.captured(1).trimmed().simplified();
+        transDetail.m_piakChan = match.captured(2).trimmed().simplified();
         return transDetail;
     }
 
     rx.setPattern("BY TRANSFER-(.*)");
     match = rx.match(description);
     if (match.hasMatch()) {
-        transDetail.m_piakChan = match.captured(1).trimmed();
+        transDetail.m_piakChan = match.captured(1).trimmed().simplified();
         return transDetail;
     }
 
@@ -440,14 +443,14 @@ CreadBankStatement::processDescription(QString description)
     match = rx.match(description);
     if (match.hasMatch()) {
         transDetail.m_type = NOTASIGN;
-        transDetail.m_piakChan = match.captured(2).trimmed();
+        transDetail.m_piakChan = match.captured(2).trimmed().simplified();
         return transDetail;
     }
     rx.setPattern("TO TRANSFER-(.*)");
     match = rx.match(description);
     if (match.hasMatch()) {
 
-        transDetail.m_piakChan = match.captured(1).trimmed();
+        transDetail.m_piakChan = match.captured(1).trimmed().simplified();
         return transDetail;
     }
 
@@ -477,8 +480,8 @@ SbanktransDetail CreadBankStatement::processRef(QString referenceid,
     QRegularExpression rx ("(\\w+)(\\s+)TRANSFER FROM (\\d+)(\\s+)(.*)/");
     QRegularExpressionMatch match = rx.match(referenceid);
     if (match.hasMatch()) {
-        transDetail.m_refID = match.captured(1).trimmed();
-        transDetail.m_min = match.captured(5).trimmed();
+        transDetail.m_refID = match.captured(1).trimmed().simplified();
+        transDetail.m_min = match.captured(5).trimmed().simplified();
         return transDetail;
     }
 
@@ -486,8 +489,8 @@ SbanktransDetail CreadBankStatement::processRef(QString referenceid,
     rx.setPattern("^TRANSFER FROM (\\d+)\\s+(.*)/(\\d+)$");
     match = rx.match(referenceid);
     if (match.hasMatch()) {
-        transDetail.m_min = match.captured(2).trimmed();
-        transDetail.m_refID =  match.captured(3).trimmed();
+        transDetail.m_min = match.captured(2).trimmed().simplified();
+        transDetail.m_refID =  match.captured(3).trimmed().simplified();
 
         return transDetail;
     }
@@ -496,8 +499,8 @@ SbanktransDetail CreadBankStatement::processRef(QString referenceid,
     rx.setPattern("^TRANSFER FROM (\\d+)\\s+(.*)/");
     match = rx.match(referenceid);
     if (match.hasMatch()) {
-        transDetail.m_min = match.captured(2).trimmed();
-        //transDetail.m_refID =  match.captured(1).trimmed();
+        transDetail.m_min = match.captured(2).trimmed().simplified();
+        //transDetail.m_refID =  match.captured(1).trimmed().simplified();
 
         return transDetail;
     }
@@ -507,23 +510,23 @@ SbanktransDetail CreadBankStatement::processRef(QString referenceid,
     rx.setPattern("^(\\w+)\\s+(\\w+)\\s+TRANSFER FROM (\\d+)/$");
     match = rx.match(referenceid);
     if (match.hasMatch()) {
-        transDetail.m_refID = match.captured(1).trimmed();
+        transDetail.m_refID = match.captured(1).trimmed().simplified();
 
         return transDetail;
     }
     rx.setPattern("^TRANSFER FROM\\s+(\\d+)\\s+(.*)/\\s*(\\d+)$");
     match = rx.match(referenceid);
     if (match.hasMatch()) {
-        transDetail.m_min = match.captured(2).trimmed();
-        transDetail.m_refID = match.captured(3).trimmed();
+        transDetail.m_min = match.captured(2).trimmed().simplified();
+        transDetail.m_refID = match.captured(3).trimmed().simplified();
 
         return transDetail;
     }
     rx.setPattern("^TRANSFER FROM\\s+(\\d+)\\s+(.*)/$");
     match = rx.match(referenceid);
     if (match.hasMatch()) {
-        transDetail.m_min = match.captured(2).trimmed();
-        transDetail.m_refID = match.captured(1).trimmed() + "_" + amount + "_" + date;
+        transDetail.m_min = match.captured(2).trimmed().simplified();
+        transDetail.m_refID = match.captured(1).trimmed().simplified() + "_" + amount + "_" + date;
 
         return transDetail;
     }
@@ -531,7 +534,7 @@ SbanktransDetail CreadBankStatement::processRef(QString referenceid,
     match = rx.match(referenceid);
     if (match.hasMatch()) {
         transDetail.m_type = NOTASIGN;
-        transDetail.m_refID = match.captured(1).trimmed();
+        transDetail.m_refID = match.captured(1).trimmed().simplified();
 
         return transDetail;
     }
@@ -540,8 +543,8 @@ SbanktransDetail CreadBankStatement::processRef(QString referenceid,
     rx.setPattern("^TRANSFER TO\\s+(\\d+)\\s+(.*)/(\\d+)$");
     match = rx.match(referenceid);
     if (match.hasMatch() ) {
-        transDetail.m_min  = match.captured(2).trimmed();
-        transDetail.m_refID = match.captured(3).trimmed();
+        transDetail.m_min  = match.captured(2).trimmed().simplified();
+        transDetail.m_refID = match.captured(3).trimmed().simplified();
 
         return transDetail;
     }
@@ -550,8 +553,8 @@ SbanktransDetail CreadBankStatement::processRef(QString referenceid,
     rx.setPattern("(\\w+)(\\s+)TRANSFER TO (\\d+)(\\s+)(.*)/\\s+(\\w+.*)");
     match = rx.match(referenceid);
     if (match.hasMatch()) {
-        transDetail.m_refID = match.captured(1).trimmed();
-        transDetail.m_min = match.captured(6).trimmed();
+        transDetail.m_refID = match.captured(1).trimmed().simplified();
+        transDetail.m_min = match.captured(6).trimmed().simplified();
 
         return transDetail;
     }
@@ -560,8 +563,8 @@ SbanktransDetail CreadBankStatement::processRef(QString referenceid,
     rx.setPattern("(\\w+)(\\s+)TRANSFER TO (\\d+)(\\s+)(.*)/");
     match = rx.match(referenceid);
     if (match.hasMatch()) {
-        transDetail.m_refID = match.captured(1).trimmed();
-        transDetail.m_min = match.captured(5).trimmed();
+        transDetail.m_refID = match.captured(1).trimmed().simplified();
+        transDetail.m_min = match.captured(5).trimmed().simplified();
 
         return transDetail;
     }
@@ -569,7 +572,7 @@ SbanktransDetail CreadBankStatement::processRef(QString referenceid,
     rx.setPattern("^/(\\d+)$");
     match = rx.match(referenceid);
     if (match.hasMatch()) {
-        transDetail.m_refID  = match.captured(1).trimmed();
+        transDetail.m_refID  = match.captured(1).trimmed().simplified();
 
         return transDetail;
     }
@@ -584,7 +587,7 @@ SbanktransDetail CreadBankStatement::processRef(QString referenceid,
     rx.setPattern("TRANSFER TO (\\d+)/");
     match = rx.match(referenceid);
     if (match.hasMatch()) {
-        transDetail.m_refID = match.captured(1).trimmed();
+        transDetail.m_refID = match.captured(1).trimmed().simplified();
         return transDetail;
     }
     //TRANSFER FROM 4897733162090 /

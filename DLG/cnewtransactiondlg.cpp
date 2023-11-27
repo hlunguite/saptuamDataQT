@@ -13,6 +13,7 @@
 #include "ccontacttable.h"
 #include <QMessageBox>
 #include "MISC/CdlgDefine.h"
+#include "ctransactionutils.h"
 
 CnewTransactionDlg::CnewTransactionDlg(bool bankImport, int importID, QWidget *parent) :
     QDialog(parent),
@@ -303,41 +304,27 @@ EtransErrorType CnewTransactionDlg::calcTotalNetTrans()
     //int rowcount = ui->m_summaryTable->rowCount();
     ui->m_summaryTable->clearContents();
     ui->m_summaryTable->setRowCount(0);
-    QMapIterator<QString, QPair<int, double> > iterator1(m_accountSummaryMap);
+    QMapIterator<QString, SaccountSummary > iterator1(m_accountSummaryMap);
     while (iterator1.hasNext()) {
         iterator1.next();
         QString accountName = iterator1.key();
-        int count = iterator1.value().first;
-        double amount = iterator1.value().second;
-        int accountType = CaccountMap::Object()->getAccountType(accountName);
-        if (accountType > REMITTANCE_ACCOUNT_TYPE) {
-            if (accountName == gBankChargeTransactionType ||
-                accountName == gLoanDisburseTransactionType) {
-                accountType = PAYMENT_ACCOUNT_TYPE;
-            } else if (accountName == gBankInterestTransactionType ||
-                       accountName == gBankCashDepositTransactionType ||
-                       accountName == gLoanRecoverTransactionType) {
-                accountType = INCOME_ACCOUNT_TYPE;
-            }  else {
-                continue;
-            }
-        }
+        const SaccountSummary& accSum = iterator1.value();
+        int count = accSum.m_incomeCount + accSum.m_paymentCount;
+        double amountIncome = accSum.m_incomeAmount;
+        double amountPayment = accSum.m_paymentAmount;
+        m_incomeTotal += amountIncome;
+        m_paymentTotal += amountPayment;
 
         QString income;
         QString payment;
-        if (INCOME_ACCOUNT_TYPE == accountType || REQUEST_ACCOUNT_TYPE == accountType) {
-            income = QLocale(QLocale::English).toString(amount, 'f', 2);
-            m_incomeTotal += amount;
-
-        } else if (accountType == PAYMENT_ACCOUNT_TYPE || accountType == REMITTANCE_ACCOUNT_TYPE) {
-            payment = QLocale(QLocale::English).toString(amount, 'f', 2);
-            m_paymentTotal += amount;
-        } else {
-
-
-                continue;
+        if (accSum.m_incomeCount) {
+            income = CsdUtils::convertAmountToStringWithSign(amountIncome);
 
         }
+        if (accSum.m_paymentCount) {
+            payment =  CsdUtils::convertAmountToStringWithSign(amountPayment);
+        }
+
         totalcount += count;
         int row = ui->m_summaryTable->rowCount();
         ui->m_summaryTable->insertRow(row);
@@ -368,24 +355,8 @@ EtransErrorType CnewTransactionDlg::calcTotalNetTrans()
         ui->m_summaryTable->setItem(row, 3, amtPayment);
     }
 
-    ui->m_bankTotalTable->clearContents();
-    ui->m_bankTotalTable->setRowCount(0);
-    QMapIterator<QString,double > iterator2(m_bankTotalMap);
-    while(iterator2.hasNext()){
-        iterator2.next();
-        QString refname = iterator2.key();
-        double amount = iterator2.value();
-        QString number =  CsdUtils::convertAmountToStringWithSign(amount);
+    displatBankTotal();
 
-        int row = ui->m_bankTotalTable->rowCount();
-        ui->m_bankTotalTable->insertRow(row);
-
-        QTableWidgetItem * ac = new QTableWidgetItem(tr("%1").arg(refname));
-        QTableWidgetItem * amt = new QTableWidgetItem(tr("%1").arg(number));
-
-        ui->m_bankTotalTable->setItem(row,0,ac);
-        ui->m_bankTotalTable->setItem(row,1,amt);
-    }
 
     return status;
 }
@@ -446,19 +417,75 @@ EtransErrorType CnewTransactionDlg::checkForValidityOfRow(int row,  QVector<QVar
     }
     QString accountName = account->text().trimmed();
     QString transType = type->text().trimmed();
+    EtransactionType tType =  CtransactionUtils::Object()->getTransactionType(transType);
     double  value = amount->text().toDouble();
-    if (accountName.compare(gBankAccountName) == 0) {
+    /*if (accountName.compare(gBankAccountName) == 0) {
         accountName = transType;
     } else if (accountName.compare("Loan Account") == 0) {
         accountName = transType;
+    }*/
+
+    bool isIncome = true;
+    //bool isPayment = true;
+    int accountType = CaccountMap::Object()->getAccountType(accountName);
+    if (INCOME_ACCOUNT_TYPE == accountType || REQUEST_ACCOUNT_TYPE == accountType) {
+        isIncome = true;
+
+    } else if (accountType == PAYMENT_ACCOUNT_TYPE || accountType == REMITTANCE_ACCOUNT_TYPE) {
+        isIncome = false;
+    } else if (accountType == LOAN_ACCOUNT_TYPE){
+        if (tType == LOAN_RECOVERY_TRANSACTION_TYPE) {
+            isIncome = true;
+        } else {
+            isIncome = false;
+        }
+    } else if (accountType == BANK_ACCOUNT_TYPE) {
+        if (tType == BANK_CHARGES_TRANSACTION_TYPE) {
+            isIncome = false;
+        } else if (tType == BANK_INTEREST_TRANSACTION_TYPE) {
+            isIncome = true;
+        } else if (tType == BANK_CASH_DEPOSIT_TRANSACTION_TYPE) {
+            isIncome = true;
+        }
     }
+    if (accountType > REMITTANCE_ACCOUNT_TYPE) {
+        if (accountName == gBankChargeTransactionType ||
+            accountName == gLoanDisburseTransactionType) {
+                isIncome = false;
+        } else if (accountName == gBankInterestTransactionType ||
+                   accountName == gBankCashDepositTransactionType ||
+                   accountName == gLoanRecoverTransactionType) {
+                isIncome = true;
+        }  else {
+                Q_ASSERT(0);
+        }
+    }
+
+    QString income;
+    QString payment;
+
+
+
     if (m_accountSummaryMap.contains(accountName)) {
-        int count = m_accountSummaryMap[accountName].first + 1;
-        double accountValue = m_accountSummaryMap[accountName].second + value;
-        m_accountSummaryMap[accountName].first = count;
-        m_accountSummaryMap[accountName].second = accountValue;
+        SaccountSummary& accSumm = m_accountSummaryMap[accountName];
+        if (isIncome) {
+                accSumm.m_incomeAmount += value;
+                accSumm.m_incomeCount += 1;
+        } else {
+                accSumm.m_paymentCount += 1;
+                accSumm.m_paymentAmount += value;
+        }
+
     } else {
-        m_accountSummaryMap.insert(accountName, qMakePair(1, value));
+        SaccountSummary accSumm;
+        if (isIncome) {
+                accSumm.m_incomeAmount += value;
+                accSumm.m_incomeCount += 1;
+        } else {
+                accSumm.m_paymentCount += 1;
+                accSumm.m_paymentAmount += value;
+        }
+        m_accountSummaryMap.insert(accountName, accSumm);
     }
 
     rowData[TRANS_FROM_TO_COL] = fromTo->text().trimmed();
@@ -604,24 +631,39 @@ void CnewTransactionDlg::displayCurrentBankImport()
             m_currentBankTransDetailIdx > -1 && (m_currentBankTransDetailIdx < m_bankTransDetail.size())) {
         const SbanktransDetail& bankTransDetail = m_bankTransDetail.at(m_currentBankTransDetailIdx);
         QString line = bankTransDetail.toString();
-        ScontactData* contact1 = CcontactTable::Object()->getContactFromBankName(bankTransDetail.m_min);
-        ScontactData* contact2 = CcontactTable::Object()->getContactFromPhone(bankTransDetail.m_phone);
-        QString name1 = contact1 ? contact1->m_fullNameWithSpouse : "";
-        QString name2 = contact2 ? contact2->m_fullNameWithSpouse : "";
+        //qDebug()<<"bankname:"<<bankTransDetail.m_min;
+        QString bankName = bankTransDetail.m_min.simplified();
+        //qDebug()<<"bankname:"<<bankTransDetail.m_min<<" "<<bankName;
 
-        if (name1.isEmpty() == false && name2.isEmpty() == false) {
-            if (name1 == name2) {
-                line = "[" + name1 + "] " + line;
-            } else {
-                line = "[" + name1 + "/" + name2 + "] " + line;
-            }
-        }else if (name2.isEmpty() == false) {
-            line = "[" + name2 + "] " + line;
 
-        } else if (name1.isEmpty() == false) {
-           line = "[" + name1 + "] " + line;
+        QVector<ScontactData*> contact1 = CcontactTable::Object()->getContactFromBankName(bankName);
+        QVector<ScontactData*> constact2 = CcontactTable::Object()->getContactFromPhone(bankTransDetail.m_phone);
+        QString name;
+        std::set<int> ids;
+        for (auto contact: contact1) {
+
+            ids.insert(contact->m_idx);
+            delete contact;
         }
+        for (auto contact : constact2) {
+            ids.insert(contact->m_idx);
+            delete contact;
+        }
+        for (auto id: ids) {
+            if (name.isEmpty() == false) {
+                name += "/";
+            }
+            name += CcontactMap::Object()->getContactNameOnly(id);
+        }
+        if (name.isEmpty() == false) {
+            name = "[" + name + "]";
+            line = name + line;
+        }
+
         ui->m_importLine->setText(line);
+        m_bankTotalMap.clear();
+        m_bankTotalMap[bankTransDetail.m_refID] = bankTransDetail.m_amount;
+        displatBankTotal();
         if (bankTransDetail.m_isIncome) {
            m_deligateForTransaction->setUseAccount(USE_INCOME_ACOUNT);
         } else {
@@ -629,12 +671,11 @@ void CnewTransactionDlg::displayCurrentBankImport()
 
         }
         if (checkRefAlreadyHasTrans() == false) {
-            addInPrevTable(contact1 ? contact1->m_idx : 0 , contact2 ? contact2->m_idx : 0);
+            addInPrevTable(ids);
         } else {
            moveToNextImport();
         }
-        delete contact1;
-        delete contact2;
+
     } else {
         m_currentBankTransDetailIdx = -1;
     }
@@ -748,42 +789,33 @@ void CnewTransactionDlg::addInPrevTable(QVector<StransactionData*> &allTrns)
     }
 }
 
-void CnewTransactionDlg::addInPrevTable(int contactID1, int contactID2)
+void CnewTransactionDlg::addInPrevTable(const std::set<int>& contactIDs)
 {
     QVector<StransactionData*> allTrns;
-    if (contactID1 > 0 && (contactID1 == contactID2)) {
-        QVector<StransactionData*> trans = CtransactionTable::Object()->getAllTransactionForContact(contactID1);
+
+
+    for (auto id : contactIDs) {
+        QVector<StransactionData*> trans = CtransactionTable::Object()->getAllTransactionForContact(id);
+
+        int count = 0;
+        std::set<int> accountIDs;
         for (StransactionData* data : trans) {
-            if (allTrns.size() > 5) {
+            bool toAdd = true;
+            if (accountIDs.end() != accountIDs.find(data->m_accountId)) {
+                toAdd = false;
+            } else {
+                if (count >= 7) {
+                    toAdd = false;
+                }
+            }
+
+
+            if (toAdd == false) {
                 delete data;
             } else {
+                ++count;
+                accountIDs.insert(data->m_accountId);
                 allTrns.push_back(data);
-            }
-        }
-    } else {
-        //bool add1 = false;
-        //bool add2 = false;
-        if (contactID1 > 0) {
-             QVector<StransactionData*> trans = CtransactionTable::Object()->getAllTransactionForContact(contactID1);
-             for (StransactionData* data : trans) {
-                 if (allTrns.size() > 5) {
-                     delete data;
-                 } else {
-                     allTrns.push_back(data);
-                 }
-             }
-            //add1 = true;
-        }
-        if (contactID2 > 0) {
-            int limit = allTrns.size() + 5;
-            QVector<StransactionData*> allTrans2 = CtransactionTable::Object()->getAllTransactionForContact(contactID2);
-            for (StransactionData* trans : allTrans2) {
-                if (limit > 0) {
-                    allTrns.push_back(trans);
-                    --limit;
-                } else {
-                    delete trans;
-                }
             }
         }
     }
@@ -791,6 +823,28 @@ void CnewTransactionDlg::addInPrevTable(int contactID1, int contactID2)
     addInPrevTable(allTrns);
     for (StransactionData* data : allTrns) {
         delete data;
+    }
+}
+
+void CnewTransactionDlg::displatBankTotal()
+{
+    ui->m_bankTotalTable->clearContents();
+    ui->m_bankTotalTable->setRowCount(0);
+    QMapIterator<QString,double > iterator2(m_bankTotalMap);
+    while(iterator2.hasNext()){
+        iterator2.next();
+        QString refname = iterator2.key();
+        double amount = iterator2.value();
+        QString number =  CsdUtils::convertAmountToStringWithSign(amount);
+
+        int row = ui->m_bankTotalTable->rowCount();
+        ui->m_bankTotalTable->insertRow(row);
+
+        QTableWidgetItem * ac = new QTableWidgetItem(tr("%1").arg(refname));
+        QTableWidgetItem * amt = new QTableWidgetItem(tr("%1").arg(number));
+
+        ui->m_bankTotalTable->setItem(row,0,ac);
+        ui->m_bankTotalTable->setItem(row,1,amt);
     }
 }
 EtransErrorType CnewTransactionDlg::checkFromToCol(QTableWidgetItem *item)
@@ -1087,6 +1141,8 @@ void CnewTransactionDlg::on_m_okButton_clicked()
         SbanktransDetail bankTrans = m_bankTransDetail.at(m_currentBankTransDetailIdx);
         QString bankName = bankTrans.m_min;
         if (bankName.isEmpty() == false) {
+            bankName = bankName.simplified();
+
             addBankName(fromIDSet, bankName);
         }
         moveToNextImport();
