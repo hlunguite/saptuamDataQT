@@ -5,6 +5,7 @@
 #include "csdutils.h"
 #include "ctransactionutils.h"
 #include "cremittancetable.h"
+#include "cremittancedetails.h"
 CclosingCalculator::CclosingCalculator()
 {
     m_cashOpening = 0;
@@ -349,7 +350,7 @@ void CclosingCalculator::getAccountIncomePaymentForQuery(QString query,
                         int id = data->m_accontOrDeptTableID;
                         QString	str = data->m_str;
                         SremitTransDetail detail(str);
-                        double amount = detail.m_amount.toDouble();
+                        double amount = detail.m_amount;
                         double hqPC = 0;
                         double localPC = 100;
                         std::map<int, std::pair<double, double> >::iterator fn = accountPct.find(id);

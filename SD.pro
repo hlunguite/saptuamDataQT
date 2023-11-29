@@ -56,6 +56,7 @@ SOURCES += main.cpp\
     MISC/chtmlutils.cpp \
     MISC/cprintUtils.cpp \
     MISC/creadbankstatement.cpp \
+    MISC/cremittancedetails.cpp \
     mainwindow.cpp \
     DB/cdbtablebase.cpp \
     DB/caccounttable.cpp \
@@ -129,6 +130,7 @@ HEADERS  += mainwindow.h \
     MISC/chtmlutils.h \
     MISC/cprintUtils.h \
     MISC/creadbankstatement.h \
+    MISC/cremittancedetails.h \
     csdutils.h \
     DB/cpasswordtable.h \
     DB/cpersontable.h \

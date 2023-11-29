@@ -504,10 +504,10 @@ void CremittanceDlg::populateTransacltionListTable(int accountDept, const Strans
         htmlUtils.createCell(data + " ", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
         csvLine += data + ",";
 
-        data = trans.m_amount.isEmpty() ? "" :  CsdUtils::convertAmountToStringWithSign(trans.m_amount.toDouble());
-        total += trans.m_amount.isEmpty() ? 0 : trans.m_amount.toDouble();
+        data = CsdUtils::convertAmountToStringWithSign(trans.m_amount);
+        total += trans.m_amount;
         htmlUtils.createCell(data + " ", HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-        csvLine += trans.m_amount + ",\n";
+        csvLine += CsdUtils::converAmountToString(trans.m_amount) + ",\n";
         m_csvList.push_back(csvLine);
 
         htmlUtils.closeRow();
@@ -661,83 +661,33 @@ bool CremittanceDlg::populateTableUsingTransaction()
             }
         }
         if (populateUsingRemittance) {
-            queryRemittace = getQueryString(m_remittanceIndex, true);
-            QVector<StransactionData*> remitToDislay = CtransactionTable::Object()->getAllTransaction(queryRemittace);
-            disableEnable(false);
+            CremittanceDetails remitanceDetail(m_remittanceIndex);
+            const  QVector<SremitTransDetail>& remitTrans = remitanceDetail.getTransactionForRemittance();
             populateAccount();
-            ret = populateTransaction(remitToDislay);
+            disableEnable(false);
             setFieldBaseOnremittanceID();
-           //populate reconcile
-            //qDebug()<<"to reconcile "<<m_remittanceIndex;
-            QVector<SremittanceReconcileData*>* vData = CremittanceReconcileTable::Object()->getRemittanceReconcileForTableID(m_remittanceIndex);
-            if (vData) {
-              // qDebug()<<"reconcile found";
-               for (auto data :*vData) {
-                    int	 accontDepID = data->m_accontOrDeptTableID;
-                    bool isAccount = data->m_isAccount;
-                    QString	str = data->m_str;
-                    SremitTransDetail detail(str);
-                    //qDebug()<<"str is "<<str;
-                    float hqPC = 0;
-                    float localPC = 100;
-                    std::map<int, std::pair<float, float> >::iterator fn = m_accountPct.find(accontDepID);
-                    double amount = detail.m_amount.toDouble();
+            bool constructor = m_constructor;
+            m_constructor = true;
 
-                    //qDebug()<<"local amount "<<local<<" hq "<<hq;
-                    if (fn != m_accountPct.end()) {
-                        hqPC = fn->second.first;
-                        localPC = fn->second.second;
-                    }
-                    double local = (amount*localPC)/100;
-                    double hq = (amount*hqPC)/100;
-                    if (isAccount) {
-                        StransForRemittance& transRemit = m_accountRemittance[accontDepID];
-                        transRemit.m_allTrans.push_back(detail);
-                        transRemit.m_hqShare += hq;
-                        transRemit.m_localShare += local;
-                    } else {
-                        StransForRemittance& transRemit = m_deptRemittance[accontDepID];
-                        transRemit.m_allTrans.push_back(detail);
-                        transRemit.m_hqShare += hq;
-                        transRemit.m_localShare += local;
-                    }
-                    int rowCount = ui->m_table->rowCount();
-                    ui->m_table->insertRow(rowCount);
-
-                    //set min
-                    QTableWidgetItem *itemMin = new QTableWidgetItem();
-                    itemMin->setFlags(itemMin->flags() & ~Qt::ItemIsEditable);
-                    itemMin->setText(detail.m_from);
-                    ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_MIN, itemMin);
-
-                    QString accountName = CaccountMap::Object()->getAccountName(detail.m_accountID);
-                    QTableWidgetItem *itemAccount = new QTableWidgetItem();
-                    itemAccount->setFlags(itemAccount->flags() & ~Qt::ItemIsEditable);
-                    itemAccount->setText(accountName);
-                    ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_PIAKSAN, itemAccount);
+            m_selectRow = -1;
+            deleteAllRow();
+            int size = remitTrans.size();
+            for (auto transDetail: remitTrans) {
 
 
-                    QTableWidgetItem *itemAmount = new QTableWidgetItem();
-                    itemAmount->setFlags(itemAmount->flags() & ~Qt::ItemIsEditable);
-                    itemAmount->setText(detail.m_amount);
-                    ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_AMOUNT, itemAmount);
 
-                    QString amountLocalStr = CsdUtils::converAmountToString(local,'f',2);
-                    QTableWidgetItem *itemAmountLocal = new QTableWidgetItem();
-                    itemAmountLocal->setFlags(itemAmountLocal->flags() & ~Qt::ItemIsEditable);
-                    itemAmountLocal->setText(amountLocalStr);
-                    ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_LOCAL_SHARE, itemAmountLocal);
+               insertTableRow(transDetail.m_transID,
+                              transDetail.m_receiptBook,
+                              transDetail.m_receiptNo,
+                              transDetail.m_from,
+                              transDetail.m_accountID,
+                              transDetail.m_amount);
+               ret = true;
 
-
-                    QString amountHqStr = CsdUtils::converAmountToString(hq,'f',2);
-                    QTableWidgetItem *itemAmountHq = new QTableWidgetItem();
-                    itemAmountHq->setFlags(itemAmountHq->flags() & ~Qt::ItemIsEditable);
-                    itemAmountHq->setText(amountHqStr);
-                    ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_HQ_SHARE, itemAmountHq);
-               }
-
-               delete vData;
             }
+
+
+            m_constructor = constructor;
 
         }
         for (auto todel : results) {
@@ -765,13 +715,7 @@ bool CremittanceDlg::populateTableUsingTransaction()
 
         int accountID = transData->m_accountId;
         int id = transData->m_id;
-        float hqPC = 0;
-        float localPC = 100;
-        std::map<int, std::pair<float, float> >::iterator fn = m_accountPct.find(accountID);
-        if (fn != m_accountPct.end()) {
-             hqPC = fn->second.first;
-             localPC = fn->second.second;
-        }
+
 
         QString receiptBook = transData->m_reeiptBook;
         QString receiptSl = transData->m_receiptSlNo;
@@ -781,66 +725,10 @@ bool CremittanceDlg::populateTableUsingTransaction()
         }
         QString min = CcontactMap::Object()->getContanceName(transData->m_fromId);
         double amount = transData->m_amount;
-        double local = (amount*localPC)/100;
-        double hq = (amount*hqPC)/100;
-
-        QString amountStr = CsdUtils::converAmountToString(amount,'f',2);
 
 
-        int rowCount = ui->m_table->rowCount();
-        ui->m_table->insertRow(rowCount);
-        //set id
-        QTableWidgetItem *itemID = new QTableWidgetItem();
-        itemID->setFlags(itemID->flags() & ~Qt::ItemIsEditable);
-        itemID->setText(QString::number(id));
-        ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_ID, itemID);
-        //set sl no
-        QTableWidgetItem *itemDate = new QTableWidgetItem();
-        itemDate->setFlags(itemDate->flags() & ~Qt::ItemIsEditable);
-        itemDate->setText(transData->m_date.toString("d MMM yyyy"));
-        ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_DATE, itemDate);
+        insertTableRow(id, receiptBook, receiptSl, min, accountID, amount);
 
-        //set receipt bookno
-        QTableWidgetItem *itemBook = new QTableWidgetItem();
-        itemBook->setFlags(itemBook->flags() & ~Qt::ItemIsEditable);
-        itemBook->setText(receiptBook);
-        ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_RECEIPT_BOOK_NO, itemBook);
-        //set receipt sl
-        QTableWidgetItem *itemBookSl = new QTableWidgetItem();
-        itemBookSl->setFlags(itemBookSl->flags() & ~Qt::ItemIsEditable);
-        itemBookSl->setText(receiptSl);
-        ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_REEIPT_SL_NO, itemBookSl);
-
-        //set min
-        QTableWidgetItem *itemMin = new QTableWidgetItem();
-        itemMin->setFlags(itemMin->flags() & ~Qt::ItemIsEditable);
-        itemMin->setText(min);
-        ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_MIN, itemMin);
-
-        QString accountName = CaccountMap::Object()->getAccountName(accountID);
-        QTableWidgetItem *itemAccount = new QTableWidgetItem();
-        itemAccount->setFlags(itemAccount->flags() & ~Qt::ItemIsEditable);
-        itemAccount->setText(accountName);
-        ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_PIAKSAN, itemAccount);
-
-
-        QTableWidgetItem *itemAmount = new QTableWidgetItem();
-        itemAmount->setFlags(itemAmount->flags() & ~Qt::ItemIsEditable);
-        itemAmount->setText(amountStr);
-        ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_AMOUNT, itemAmount);
-
-        QString amountLocalStr = CsdUtils::converAmountToString(local,'f',2);
-        QTableWidgetItem *itemAmountLocal = new QTableWidgetItem();
-        itemAmountLocal->setFlags(itemAmountLocal->flags() & ~Qt::ItemIsEditable);
-        itemAmountLocal->setText(amountLocalStr);
-        ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_LOCAL_SHARE, itemAmountLocal);
-
-
-        QString amountHqStr = CsdUtils::converAmountToString(hq,'f',2);
-        QTableWidgetItem *itemAmountHq = new QTableWidgetItem();
-        itemAmountHq->setFlags(itemAmountHq->flags() & ~Qt::ItemIsEditable);
-        itemAmountHq->setText(amountHqStr);
-        ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_HQ_SHARE, itemAmountHq);
 
 
         delete transData;
@@ -849,6 +737,77 @@ bool CremittanceDlg::populateTableUsingTransaction()
     results.clear();
     m_constructor = constructor;
     return true;
+ }
+
+ void CremittanceDlg::insertTableRow(int id, QString receiptBook, QString receiptSl, QString min, int accountID, double amount)
+ {
+    float hqPC = 0;
+    float localPC = 100;
+    std::map<int, std::pair<float, float> >::iterator fn = m_accountPct.find(accountID);
+    if (fn != m_accountPct.end()) {
+        hqPC = fn->second.first;
+        localPC = fn->second.second;
+    }
+    QString amountStr = CsdUtils::converAmountToString(amount,'f',2);
+    double local = (amount*localPC)/100;
+    double hq = (amount*hqPC)/100;
+
+    int rowCount = ui->m_table->rowCount();
+    ui->m_table->insertRow(rowCount);
+    //set id
+    QTableWidgetItem *itemID = new QTableWidgetItem();
+    itemID->setFlags(itemID->flags() & ~Qt::ItemIsEditable);
+    itemID->setText(QString::number(id));
+    ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_ID, itemID);
+    //set sl no
+    QTableWidgetItem *itemDate = new QTableWidgetItem();
+    itemDate->setFlags(itemDate->flags() & ~Qt::ItemIsEditable);
+    itemDate->setText("");
+    //itemDate->setText(transData->m_date.toString("d MMM yyyy"));
+    ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_DATE, itemDate);
+
+    //set receipt bookno
+    QTableWidgetItem *itemBook = new QTableWidgetItem();
+    itemBook->setFlags(itemBook->flags() & ~Qt::ItemIsEditable);
+    itemBook->setText(receiptBook);
+    ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_RECEIPT_BOOK_NO, itemBook);
+    //set receipt sl
+    QTableWidgetItem *itemBookSl = new QTableWidgetItem();
+    itemBookSl->setFlags(itemBookSl->flags() & ~Qt::ItemIsEditable);
+    itemBookSl->setText(receiptSl);
+    ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_REEIPT_SL_NO, itemBookSl);
+
+    //set min
+    QTableWidgetItem *itemMin = new QTableWidgetItem();
+    itemMin->setFlags(itemMin->flags() & ~Qt::ItemIsEditable);
+    itemMin->setText(min);
+    ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_MIN, itemMin);
+
+    QString accountName = CaccountMap::Object()->getAccountName(accountID);
+    QTableWidgetItem *itemAccount = new QTableWidgetItem();
+    itemAccount->setFlags(itemAccount->flags() & ~Qt::ItemIsEditable);
+    itemAccount->setText(accountName);
+    ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_PIAKSAN, itemAccount);
+
+
+    QTableWidgetItem *itemAmount = new QTableWidgetItem();
+    itemAmount->setFlags(itemAmount->flags() & ~Qt::ItemIsEditable);
+    itemAmount->setText(amountStr);
+    ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_AMOUNT, itemAmount);
+
+    QString amountLocalStr = CsdUtils::converAmountToString(local,'f',2);
+    QTableWidgetItem *itemAmountLocal = new QTableWidgetItem();
+    itemAmountLocal->setFlags(itemAmountLocal->flags() & ~Qt::ItemIsEditable);
+    itemAmountLocal->setText(amountLocalStr);
+    ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_LOCAL_SHARE, itemAmountLocal);
+
+
+    QString amountHqStr = CsdUtils::converAmountToString(hq,'f',2);
+    QTableWidgetItem *itemAmountHq = new QTableWidgetItem();
+    itemAmountHq->setFlags(itemAmountHq->flags() & ~Qt::ItemIsEditable);
+    itemAmountHq->setText(amountHqStr);
+    ui->m_table->setItem(rowCount, REMIT_DLG_TABLE_HQ_SHARE, itemAmountHq);
+
  }
 
  void CremittanceDlg::calclateTotal()
@@ -876,7 +835,7 @@ bool CremittanceDlg::populateTableUsingTransaction()
         }
         QString accountName = piaksanItem->text().trimmed();
         int accountID = CaccountMap::Object()->getAccountID(accountName);
-        int deptID = CaccountMap::Object()->getDeptForAccount(accountID);
+        int deptID =  CaccountMap::Object()->getDeptForAccount(accountID);
         float hqPC = 0;
         float localPC = 100;
         std::map<int, std::pair<float, float> >::iterator fn = m_accountPct.find(accountID);
@@ -889,7 +848,7 @@ bool CremittanceDlg::populateTableUsingTransaction()
         m_remittanceAmount += amount;
         double local = (amount*localPC)/100;
         double hq = (amount*hqPC)/100;
-        QString amountStr = CsdUtils::converAmountToString(amount,'f',2);
+       // QString amountStr = CsdUtils::converAmountToString(amount,'f',2);
 
         if (localPC > 0) {
             m_allHq = false;
@@ -930,7 +889,7 @@ bool CremittanceDlg::populateTableUsingTransaction()
 
             remits.m_allTrans.push_back(SremitTransDetail(id,
                                                           min,
-                                                          amountStr,
+                                                          amount,
                                                           receiptBook,
                                                           receiptSl,
                                                           accountID));
@@ -946,7 +905,7 @@ bool CremittanceDlg::populateTableUsingTransaction()
 
             remits.m_allTrans.push_back(SremitTransDetail(id,
                                                           min,
-                                                          amountStr,
+                                                          amount,
                                                           receiptBook,
                                                           receiptSl,
                                                           accountID));

@@ -9,6 +9,8 @@
 #include "MISC/chtmlutils.h"
 #include <QTableWidgetItem>
 #include "cremittancetable.h"
+#include "MISC/cremittancedetails.h"
+
 namespace Ui {
 class CremittanceDlg;
 }
@@ -56,20 +58,7 @@ private slots:
 
 private:
 
-    struct StransForRemittance{
-        double                          m_hqShare;
-        double                          m_localShare;
 
-        std::map<int, std::set<int> >   m_receipts;
-        std::vector<SremitTransDetail>  m_allTrans;
-        StransForRemittance() {
-            m_hqShare = 0;
-            m_localShare = 0;
-            m_receipts.clear();
-            m_allTrans.clear();
-        }
-
-    };
 
     Ui::CremittanceDlg *ui;
     bool                                        m_constructor;
@@ -95,6 +84,8 @@ private:
     void populateHTMLTable();
     bool populateTableUsingTransaction();
     bool populateTransaction(QVector<StransactionData*>&results);
+    void insertTableRow(int id, QString receiptBook, QString receiptSl, QString min, int accountID, double amount);
+
     void calclateTotal();
     void calculateTotalAndPopulateHtmlTable();
 

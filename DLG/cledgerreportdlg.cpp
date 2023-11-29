@@ -546,7 +546,7 @@ void CledgerReportDlg::printDeptSummary(CclosingCalculator *calc)
             }
         }
         SdeptStatement& statement = m_deptStatement[name];
-        statement.m_openintBalance = amount;
+        statement.m_openintBalance += amount;
     }
 
     for (auto accDept : closing) {
