@@ -6,6 +6,7 @@
 #include <QMap>
 #include <QVector>
 #include <QDate>
+#include <map>
 struct StransactionData;
 class CclosingCalculator;
 namespace Ui {
@@ -39,6 +40,12 @@ public:
     ~CledgerReportDlg();
 
 private:
+    struct SdeptStatement{
+
+        double m_openintBalance = 0;
+        double m_closingBalance = 0;
+        std::map<QString, std::pair<double, double>> m_incomePaymentAmt;
+    };
     Ui::CledgerReportDlg *ui;
     bool                               m_isConstructor;
     QCompleter*                        m_nameCompleter;
@@ -47,11 +54,17 @@ private:
     QStringList                       m_csvTrans;
     QStringList                       m_htmlList;
     QString                           m_html;
+    std::map<QString, SdeptStatement> m_deptStatement;
     void clear();
     // QWidget interface
     void resize();
     void populateTable();
-    void populateForOpeningClosing(CclosingCalculator* calc);
+    void printForOpeningClosing(CclosingCalculator* calc);
+    void printForSummary(CclosingCalculator* calc);
+    void printForClosingSummary(CclosingCalculator* calc);
+    void printDeptSummary(CclosingCalculator* calc);
+
+
 protected:
     void resizeEvent(QResizeEvent *event);
 private slots:

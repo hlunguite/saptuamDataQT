@@ -4,6 +4,7 @@
 #include "cpaymentaccounttable.h"
 CaccountMap::CaccountMap()
 {
+    m_defaultDept = 0;
     populateAccountMap();
 }
 
@@ -20,7 +21,7 @@ void CaccountMap::populateAccountMap()
 
 void CaccountMap::populateAccountMapInt()
 {
-
+    m_defaultDept = 0;
     m_accountIdNameMap.clear();
     m_accountNameIdMap.clear();
     m_accountList.clear();
@@ -118,6 +119,9 @@ void CaccountMap::populateAccountDeptMap()
             const Tobjects& dept = values.at(i);
             int id = dept.at(DEPARTMENT_ID_IDX).toInt();
             QString name = dept.at(DEPARTMENT_NAME_IDX).toString();
+            if (name.contains("upa committee", Qt::CaseInsensitive)) { // Could there be better way to check
+                m_defaultDept = id;
+            }
             //ui->m_deptCombo->addItem(name);
             m_deptIDNameMap.insert(id, name);
             m_deptNameIDMap.insert(name, id);

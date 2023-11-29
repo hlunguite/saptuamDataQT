@@ -85,7 +85,7 @@ public:
     void closeTable();
 
     int getNoOfRowInTable(){ return m_tableRowCount;}
-    void formatString(QString str, bool paragraph = false);
+    void formatString(QString str, bool paragraph = false, bool bold = false);
     static QString addMultipleBlank(int noofline);
     static QString getTwoSignator();
     static QString getHeader();

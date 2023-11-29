@@ -176,13 +176,15 @@ void CledgerReportDlg::populateTable()
     }
     CaccountLedger cashAccount(true);
     CaccountLedger bankAccount(true);
-
-    CclosingCalculator closingCalc;
-    closingCalc.calculateClosing( ui->m_fromDate->date() ,query);
-    populateForOpeningClosing(&closingCalc);
+    QVector<StransactionData*> results = CtransactionTable::Object()->getAllTransaction(query);
+    bool isAll = ui->m_accountBox->currentText().isEmpty() && ui->m_DeptBox->currentText().isEmpty() && ui->m_nameFilter->text().isEmpty();
+    if (results.isEmpty() == false && individualLedger == false && isAll) {
+        CclosingCalculator closingCalc;
+        closingCalc.calculateClosing( ui->m_fromDate->date() ,query);
+        printForOpeningClosing(&closingCalc);
+    }
 
     //qDebug()<<"qeery is "<<query;
-    QVector<StransactionData*> results = CtransactionTable::Object()->getAllTransaction(query);
     //qDebug()<<"Amount Account, From/To Type";
     for (auto& transData: results) {
          int deptID = CaccountMap::Object()->getDeptForAccount(transData->m_accountId);
@@ -261,9 +263,473 @@ void CledgerReportDlg::populateTable()
 
 }
 
-void CledgerReportDlg::populateForOpeningClosing(CclosingCalculator *calc)
+void CledgerReportDlg::printForOpeningClosing(CclosingCalculator *calc)
+{
+    printForSummary(calc);
+    printForClosingSummary(calc);
+    printDeptSummary(calc);
+
+    //qDebug()<<openingCash<<" "<<openingBank<<" "<<closingCash<<" "<<closingBank;
+/*
+ *     double cashOpening() const;
+
+    double cashClosing() const;
+
+    double bankOpening() const;
+
+    double bankClosing() const;
+    const accountDeptAmountType& getClosing() { return m_closingValues;}
+    const accountDeptAmountType& getOpening() { return m_openingValues;}
+
+    QDate lastTransDate() const;
+
+    accountTwoAmountType accountIncomeAndPayment() const;*/
+}
+
+void CledgerReportDlg::printForSummary(CclosingCalculator *calc)
+{
+    double openingCash = calc->cashOpening();
+    double openingBank = calc->bankOpening();
+    double closingCash = calc->cashClosing();
+    double closingBank = calc->bankClosing();
+    double totalIncome = 0;
+    double totalPayment = 0;
+    accountTwoAmountType incomeAndPayment = calc->accountIncomeAndPayment();
+    for (auto iandp : incomeAndPayment) {
+        totalIncome += iandp.second.first;
+        totalPayment += iandp.second.second;
+    }
+
+
+
+    ChtmlUtils htmlUtils;
+    QString htmlLine = "SUMMARY: " + ui->m_fromDate->date().toString("d MMM yyyy") + " TO " + ui->m_toDate->date().toString("d MMM yyyy") + "</br>";
+    htmlUtils.formatString(htmlLine, true, true);
+
+    htmlUtils.setIsTableHeader(false);
+    htmlUtils.addTableColSize(2);
+    htmlUtils.addTableColSize(10);
+    htmlUtils.addTableColSize(2);
+    htmlUtils.addTableColSize(10);
+    htmlUtils.addTableColSize(13);
+
+
+    htmlUtils.openTable();
+    //add opening balance
+    htmlUtils.createRow();
+    htmlUtils.createCell("1", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("Opening Balance", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("(a)", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("Cash", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    QString cashOpningStr = CsdUtils::convertAmountToStringWithSign(openingCash);
+    htmlUtils.createCell(cashOpningStr, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.closeRow();
+    cashOpningStr = CsdUtils::converAmountToString(openingCash);
+    QString line = "1,Opening Balance, (a), Cash, " + cashOpningStr +"\n";
+    m_csvTrans.push_back(line);
+
+    htmlUtils.createRow();
+    htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("(b)", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("Saving Account", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    cashOpningStr = CsdUtils::convertAmountToStringWithSign(openingBank);
+    htmlUtils.createCell(cashOpningStr, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.closeRow();
+    cashOpningStr = CsdUtils::converAmountToString(openingBank);
+    line = ",, (b), Saving Account, " + cashOpningStr +"\n";
+    m_csvTrans.push_back(line);
+
+
+    htmlUtils.createRow();
+    htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("Total", HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    cashOpningStr = CsdUtils::convertAmountToStringWithSign(openingBank + openingCash);
+    htmlUtils.createCell(cashOpningStr, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.closeRow();
+    cashOpningStr = CsdUtils::converAmountToString(openingBank + openingCash);
+    line = ",Total, , , " + cashOpningStr +"\n";
+    m_csvTrans.push_back(line);
+
+    //Add total receipt
+    htmlUtils.createRow();
+    htmlUtils.createCell("2", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("Total Receipt", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    cashOpningStr = CsdUtils::convertAmountToStringWithSign(totalIncome);
+    htmlUtils.createCell(cashOpningStr, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.closeRow();
+    cashOpningStr = CsdUtils::converAmountToString(totalIncome);
+    line = "2,Total Receipt, , , " + cashOpningStr +"\n";
+    m_csvTrans.push_back(line);
+    //Add total payment
+    htmlUtils.createRow();
+    htmlUtils.createCell("3", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("Total Payment", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    cashOpningStr = CsdUtils::convertAmountToStringWithSign(totalPayment);
+    htmlUtils.createCell(cashOpningStr, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.closeRow();
+    cashOpningStr = CsdUtils::converAmountToString(totalPayment);
+    line = "3,Total Payment, , , " + cashOpningStr +"\n";
+    m_csvTrans.push_back(line);
+    // add closing balance
+
+    htmlUtils.createRow();
+    htmlUtils.createCell("4", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("Closing Balance", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("(a)", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("Cash", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    cashOpningStr = CsdUtils::convertAmountToStringWithSign(closingCash);
+    htmlUtils.createCell(cashOpningStr, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.closeRow();
+    cashOpningStr = CsdUtils::converAmountToString(closingCash);
+    line = "4,Closing Balance, (a) , Cash, " + cashOpningStr +"\n";
+    m_csvTrans.push_back(line);
+
+    htmlUtils.createRow();
+    htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("", HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("(b)", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("Saving Account", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    cashOpningStr = CsdUtils::convertAmountToStringWithSign(closingBank);
+    htmlUtils.createCell(cashOpningStr, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.closeRow();
+    cashOpningStr = CsdUtils::converAmountToString(closingBank);
+    line = ",, (b) , Saving Account, " + cashOpningStr +"\n";
+    m_csvTrans.push_back(line);
+
+
+    htmlUtils.createRow();
+    htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("Total", HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("", HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("", HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    cashOpningStr = CsdUtils::convertAmountToStringWithSign(closingBank + closingCash);
+    htmlUtils.createCell(cashOpningStr, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.closeRow();
+    cashOpningStr = CsdUtils::converAmountToString(closingBank + closingCash);
+    line = ",Total,  , , " + cashOpningStr +"\n";
+    m_csvTrans.push_back(line);
+
+    htmlUtils.closeTable();
+    double diff = (openingCash + openingBank + totalIncome - totalPayment) - (closingCash + closingBank);
+    if (diff != 0) {
+        QString htmlLine = "*Mismatch in calculation";
+        htmlUtils.formatString(htmlLine, true, true);
+        m_csvTrans.push_back(htmlLine + "\n");
+
+    }
+    m_csvTrans.push_back("\n");
+
+    QString html = htmlUtils.getHtml() + ChtmlUtils::getPageBreak();
+
+    m_htmlList.push_back(html);
+}
+
+void CledgerReportDlg::printForClosingSummary(CclosingCalculator *calc)
 {
 
+    const accountDeptAmountType& closing = calc->getClosing();
+    ChtmlUtils htmlUtils;
+    QString htmlLine  = "Department's Balance in Local Pool as on " + ui->m_toDate->date().toString("d MMM yyyy");
+    m_csvTrans.push_back(htmlLine + "\n");
+    htmlUtils.formatString(htmlLine, true, true);
+    std::map<QString, double> deptAmount;
+    std::map<QString, double> accAmount;
+
+    for (auto accDept : closing) {
+        int id = accDept.first;
+        EaccountType accType = CaccountMap::Object()->getAccountType(id);
+        if (accType == REMITTANCE_ACCOUNT_TYPE || REQUEST_ACCOUNT_TYPE == accType) {
+            continue;
+        }
+        if (accType == BANK_ACCOUNT_TYPE || accType == LOAN_ACCOUNT_TYPE) {
+            id = CaccountMap::Object()->getDefaultDept();
+        }
+
+        double amount = accDept.second;
+        QString name = CaccountMap::Object()->getDeptName(id);
+        if (name.isEmpty() == false) {
+            deptAmount.insert({name, amount});
+        } else {
+            name = CaccountMap::Object()->getAccountName(id);
+            if (name.isEmpty() == false) {
+                accAmount.insert({name, amount});
+            } else {
+                Q_ASSERT(0);
+            }
+        }
+    }
+    int slno = 0;
+    htmlUtils.setIsTableHeader(false);
+    htmlUtils.addTableColSize(5);
+    htmlUtils.addTableColSize(20);
+    htmlUtils.addTableColSize(15);
+    htmlUtils.openTable();
+    double total = 0;
+    for (auto dept :deptAmount ) {
+        ++slno;
+        htmlUtils.createRow();
+        QString slNo = QString::number(slno);
+        htmlUtils.createCell(slNo, HTML_CENTER_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+        htmlUtils.createCell(dept.first, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+        QString amountStr = CsdUtils::convertAmountToStringWithSign(dept.second);
+        htmlUtils.createCell(amountStr, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+        htmlUtils.closeRow();
+        amountStr = CsdUtils::converAmountToString(dept.second);
+        QString csvLine = slNo + ", " + dept.first + "," + amountStr + "\n";
+        m_csvTrans.push_back(csvLine);
+        total += dept.second;
+    }
+
+    for (auto acc : accAmount ) {
+        ++slno;
+        htmlUtils.createRow();
+        QString slNo = QString::number(slno);
+        htmlUtils.createCell(slNo, HTML_CENTER_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+        htmlUtils.createCell(acc.first, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+        QString amountStr = CsdUtils::convertAmountToStringWithSign(acc.second);
+        htmlUtils.createCell(amountStr, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+        htmlUtils.closeRow();
+        amountStr = CsdUtils::converAmountToString(acc.second);
+        QString csvLine = slNo + ", " + acc.first + "," + amountStr + "\n";
+        m_csvTrans.push_back(csvLine);
+        total += acc.second;
+    }
+
+    htmlUtils.createRow();
+    htmlUtils.createCell("", HTML_CENTER_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.createCell("Total", HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    QString amountStr = CsdUtils::convertAmountToStringWithSign(total);
+    htmlUtils.createCell(amountStr, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
+    htmlUtils.closeRow();
+    amountStr = CsdUtils::converAmountToString(total);
+    QString csvLine = ", Total," + amountStr + "\n";
+    m_csvTrans.push_back(csvLine);
+    m_csvTrans.push_back("\n");
+    htmlUtils.closeTable();
+
+    QString html = htmlUtils.getHtml() + ChtmlUtils::getPageBreak();
+
+    m_htmlList.push_back(html);
+
+}
+
+void CledgerReportDlg::printDeptSummary(CclosingCalculator *calc)
+{
+    m_deptStatement.clear();
+    const accountDeptAmountType& opening = calc->getOpening();
+    const accountDeptAmountType& closing = calc->getClosing();
+    accountTwoAmountType incomeAndPayment = calc->accountIncomeAndPayment();
+
+    for (auto accDept : opening) {
+        int id = accDept.first;
+        EaccountType accType = CaccountMap::Object()->getAccountType(id);
+        if (accType == REMITTANCE_ACCOUNT_TYPE || REQUEST_ACCOUNT_TYPE == accType) {
+            continue;
+        }
+        if (accType == BANK_ACCOUNT_TYPE || accType == LOAN_ACCOUNT_TYPE) {
+            id = CaccountMap::Object()->getDefaultDept();
+        }
+
+        double amount = accDept.second;
+        QString name = CaccountMap::Object()->getDeptName(id);
+        if (name.isEmpty()) {
+            name = CaccountMap::Object()->getAccountName(id);
+            if (name.isEmpty()) {
+                Q_ASSERT(0);
+            }
+        }
+        SdeptStatement& statement = m_deptStatement[name];
+        statement.m_openintBalance = amount;
+    }
+
+    for (auto accDept : closing) {
+        int id = accDept.first;
+        EaccountType accType = CaccountMap::Object()->getAccountType(id);
+        if (accType == REMITTANCE_ACCOUNT_TYPE || REQUEST_ACCOUNT_TYPE == accType) {
+            continue;
+        }
+        if (accType == BANK_ACCOUNT_TYPE || accType == LOAN_ACCOUNT_TYPE) {
+            id = CaccountMap::Object()->getDefaultDept();
+        }
+
+        double amount = accDept.second;
+        QString name = CaccountMap::Object()->getDeptName(id);
+        if (name.isEmpty()) {
+            name = CaccountMap::Object()->getAccountName(id);
+            if (name.isEmpty()) {
+                Q_ASSERT(0);
+            }
+        }
+        SdeptStatement& statement = m_deptStatement[name];
+        statement.m_closingBalance += amount;
+    }
+
+    for (auto accountdpt: incomeAndPayment) {
+        int id = accountdpt.first;
+        double incomeAmt = accountdpt.second.first;
+        double paymentAmt = accountdpt.second.second;
+        int deptID = 0;
+        EaccountType accType = CaccountMap::Object()->getAccountType(id);
+        if (accType == REMITTANCE_ACCOUNT_TYPE || REQUEST_ACCOUNT_TYPE == accType) {
+            continue;
+        }
+        if (accType == BANK_ACCOUNT_TYPE || accType == LOAN_ACCOUNT_TYPE) {
+            deptID = CaccountMap::Object()->getDefaultDept();
+        } else {
+            deptID = CaccountMap::Object()->getDeptForAccount(id);
+        }
+        QString deptName = CaccountMap::Object()->getDeptName(deptID);
+        QString accountName = CaccountMap::Object()->getAccountName(id);
+        SdeptStatement& statement = m_deptStatement[deptName];
+        std::pair<double, double>& accountAmt = statement.m_incomePaymentAmt[accountName];
+        accountAmt.first += incomeAmt;
+        accountAmt.second += paymentAmt;
+    }
+
+
+    ChtmlUtils htmlUtils;
+    QString htmlLine  = "Department's summary statement: " + ui->m_fromDate->date().toString("d MMM yyyy")+ " to " + ui->m_toDate->date().toString("d MMM yyyy");
+    m_csvTrans.push_back(htmlLine + "\n");
+    htmlUtils.formatString(htmlLine, true, true);
+    bool first = true;
+    for (auto deptstatement: m_deptStatement) {
+        QString deptName = deptstatement.first;
+        const SdeptStatement& statement = deptstatement.second;
+        if (first == false) {
+            htmlUtils.formatString("<br>", false, false);
+            m_csvTrans.push_back("\n");
+        }
+        first = false;
+        htmlUtils.setIsTableHeader(false);
+        htmlUtils.addTableColSize(5);
+        htmlUtils.addTableColSize(20);
+        htmlUtils.addTableColSize(20);
+        htmlUtils.addTableColSize(15);
+        htmlUtils.addTableColSize(15);
+        htmlUtils.openTable();
+
+        double income = 0;
+        double payment = 0;
+        htmlUtils.createRow();
+        htmlUtils.createCell("Sl No", HTML_CENTER_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_TOP_BOTTOM_BORDER, HTML_NORMAL_BORDER_STYLE, "#E2E2E2");
+        htmlUtils.createCell("Department", HTML_CENTER_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_TOP_BOTTOM_BORDER, HTML_NORMAL_BORDER_STYLE, "#E2E2E2");
+        htmlUtils.createCell("Account Head", HTML_CENTER_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_TOP_BOTTOM_BORDER, HTML_NORMAL_BORDER_STYLE, "#E2E2E2");
+        htmlUtils.createCell("Receipt", HTML_CENTER_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_TOP_BOTTOM_BORDER, HTML_NORMAL_BORDER_STYLE, "#E2E2E2");
+        htmlUtils.createCell("Payment", HTML_CENTER_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_TOP_BOTTOM_BORDER, HTML_NORMAL_BORDER_STYLE, "#E2E2E2");
+        htmlUtils.closeRow();
+        QString line = "Sl No, Department, Account Head, Receipt, Payment";
+        m_csvTrans.push_back(line + "\n");
+        int rowCount = 0;
+        QString bgcolor;
+        if(rowCount%2){
+            bgcolor ="#efefef";
+
+        }
+
+        htmlUtils.createRow();
+        QString slno = QString::number(rowCount + 1);
+        htmlUtils.createCell(slno, HTML_CENTER_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+        htmlUtils.createCell(deptName, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+        htmlUtils.createCell("Opening Balance Local Pool", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+        QString receiptStr = CsdUtils::convertAmountToStringWithSign(statement.m_openintBalance);
+        htmlUtils.createCell(receiptStr, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+        htmlUtils.createCell("", HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+        htmlUtils.closeRow();
+        receiptStr = CsdUtils::converAmountToString(statement.m_openintBalance);
+        line = slno + "," + deptName + ",Opening Balance Local Pool," + receiptStr + ",\n";
+        m_csvTrans.push_back(line);
+        income += statement.m_openintBalance;
+        ++rowCount;
+
+        for (auto accountamt : statement.m_incomePaymentAmt) {
+            QString accountName = accountamt.first;
+            double accountIncome = accountamt.second.first;
+            double accountPayment = accountamt.second.second;
+            QString bgcolor;
+            if(rowCount%2){
+                bgcolor ="#efefef";
+
+            }
+            htmlUtils.createRow();
+            QString slno = QString::number(rowCount + 1);
+            htmlUtils.createCell(slno, HTML_CENTER_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+            htmlUtils.createCell(deptName, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+            htmlUtils.createCell(accountName, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+            QString receiptStr = CsdUtils::convertAmountToStringWithSign(accountIncome);
+            QString paymentStr = CsdUtils::convertAmountToStringWithSign(accountPayment);
+            htmlUtils.createCell(receiptStr, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+            htmlUtils.createCell(paymentStr, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+            htmlUtils.closeRow();
+            receiptStr = CsdUtils::converAmountToString(accountIncome);
+            paymentStr = CsdUtils::converAmountToString(accountPayment);
+            line = slno + "," + deptName + ","+ accountName +"," + receiptStr +","+ paymentStr + ",\n";
+            m_csvTrans.push_back(line);
+            income += accountIncome;
+            payment += accountPayment;
+            ++rowCount;
+        }
+
+
+        bgcolor.clear();
+        if(rowCount%2){
+            bgcolor ="#efefef";
+
+        }
+
+
+        htmlUtils.createRow();
+        htmlUtils.createCell("", HTML_CENTER_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+        htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+        htmlUtils.createCell("<stong>TOTAL</strong>", HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+        receiptStr = "<strong>" + CsdUtils::convertAmountToStringWithSign(income) + "</strong>";
+        QString paymentStr = "<strong>"  + CsdUtils::convertAmountToStringWithSign(payment) + "</strong>";
+        htmlUtils.createCell(receiptStr, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+        htmlUtils.createCell(paymentStr, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+        htmlUtils.closeRow();
+        receiptStr = CsdUtils::converAmountToString(income);
+        paymentStr = CsdUtils::converAmountToString(payment);
+        line =   ",,Total," + receiptStr +"," + paymentStr + ",\n";
+        m_csvTrans.push_back(line);
+        ++rowCount;
+
+        bgcolor.clear();
+        if(rowCount%2){
+            bgcolor ="#efefef";
+
+        }
+
+        QString closingString = "Closing Balance Local Pool";
+        double diff = (income - payment) - statement.m_closingBalance;
+        if (diff != 0) {
+            closingString += "*";
+        }
+        htmlUtils.createRow();
+        htmlUtils.createCell("", HTML_CENTER_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_TOP_BOTTOM_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+        htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_TOP_BOTTOM_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+        htmlUtils.createCell(closingString, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_TOP_BOTTOM_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+        receiptStr = CsdUtils::convertAmountToStringWithSign(statement.m_closingBalance);
+        htmlUtils.createCell(receiptStr, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_TOP_BOTTOM_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+        htmlUtils.createCell("", HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_TOP_BOTTOM_BORDER, HTML_NORMAL_BORDER_STYLE, bgcolor);
+        htmlUtils.closeRow();
+        receiptStr = CsdUtils::converAmountToString(statement.m_closingBalance);
+        line =   ",,"+closingString+"," + receiptStr + ",\n";
+        m_csvTrans.push_back(line);
+
+
+        htmlUtils.closeTable();
+    }
+
+
+    QString html = htmlUtils.getHtml() + ChtmlUtils::getPageBreak();
+
+    m_htmlList.push_back(html);
 }
 
 void CledgerReportDlg::resizeEvent(QResizeEvent *event)
@@ -485,8 +951,9 @@ QString CaccountLedger::getHTMLTable(int accountID, bool addDeptInCSV, bool indi
         for (auto transData: transactionDatas) {
             ++rowCount;
             ++count;
-            QString bgcolor;
             EhtmlCellBoarder borderType = HTML_NO_BORDER;
+
+            QString bgcolor;
             if(rowCount%2){
                 bgcolor ="#efefef";
                 //borderType = HTML_RIGHT_BORDER;

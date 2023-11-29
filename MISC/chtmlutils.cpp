@@ -81,7 +81,7 @@ QVector<int> ChtmlUtils::tableColSize() const
 
 void ChtmlUtils::addTableColSize(int size)
 {
-    if(m_tableStage != NO_HTML_TABLE) // create size before you create a table
+    if(m_tableStage != NO_HTML_TABLE && m_tableStage != CLOSE_HTML_TABLE) // create size before you create a table
          Q_ASSERT(0);
     m_tableColSize.push_back(size);
 }
@@ -98,7 +98,7 @@ void ChtmlUtils::setIsTableHeader(bool newIsTableHeader)
 
 void ChtmlUtils::openTable()
 {
-    if(m_tableStage != NO_HTML_TABLE){ // can open html only in case of no table is open currently
+    if(m_tableStage != NO_HTML_TABLE  && m_tableStage != CLOSE_HTML_TABLE){ // can open html only in case of no table is open currently
         Q_ASSERT(0);
     }
 
@@ -287,16 +287,19 @@ void ChtmlUtils::closeTable()
     }
     m_tableStage = CLOSE_HTML_TABLE;
     m_htmlTable += "</table>";
+    m_tableColSize.clear();
 }
 
-void ChtmlUtils::formatString(QString str, bool paragraph)
+void ChtmlUtils::formatString(QString str, bool paragraph, bool bold)
 {
     QString str1;
    // qDebug()<<"before "<<str;
     str.replace(QRegularExpression("[\r\n]"), "<br>");
 
     //qDebug()<<"afer "<<str;
-
+    if (bold) {
+        str = "<strong>" + str + "</strong>";
+    }
     if(paragraph){
         str1 ="<p " + m_fontSize+ ">" + str + "</p>";
     }else {

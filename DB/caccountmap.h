@@ -31,6 +31,7 @@ public:
     const std::set<int>& getAllAccount() {return m_allAccount;}
     EaccountType getAccountType(int accountID);
     QString getPaymentAccountNameForAccountDepID(int id);
+    int     getDefaultDept() const { return m_defaultDept;}
 
 private:
     CaccountMap();
@@ -59,6 +60,7 @@ private:
          EaccountType>  m_accountTypes;
     QMap<int, QString>  m_paymentAccountIDNameMap;
     QMap<int, int>      m_accountDepPaymentAccountMap;
+    int                 m_defaultDept;
 
 
 };

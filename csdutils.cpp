@@ -300,8 +300,11 @@ void CsdUtils::setMaxWidth(int maxWidth)
 
 QString CsdUtils::convertAmountToStringWithSign(double d)
 {
-    QLocale locale(QLocale::English ,QLocale::India);
-    QString formatStr = locale.toCurrencyString(d, "₹");
+    QString formatStr;
+    if (d != 0) {
+        QLocale locale(QLocale::English ,QLocale::India);
+        formatStr = locale.toCurrencyString(d, "₹");
+    }
     return formatStr;
 
 }
