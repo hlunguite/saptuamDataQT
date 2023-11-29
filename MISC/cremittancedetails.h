@@ -37,10 +37,15 @@ class CremittanceDetails
 public:
     CremittanceDetails(int remittanceID);
     const  QVector<SremitTransDetail>& getTransactionForRemittance() const { return m_remittanceTransaction;}
+    const std::map<int, std::pair<double, double> >& getAccountPct() const { return  m_accountPct;}
+    const std::map<int, std::pair<double, double> >& getAccountDeptLocalAndDeptAmt() const { return  m_accountDeptLocalHqAmt;}
+
 private:
     int m_remittanceTableID;
     std::map<int, std::pair<double, double> >   m_accountPct;
+    std::map<int, std::pair<double, double> >   m_accountDeptLocalHqAmt;
     QVector<SremitTransDetail>                  m_remittanceTransaction;
+
 };
 
 #endif // CREMITTANCEDETAILS_H

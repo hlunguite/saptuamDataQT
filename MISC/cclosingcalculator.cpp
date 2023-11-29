@@ -300,81 +300,19 @@ void CclosingCalculator::getAccountIncomePaymentForQuery(QString query,
             SremittanceData* remitData = CremittanceTable::Object()->getRemittanceDataFromTransID(transID);
             if (remitData) {
                 int remitTableID = remitData->m_id;
-                std::map<int, std::pair<double, double> > accountPct;
-                //qDebug()<<"Remit Table id "<<remitTableID;
-                QVector<SremittanceDetailData*>* vData = CremittanceDetailTable::Object()->getRemittanceDetailForTableID(remitTableID);
-                if (vData) {
-                    for (auto data : *vData) {
-                        int	accountTableID = data->m_accuntTableID;
-                        double	localShare = data->m_localShare;
-                        double   hqShare = data->m_hqShare;
-                        //QString accountName = CaccountMap::Object()->getAccountName(accountID);
-                        //qDebug()<<accountName<<" hq pc "<<hqShare<<" local pc "<<localShare;
-                        accountPct[accountTableID] = std::make_pair(hqShare,localShare);
-                        //nameID.insert({accountName, accountID});
-                        delete data;
-                    }
-                    delete vData;
-                }
-                QString filter = "(" +CtransactionTable::Object()->getColName(TRANSACTION_STATUS_IDX) + "=1)";
-                QString query = "SELECT * FROM " + CtransactionTable::Object()->getTableName() + " WHERE ";
-                query += CtransactionTable::Object()->getColName(TRANSACTION_REMITTANCE_ID_IDX) + "=" + QString::number(remitTableID) ;
-                QVector<StransactionData*> remitTrans = CtransactionTable::Object()->getAllTransaction(query);
-                //add remittance expense
-                for (auto rtran: remitTrans) {
-                    double amount = rtran->m_amount;
-                    int transAccountID = rtran->m_accountId;
-                    std::map<int, std::pair<double, double> >::iterator fn = accountPct.find(transAccountID);
-                    double hqPC = 0;
-                    double localPC = 100;
-                    if (fn != accountPct.end()) {
-                        hqPC = fn->second.first;
-                        localPC = fn->second.second;
-                    } else {
-                        //QString accountName = CaccountMap::Object()->getAccountName(transAccountID);
-                    }
-                    if (localPC < 100) {
-                        double hq = (amount*hqPC)/(double)100;
-                        std::pair<double, double> & amt = processedDate[transAccountID];
-                        amt.second += hq;
-                        remittance += (amount*localPC)/(double)100;
-                    } else {
-                        remittance += amount;
-                    }
-                    delete rtran;
+                CremittanceDetails remitanceDetail(remitTableID);
+
+                const std::map<int, std::pair<double, double> >& accountPct = remitanceDetail.getAccountPct();
+                const std::map<int, std::pair<double, double> >& accountDeptLocalAndDeptAmt = remitanceDetail.getAccountDeptLocalAndDeptAmt();
+
+
+                for (auto localAndDept : accountDeptLocalAndDeptAmt) {
+                    int id = localAndDept.first;
+                    std::pair<double, double> & amt = processedDate[id];
+                    amt.second += localAndDept.second.second;
+                    remittance += localAndDept.second.first;
                 }
 
-                QVector<SremittanceReconcileData*>* reconData = CremittanceReconcileTable::Object()->getRemittanceReconcileForTableID(remitTableID);
-                if (reconData) {
-                    for (auto data :*reconData) {
-                        int id = data->m_accontOrDeptTableID;
-                        QString	str = data->m_str;
-                        SremitTransDetail detail(str);
-                        double amount = detail.m_amount;
-                        double hqPC = 0;
-                        double localPC = 100;
-                        std::map<int, std::pair<double, double> >::iterator fn = accountPct.find(id);
-
-                        if (fn != accountPct.end()) {
-                            hqPC = fn->second.first;
-                            localPC = fn->second.second;
-                        }
-                        if (localPC < 100) {
-                            //double local = (amount*localPC)/100;
-                            double hq = (amount*hqPC)/(double)100;
-                            std::pair<double, double> & amt = processedDate[id];
-                            amt.second += hq;
-                            remittance += (amount*localPC)/(double)100;
-                        } else {
-                            remittance += amount;
-
-                        }
-                        delete data;
-
-                    }
-                    delete reconData;
-                }
-                delete remitData;
             }
             if (remittance > 0) {
                 std::pair<double, double> & amt = processedDate[accountID];

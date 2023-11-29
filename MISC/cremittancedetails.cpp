@@ -54,13 +54,15 @@ CremittanceDetails::CremittanceDetails(int remittanceID):m_remittanceTableID(rem
 
     QVector<StransactionData*> remitTrans = CtransactionTable::Object()->getAllTransaction(query);
     m_remittanceTransaction.clear();
+    m_accountDeptLocalHqAmt.clear();
     //add remittance expense
     for (auto transData: remitTrans) {
         double amount = transData->m_amount;
         int transAccountID = transData->m_accountId;
 
         std::map<int, std::pair<double, double> >::iterator fn = m_accountPct.find(transAccountID);
-       /* double hqPC = 0;
+
+        double hqPC = 0;
         double localPC = 100;
         if (fn != m_accountPct.end()) {
             hqPC = fn->second.first;
@@ -68,14 +70,14 @@ CremittanceDetails::CremittanceDetails(int remittanceID):m_remittanceTableID(rem
         } else {
             //QString accountName = CaccountMap::Object()->getAccountName(transAccountID);
         }
-        if (localPC < 100) {
-            double hq = (amount*hqPC)/(double)100;
-            std::pair<double, double> & amt = processedDate[transAccountID];
-            amt.second += hq;
-            remittance += (amount*localPC)/(double)100;
-        } else {
-            remittance += amount;
-        }*/
+
+        double hq = (amount*hqPC)/(double)100;
+        double local = (amount*localPC)/(double)100;
+        std::pair<double, double> & amt = m_accountDeptLocalHqAmt[transAccountID];
+        amt.second += hq;
+        amt.first += local;
+
+
          QString min = CcontactMap::Object()->getContanceName(transData->m_fromId);
 
         SremitTransDetail remitTransDetail(transData->m_id, min, amount, transData->m_reeiptBook, transData->m_receiptSlNo, transAccountID);
@@ -84,16 +86,29 @@ CremittanceDetails::CremittanceDetails(int remittanceID):m_remittanceTableID(rem
     }
 
     QVector<SremittanceReconcileData*>* vrData = CremittanceReconcileTable::Object()->getRemittanceReconcileForTableID(m_remittanceTableID);
-    if (vData) {
-        qDebug()<<"reconcile found";
+    if (vrData) {
+       // qDebug()<<"reconcile found";
         for (auto data :*vrData) {
-            int	 accontDepID = data->m_accontOrDeptTableID;
+            //int	 accontDepID = data->m_accontOrDeptTableID;
             //bool isAccount = data->m_isAccount;
             QString	str = data->m_str;
             SremitTransDetail detail(str);
-            //qDebug()<<"recencile "<<detail.m_transID<<" account "<<detail.m_accountID<<" amunt "<<detail.m_amount<<" "<<accontDepID<<" "<<detail.m_from;
-            //detail.m_accountID = accontDepID;
             m_remittanceTransaction.push_back(detail);
+            int id = data->m_accontOrDeptTableID;
+            double amount = detail.m_amount;
+            double hqPC = 0;
+            double localPC = 100;
+            auto fn = m_accountPct.find(id);
+
+            if (fn != m_accountPct.end()) {
+                hqPC = fn->second.first;
+                localPC = fn->second.second;
+            }
+            double hq = (amount*hqPC)/(double)100;
+            double local = (amount*localPC)/(double)100;
+            std::pair<double, double> & amt = m_accountDeptLocalHqAmt[id];
+            amt.second += hq;
+            amt.first += local;
             delete data;
         }
         delete vrData;
