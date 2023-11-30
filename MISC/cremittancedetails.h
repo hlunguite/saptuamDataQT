@@ -3,6 +3,7 @@
 #include <map>
 #include <set>
 #include <QVector>
+#include <vector>
 struct StransactionData;
 struct SremitTransDetail {
     int m_transID;
