@@ -85,6 +85,28 @@ void CsaptuamDataDBMgr::addRemitRequestBankAccount()
     } else {
         delete accData;
     }
+
+
+    accountData.m_id = 0;
+    accountData.m_accountName = gLoanAccountName;
+    accountData.m_accountType = LOAN_ACCOUNT_TYPE;
+    accountData.m_isUseHqReceipt = false;
+    accountData.m_paymentAccountID = 0;
+    accountData.m_isActiveAccount = 0;
+    accountData.m_bankAccountName = "";
+
+    accData = CaccountTable::Object()->getAccountDataForName(accountData.m_accountName);
+    if (accData == nullptr) {
+        int id = accountData.save();
+        SdepartmentAccountData deptAcc;
+        deptAcc.m_id = 0;
+        deptAcc.m_deptOrAccountID = id;
+        deptAcc.m_isDept = false;
+        deptAcc.m_parentID = 0;
+        deptAcc.save();
+    } else {
+        delete accData;
+    }
 }
 
 void CsaptuamDataDBMgr::addDefaultName()

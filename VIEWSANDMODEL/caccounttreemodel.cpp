@@ -240,10 +240,10 @@ void CaccountTreeModel::populateAccountandDept()
             switch(accountType) {
                 case INCOME_ACCOUNT_TYPE: accountTypeStr = "Income Account";break;
                 case PAYMENT_ACCOUNT_TYPE: accountTypeStr = "Payment Account";break;
-                case BANK_ACCOUNT_TYPE: accountTypeStr = "Bank Account";break;
-                case REQUEST_ACCOUNT_TYPE: accountTypeStr = "Request Account";  break;
-                case REMITTANCE_ACCOUNT_TYPE: accountTypeStr = "Remittance Account";  break;
-                case LOAN_ACCOUNT_TYPE: accountTypeStr = "Loan Account";  break;
+                case BANK_ACCOUNT_TYPE: accountTypeStr = gBankAccountName;break;
+                case REQUEST_ACCOUNT_TYPE: accountTypeStr = gRequestAccountName;  break;
+                case REMITTANCE_ACCOUNT_TYPE: accountTypeStr = gRemittanceAccountName;  break;
+                case LOAN_ACCOUNT_TYPE: accountTypeStr = gLoanAccountName;  break;
 
                 default: Q_ASSERT(0);
             }

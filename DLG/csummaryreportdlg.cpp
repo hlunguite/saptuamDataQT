@@ -221,7 +221,7 @@ void CsummaryReportDlg::populateTable()
         m_html += html;
         addPageBreak = true;
     }
-    html = addInTable(remitanceAmount, "Remittance");
+    html = addInTable(remitanceAmount, gRemittanceAccountName);
 
     if (html.isEmpty() == false) {
         if (addPageBreak) {
@@ -230,7 +230,7 @@ void CsummaryReportDlg::populateTable()
         m_html += html;
         addPageBreak = true;
     }
-    html = addInTable(requestAmount, "Request");
+    html = addInTable(requestAmount, gRequestAccountName);
 
     if (html.isEmpty() == false) {
         if (addPageBreak) {
@@ -240,7 +240,7 @@ void CsummaryReportDlg::populateTable()
         addPageBreak = true;
     }
 
-    html = addInTable(loanAmount, "Loan Account");
+    html = addInTable(loanAmount, gLoanAccountName);
 
     if (html.isEmpty() == false) {
         if (addPageBreak) {

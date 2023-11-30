@@ -156,8 +156,8 @@ void CaccountUtils::getAccountTypesForNewAccountType(QVector<QString> &accountTy
     QMap<int, QString>::iterator end = m_accountTypeIdStringMap.end();
     while (beg != end) {
         if (beg.key() == INCOME_ACCOUNT_TYPE ||
-                beg.key() == PAYMENT_ACCOUNT_TYPE ||
-                beg.key() == LOAN_ACCOUNT_TYPE) {
+                beg.key() == PAYMENT_ACCOUNT_TYPE /*||
+                beg.key() == LOAN_ACCOUNT_TYPE*/) {
             accountType.push_back(beg.value());
         }
         ++beg;
@@ -188,10 +188,10 @@ CaccountUtils::CaccountUtils()
 {
     m_accountTypeIdStringMap.insert(INCOME_ACCOUNT_TYPE, "Income Account");
     m_accountTypeIdStringMap.insert(PAYMENT_ACCOUNT_TYPE, "Payment Account");
-    m_accountTypeIdStringMap.insert(BANK_ACCOUNT_TYPE, "Bank Account");
-    m_accountTypeIdStringMap.insert(REMITTANCE_ACCOUNT_TYPE, "Remittance Account");
-    m_accountTypeIdStringMap.insert(REQUEST_ACCOUNT_TYPE, "Request Account");
-    m_accountTypeIdStringMap.insert(LOAN_ACCOUNT_TYPE, "Loan Account");
+    m_accountTypeIdStringMap.insert(BANK_ACCOUNT_TYPE, gBankAccountName);
+    m_accountTypeIdStringMap.insert(REMITTANCE_ACCOUNT_TYPE, gRemittanceAccountName);
+    m_accountTypeIdStringMap.insert(REQUEST_ACCOUNT_TYPE, gRequestAccountName);
+    m_accountTypeIdStringMap.insert(LOAN_ACCOUNT_TYPE, gLoanAccountName);
     QMap<int, QString>::iterator beg = m_accountTypeIdStringMap.begin();
     QMap<int, QString>::iterator end = m_accountTypeIdStringMap.end();
     while (beg != end) {

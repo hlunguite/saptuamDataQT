@@ -419,11 +419,6 @@ EtransErrorType CnewTransactionDlg::checkForValidityOfRow(int row,  QVector<QVar
     QString transType = type->text().trimmed();
     EtransactionType tType =  CtransactionUtils::Object()->getTransactionType(transType);
     double  value = amount->text().toDouble();
-    /*if (accountName.compare(gBankAccountName) == 0) {
-        accountName = transType;
-    } else if (accountName.compare("Loan Account") == 0) {
-        accountName = transType;
-    }*/
 
     bool isIncome = true;
     //bool isPayment = true;

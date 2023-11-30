@@ -183,13 +183,7 @@ void CimportAccountDlg::on_m_selectBtn_clicked()
         } else {
             Q_ASSERT(0);
         }
-        /*m_accountTypeIdStringMap.insert(INCOME_ACCOUNT_TYPE, "Income Account");
-        m_accountTypeIdStringMap.insert(PAYMENT_ACCOUNT_TYPE, "Payment Account");
-        m_accountTypeIdStringMap.insert(BANK_ACCOUNT_TYPE, "Bank Account");
-        m_accountTypeIdStringMap.insert(REMITTANCE_ACCOUNT_TYPE, "Remittance Account");
-        m_accountTypeIdStringMap.insert(REQUEST_ACCOUNT_TYPE, "Request Account");
-        m_accountTypeIdStringMap.insert(LOAN_ACCOUNT_TYPE, "Loan Account");*/
-        //qDebug()<<id<<" "<<importAccName<<" "<<importAccType<<" type "<<type;
+
         SimportAccountData account;
         account.m_idx = 0;
         account.m_accountID = 0;
