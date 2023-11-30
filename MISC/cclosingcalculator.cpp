@@ -296,21 +296,25 @@ void CclosingCalculator::getAccountIncomePaymentForQuery(QString query,
             }
             double remittance = 0;
             int transID = transData->m_id;
-
+            //qDebug()<<"check for reconcile";
             SremittanceData* remitData = CremittanceTable::Object()->getRemittanceDataFromTransID(transID);
             if (remitData) {
                 int remitTableID = remitData->m_id;
                 CremittanceDetails remitanceDetail(remitTableID);
 
-                const std::map<int, std::pair<double, double> >& accountPct = remitanceDetail.getAccountPct();
                 const std::map<int, std::pair<double, double> >& accountDeptLocalAndDeptAmt = remitanceDetail.getAccountDeptLocalAndDeptAmt();
 
 
                 for (auto localAndDept : accountDeptLocalAndDeptAmt) {
                     int id = localAndDept.first;
-                    std::pair<double, double> & amt = processedDate[id];
-                    amt.second += localAndDept.second.second;
+                    if (localAndDept.second.second > 0) {
+                        std::pair<double, double> & amt = processedDate[id];
+                        amt.second += localAndDept.second.second;
+                    }
                     remittance += localAndDept.second.first;
+
+                    //qDebug()<<id<<" is account "<<CaccountMap::Object()->getAccountName(id)<<" or dept "<<CaccountMap::Object()->getDeptName(id);
+                    //qDebug()<<"\t"<<localAndDept.second.first<<" "<<localAndDept.second.second;
                 }
 
             }

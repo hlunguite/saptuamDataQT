@@ -3,6 +3,7 @@
 #include "cremittancetable.h"
 #include "csdutils.h"
 #include "ccontactmap.h"
+#include "caccountmap.h"
 SremitTransDetail::SremitTransDetail(QString str)
 {
     m_transID = 0;
@@ -109,6 +110,9 @@ CremittanceDetails::CremittanceDetails(int remittanceID):m_remittanceTableID(rem
             std::pair<double, double> & amt = m_accountDeptLocalHqAmt[id];
             amt.second += hq;
             amt.first += local;
+
+
+
             delete data;
         }
         delete vrData;

@@ -545,6 +545,7 @@ void CledgerReportDlg::printDeptSummary(CclosingCalculator *calc)
                 Q_ASSERT(0);
             }
         }
+
         SdeptStatement& statement = m_deptStatement[name];
         statement.m_openintBalance += amount;
     }
@@ -567,6 +568,7 @@ void CledgerReportDlg::printDeptSummary(CclosingCalculator *calc)
                 Q_ASSERT(0);
             }
         }
+
         SdeptStatement& statement = m_deptStatement[name];
         statement.m_closingBalance += amount;
     }
@@ -591,6 +593,10 @@ void CledgerReportDlg::printDeptSummary(CclosingCalculator *calc)
         std::pair<double, double>& accountAmt = statement.m_incomePaymentAmt[accountName];
         accountAmt.first += incomeAmt;
         accountAmt.second += paymentAmt;
+        /*if (deptName.isEmpty()) {
+            qDebug()<<id<<" Empty dept for account "<<accountName;
+        }*/
+
     }
 
 
