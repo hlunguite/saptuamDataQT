@@ -273,6 +273,28 @@ QVector<SremittanceSetupTableData *> *CremittanceSetupTable::getRemitanceSetupFo
     return dataV;
 }
 
+bool CremittanceSetupTable::deleteRemittanePCIfNotUSe(int percentID)
+{
+    bool ret = false;
+    if (percentID > 0) {
+        QString tosearch = QString::number(percentID);
+        QString condition = getSearchString(tosearch, REMITTANCE_SETUP_TABLE_PERCENTAGE_ID_IDX);
+        TobjectList values;
+        if (getTableValues(condition, values)) {
+            ret = false;
+        } else {
+            SremitrancePercentData * data = CremittancePercentTable::Object()->getRemittancePercentageForID(percentID);
+            if (data) {
+                data->deleteObj();
+                delete data;
+                ret = true;
+            }
+        }
+
+    }
+    return ret;
+}
+
 QVector<SremittanceSetupTableData *>* CremittanceSetupTable::getRemitanceSetupForName(QString name)
 {
     QVector<SremittanceSetupTableData*>* nameList = nullptr;
@@ -306,6 +328,36 @@ QVector<SremittanceSetupTableData *>* CremittanceSetupTable::getRemitanceSetupFo
 
     }
     return nameList;
+}
+
+bool CremittanceSetupTable::deleteREmitanceNameIfNotUSe(QString name)
+{
+    bool ret = false;
+    if (name.isEmpty() == false) {
+        SremittanceNameData *nameData = CremittanceNameTable::Object()->getRemittanceNameData(name);
+        int id = 0;
+        if (nameData) {
+            id = nameData->m_id;
+        } else {
+            return ret;
+        }
+
+
+
+        QString tosearch = QString::number(id);
+        QString condition = getSearchString(tosearch, REMITTANCE_SETUP_TABLE_NAME_ID_IDX);
+        TobjectList values;
+        if (getTableValues(condition, values)) {
+            ret = false;
+        } else {
+            nameData->deleteObj();
+            ret = true;
+        }
+        delete nameData;
+
+
+    }
+    return ret;
 }
 
 void CremittanceSetupTable::serializeTable(QDataStream &out, const Tobjects &obj)

@@ -3,12 +3,14 @@
 
 #include <QDialog>
 #include <QButtonGroup>
+#include <QCompleter>
+#include "cdlgbase.h"
 
 namespace Ui {
 class CremittanceSetupDlg;
 }
 
-class CremittanceSetupDlg : public QDialog
+class CremittanceSetupDlg : public CdlgBase
 {
     Q_OBJECT
 
@@ -18,7 +20,9 @@ public:
 
 private:
    Ui::CremittanceSetupDlg *ui;
-
+    bool m_populateTable = false;
+   QCompleter* m_remitNameCompleter;
+    bool addEditRemittancePcForAccount(QString accountName, double localPC, double hqPC, bool isAdd, bool isEdit);
    // QWidget interface
 protected:
    virtual void resizeEvent(QResizeEvent *);
@@ -30,6 +34,7 @@ private slots:
    void populateAllAccount();
    void populateRemittance(QString remitName);
    void on_m_cancelBtn_clicked();
+   void on_m_okBtn_clicked();
 };
 
 #endif // CREMITTANCESETUPDLG_H

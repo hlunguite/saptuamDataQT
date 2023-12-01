@@ -213,7 +213,7 @@ int CreadBankStatement::read()
             transData.save();
         }
     }
-    qDebug()<<"import id is "<<importData.m_id;
+   // qDebug()<<"import id is "<<importData.m_id;
     return importData.m_id;
 }
 

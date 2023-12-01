@@ -100,8 +100,9 @@ class CremittanceSetupTable : public CdbTableBase, public CsdSingleton<Cremittan
     CremittanceSetupTable();
     SremittanceSetupTableData* getRemittanceSetupForAccount(int acountID);
     QVector<SremittanceSetupTableData*>* getRemitanceSetupForPercentID(int percentID);
-
+    bool deleteRemittanePCIfNotUSe(int percentID);
     QVector<SremittanceSetupTableData*>* getRemitanceSetupForName(QString name);
+    bool deleteREmitanceNameIfNotUSe(QString name);
 protected:
     virtual void serializeTable(QDataStream& out, const Tobjects& obj) override;
     virtual void desserializeTable(QDataStream& in) override;
