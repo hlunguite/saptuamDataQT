@@ -86,16 +86,16 @@ void CledgerReportDlg::resize()
     x += GAP +  DEPT_ACCOUNT_COMBO_SIZE.width();
     ui->m_accountBox->setGeometry(x, y,  DEPT_ACCOUNT_COMBO_SIZE.width(),  DEPT_ACCOUNT_COMBO_SIZE.height());
     x += GAP + DEPT_ACCOUNT_COMBO_SIZE.width();
-    ui->m_nameFilter->setGeometry(x, y, DATE_SIZE.width() + btnWidth, DATE_SIZE.height());
-    x += GAP + DATE_SIZE.width() + btnWidth;
-
-    ui->m_deptInCSV->setGeometry(x, y, DATE_SIZE.width() + btnWidth, DATE_SIZE.height());
-    x += GAP + DATE_SIZE.width() + btnWidth;
-    ui->m_individualLedger->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    int width = DATE_SIZE.width()*1.3;
+    ui->m_nameFilter->setGeometry(x, y, width, DATE_SIZE.height());
+    x += GAP + width;
+    ui->m_deptInCSV->setGeometry(x, y, width , DATE_SIZE.height());
+    x += GAP + width;
+    ui->m_individualLedger->setGeometry(x, y, width, DATE_SIZE.height());
     y += GAP +  DATE_SIZE.height();
 
     x = XCORD;
-    int width = windowwidth - 2*XCORD;
+    width = windowwidth - 2*XCORD;
     int height = windowheight - y - GAP - YCORD - btnheight;
 
 

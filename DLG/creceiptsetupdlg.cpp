@@ -65,16 +65,17 @@ void CreceiptSetupDlg::resize()
     //qDebug()<<"buttonheight "<<buttonheight<<" buttonwidth "<<buttonwidth;
     y = y + GAP + height;
     x = XCORD;//ui->m_addNewReceiptGroup->geometry().x();
+    width = DATE_SIZE.width()*1.2;
 
     ui->m_selectlbl->setGeometry(x, y /*+ buttonheight/2*/,
-                                 DEPT_ACCOUNT_COMBO_SIZE.width(), DEPT_ACCOUNT_COMBO_SIZE.height());
+                                 width, DEPT_ACCOUNT_COMBO_SIZE.height());
 
 
 
     int bx = windowwidth/2 - buttonwidth/2;
     ui->m_clearBtn->setGeometry(bx, y, buttonwidth, buttonheight);
     bx =  windowwidth/2 + buttonwidth/2 + GAP;
-    int addRemovBtnWidth = buttonwidth*3;
+    int addRemovBtnWidth = buttonwidth*2.1;
     ui->m_removeReceiptAccountBtn->setGeometry(bx, y, addRemovBtnWidth, buttonheight);
 
     ui->m_accountReceiptlbl->setGeometry( windowwidth - x - DEPT_ACCOUNT_COMBO_SIZE.width(), y,
@@ -84,10 +85,10 @@ void CreceiptSetupDlg::resize()
 
     bx =  windowwidth/2 - buttonwidth/2 - GAP - addRemovBtnWidth;
     ui->m_addReceiptAccountBtn->setGeometry(bx, y, addRemovBtnWidth, buttonheight);
+    width = DEPT_ACCOUNT_COMBO_SIZE.width()*0.8;
+    bx = bx - (GAP + width);
 
-    bx = bx - (GAP + DEPT_ACCOUNT_COMBO_SIZE.width());
-
-    ui->m_selDeptBox->setGeometry(bx, y, DEPT_ACCOUNT_COMBO_SIZE.width(), DEPT_ACCOUNT_COMBO_SIZE.height());
+    ui->m_selDeptBox->setGeometry(bx, y, width, DEPT_ACCOUNT_COMBO_SIZE.height());
 
 
 
