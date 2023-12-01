@@ -342,11 +342,11 @@ void CledgerReportDlg::printForSummary(CclosingCalculator *calc)
     htmlUtils.formatString(htmlLine, true, true);
 
     htmlUtils.setIsTableHeader(false);
-    htmlUtils.addTableColSize(2);
-    htmlUtils.addTableColSize(10);
-    htmlUtils.addTableColSize(2);
-    htmlUtils.addTableColSize(10);
-    htmlUtils.addTableColSize(13);
+    htmlUtils.addTableColSize(3);
+    htmlUtils.addTableColSize(15);
+    htmlUtils.addTableColSize(7);
+    htmlUtils.addTableColSize(15);
+    htmlUtils.addTableColSize(20);
 
 
     htmlUtils.openTable();
@@ -503,8 +503,8 @@ void CledgerReportDlg::printForClosingSummary(CclosingCalculator *calc)
     int slno = 0;
     htmlUtils.setIsTableHeader(false);
     htmlUtils.addTableColSize(5);
-    htmlUtils.addTableColSize(20);
-    htmlUtils.addTableColSize(15);
+    htmlUtils.addTableColSize(25);
+    htmlUtils.addTableColSize(25);
     htmlUtils.openTable();
     double total = 0;
     for (auto dept :deptAmount ) {
@@ -949,13 +949,13 @@ QString CaccountLedger::getHTMLTable(int accountID, bool addDeptInCSV, bool indi
     htmlUtils.formatString(htmlLine, true);
 
     htmlUtils.setIsTableHeader(false);
-    htmlUtils.addTableColSize(8);
-    htmlUtils.addTableColSize(18);
-    htmlUtils.addTableColSize(8);
     htmlUtils.addTableColSize(9);
-    htmlUtils.addTableColSize(8);
+    htmlUtils.addTableColSize(18);
+    htmlUtils.addTableColSize(10);
+    htmlUtils.addTableColSize(5);
     htmlUtils.addTableColSize(12);
-    htmlUtils.addTableColSize(12);
+    htmlUtils.addTableColSize(11);
+    htmlUtils.addTableColSize(11);
     htmlUtils.addTableColSize(12);
     htmlUtils.addTableColSize(12);
     htmlUtils.openTable();
@@ -1035,20 +1035,23 @@ QString CaccountLedger::getHTMLTable(int accountID, bool addDeptInCSV, bool indi
                 receipt = "(C)";
             }
            // qDebug()<<"inside mode "<<mode<<" "<<CaccountMap::Object()->getAccountName(transData->m_accountId)<<" "<<CcontactMap::Object()->getContanceName(transData->m_fromId);
-
+            QString ref = transData->m_ref;
+            if (ref.size() > 14) {
+                ref = ref.right(14);
+            }
             htmlUtils.createRow();
             htmlUtils.createCell(dateStr, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
             htmlUtils.createCell(fromTo, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
             htmlUtils.createCell(receipt, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
             htmlUtils.createCell(mode, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-            htmlUtils.createCell(transData->m_ref, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
+            htmlUtils.createCell(ref, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
             htmlUtils.createCell(incomeAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
             htmlUtils.createCell(paymentAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
             csvLine += dateStr + ",";
             if (addDeptInCSV) {
                 csvLine +=deptName + ", " + accountName + ",";
             }
-            csvLine += fromTo + ", " + receipt + ", " + mode +"," + transData->m_ref + ",";
+            csvLine += fromTo + ", " + receipt + ", " + mode +"," + ref + ",";
             if (isIncome) {
                 csvLine += CsdUtils::converAmountToString(transData->m_amount,'f',2) + ",,";
             } else {
@@ -1090,12 +1093,16 @@ QString CaccountLedger::getHTMLTable(int accountID, bool addDeptInCSV, bool indi
                 } else {
                     mode = "Bank";
                 }
+                QString ref = transData->m_ref;
+                if (ref.size() > 14) {
+                    ref = ref.right(14);
+                }
                 htmlUtils.createRow();
                 htmlUtils.createCell(dateStr, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
                 htmlUtils.createCell(fromTo, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
                 htmlUtils.createCell(receipt, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
                 htmlUtils.createCell(mode, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-                htmlUtils.createCell(transData->m_ref, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
+                htmlUtils.createCell(ref, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
                 htmlUtils.createCell(paymentAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
                 htmlUtils.createCell(incomeAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
 
@@ -1308,10 +1315,10 @@ QString CloanLedger::getHTMLTable(int accountID, bool addDeptInCSV, bool indiviu
     htmlUtils.formatString(htmlLine, true);
 
     htmlUtils.setIsTableHeader(false);
-    htmlUtils.addTableColSize(8);
+    htmlUtils.addTableColSize(9);
     htmlUtils.addTableColSize(18);
     htmlUtils.addTableColSize(8);
-    htmlUtils.addTableColSize(9);
+    htmlUtils.addTableColSize(10);
     htmlUtils.addTableColSize(12);
     htmlUtils.addTableColSize(12);
     htmlUtils.addTableColSize(12);
@@ -1350,6 +1357,10 @@ QString CloanLedger::getHTMLTable(int accountID, bool addDeptInCSV, bool indiviu
              QString fromTo = CcontactMap::Object()->getContanceName(transData->m_fromId);
              QString mode = CtransactionUtils::Object()->getTransactionModeTwoTypeStr((EtransactionMode)transData->m_mode);
              QString ref = transData->m_ref;
+
+             if (ref.size() > 14) {
+                 ref = ref.right(14);
+             }
              QString disburseStr = "";
              QString recoverStr = "";
              QString disburseStrCSV = "";
@@ -1435,10 +1446,10 @@ QString CremitttanceLedger::getHTMLTable(int accountID, bool addDeptInCSV, bool 
     htmlUtils.formatString(htmlLine, true);
 
     htmlUtils.setIsTableHeader(false);
-    htmlUtils.addTableColSize(8);
-    htmlUtils.addTableColSize(18);
-    htmlUtils.addTableColSize(8);
     htmlUtils.addTableColSize(9);
+    htmlUtils.addTableColSize(25);
+    htmlUtils.addTableColSize(8);
+    htmlUtils.addTableColSize(10);
     htmlUtils.addTableColSize(12);
     htmlUtils.addTableColSize(12);
     htmlUtils.addTableColSize(12);
@@ -1485,13 +1496,18 @@ QString CremitttanceLedger::getHTMLTable(int accountID, bool addDeptInCSV, bool 
              QString amountStrCSV = CsdUtils::converAmountToString(transData->m_amount);
 
              QString csvLine = "";
+             QString ref = transData->m_ref;
+             if (ref.size() > 14) {
+                 ref = ref.right(14);
+
+             }
              htmlUtils.createRow();
              htmlUtils.createCell(dateStr, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
              htmlUtils.createCell(fromTo, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
              htmlUtils.createCell(mode, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-             htmlUtils.createCell(transData->m_ref, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
+             htmlUtils.createCell(ref, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
              htmlUtils.createCell(amountStr, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-             csvLine = dateStr +"," + fromTo + ", " + mode +", " + transData->m_ref + "," + amountStrCSV +", ";
+             csvLine = dateStr +"," + fromTo + ", " + mode +", " + ref + "," + amountStrCSV +", ";
              bool closeRow = false;
              //htmlUtils.createCell(paymentAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
 
@@ -1617,209 +1633,4 @@ QString CremitttanceLedger::getHTMLTable(int accountID, bool addDeptInCSV, bool 
 
     return html;
 
-    return CaccountLedger::getHTMLTable(accountID, addDeptInCSV, indiviualAccount, replaceAccountName);
-
-
-    for (auto [date, transactionDatas] : m_transactions.asKeyValueRange()) {
-        csvLine = "";
-        double localIncome = 0;
-        double localPayment = 0;
-        QString dateStr = date.toString("dd MMM yyyy");
-        int size = transactionDatas.size();
-        int count = 0;
-        for (auto transData: transactionDatas) {
-            ++rowCount;
-            ++count;
-            EhtmlCellBoarder borderType = HTML_NO_BORDER;
-
-            QString bgcolor;
-            if(rowCount%2){
-                bgcolor ="#efefef";
-            }
-            bool isIncome = true;
-            bool isContra = false;
-            switch((EtransactionType)transData->m_type) {
-            case INCOME_TRANSACTION_TYPE:break;
-            case PAYMENT_TRANSACTION_TYPE: isIncome = false; break;
-            case LOAN_RECOVERY_TRANSACTION_TYPE: break;
-            case LOAN_DISBURSE_TRANSACTION_TYPE: isIncome = false; break;
-            case BANK_CHARGES_TRANSACTION_TYPE: isIncome = false; break;
-            case BANK_INTEREST_TRANSACTION_TYPE: break;
-            case BANK_CASH_DEPOSIT_TRANSACTION_TYPE: isIncome = true; isContra = true; break;
-            default: break;
-            }
-            QString mode = CtransactionUtils::Object()->getTransactionModeTwoTypeStr((EtransactionMode)transData->m_mode);
-            QString receipt;
-            if (transData->m_reeiptBook.isEmpty() == false && transData->m_receiptSlNo.isEmpty() == false) {
-                receipt += transData->m_reeiptBook + ":" + transData->m_receiptSlNo;
-            }
-            QString incomeAmount;
-            QString paymentAmount;
-            if (isIncome) {
-                incomeAmount =  CsdUtils::convertAmountToStringWithSign(transData->m_amount);
-                localIncome += transData->m_amount;
-            } else {
-                paymentAmount = CsdUtils::convertAmountToStringWithSign(transData->m_amount);
-                localPayment += transData->m_amount;
-            }
-            QString fromTo = CcontactMap::Object()->getContanceName(transData->m_fromId);
-            if (m_isBankOrCashLedger) {
-                fromTo += " (" + CaccountMap::Object()->getAccountName(transData->m_accountId) + ")";
-            } else if (transData->m_particular.isEmpty() == false) {
-                fromTo += "(" + transData->m_particular + ")";
-            }
-            if (isContra) {
-                receipt = "(C)";
-            }
-            // qDebug()<<"inside mode "<<mode<<" "<<CaccountMap::Object()->getAccountName(transData->m_accountId)<<" "<<CcontactMap::Object()->getContanceName(transData->m_fromId);
-
-            htmlUtils.createRow();
-            htmlUtils.createCell(dateStr, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-            htmlUtils.createCell(fromTo, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-            htmlUtils.createCell(receipt, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-            htmlUtils.createCell(mode, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-            htmlUtils.createCell(transData->m_ref, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-            htmlUtils.createCell(incomeAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-            htmlUtils.createCell(paymentAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-            csvLine += dateStr + ",";
-            if (addDeptInCSV) {
-                csvLine +=deptName + ", " + accountName + ",";
-            }
-            csvLine += fromTo + ", " + receipt + ", " + mode +"," + transData->m_ref + ",";
-            if (isIncome) {
-                csvLine += CsdUtils::converAmountToString(transData->m_amount,'f',2) + ",,";
-            } else {
-                csvLine += "," + CsdUtils::converAmountToString(transData->m_amount,'f',2) + ",";
-            }
-
-            if (count == size && (isContra == false)) {
-                incomeAmount = "";
-                paymentAmount = "";
-                if (localIncome) {
-                    incomeAmount = CsdUtils::convertAmountToStringWithSign(localIncome);
-                }
-                if (localPayment) {
-                    paymentAmount = CsdUtils::convertAmountToStringWithSign(localPayment);
-                }
-                htmlUtils.createCell(incomeAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-                htmlUtils.createCell(paymentAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-                csvLine += CsdUtils::converAmountToString(localIncome,'f',2) + ","  + CsdUtils::converAmountToString(localPayment,'f',2) +",";
-            } else {
-                htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-                htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-                csvLine += ",,";
-            }
-            csvLine += "\n";
-            htmlUtils.closeRow();
-
-            if (isContra) {
-                ++rowCount;
-                bgcolor = "";
-                borderType = HTML_NO_BORDER;
-                if(rowCount%2){
-                    bgcolor ="#efefef";
-                    // borderType = HTML_RIGHT_BORDER;
-                }
-                //contra only in case of bank cash depost. interchange mode between bank and cash
-                //Also interchange income amount and payment amount
-                if (mode.contains("Bank", Qt::CaseInsensitive)) {
-                    mode = "Cash";
-                } else {
-                    mode = "Bank";
-                }
-                htmlUtils.createRow();
-                htmlUtils.createCell(dateStr, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-                htmlUtils.createCell(fromTo, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-                htmlUtils.createCell(receipt, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-                htmlUtils.createCell(mode, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-                htmlUtils.createCell(transData->m_ref, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-                htmlUtils.createCell(paymentAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-                htmlUtils.createCell(incomeAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-
-                csvLine += dateStr + ",";
-                if (addDeptInCSV) {
-                    csvLine +=deptName + ", " + accountName + ",";
-                }
-                csvLine += fromTo + ", " + receipt + ", " + mode +",,";
-                if (isIncome == false) {
-                    csvLine += CsdUtils::converAmountToString(transData->m_amount,'f',2) + ",,";
-                } else {
-                    csvLine += "," + CsdUtils::converAmountToString(transData->m_amount,'f',2) + ",";
-                }
-
-
-                if (count  == size) {
-                    if (isIncome) {
-                        localPayment += transData->m_amount;
-                    } else {
-                        localIncome += transData->m_amount;
-
-                    }
-                    incomeAmount = "";
-                    paymentAmount = "";
-                    if (localIncome) {
-                        incomeAmount = CsdUtils::convertAmountToStringWithSign(localIncome);
-                    }
-                    if (localPayment) {
-                        paymentAmount = CsdUtils::convertAmountToStringWithSign(localPayment);
-                    }
-                    csvLine += CsdUtils::converAmountToString(localIncome,'f',2) + "," + CsdUtils::converAmountToString(localPayment,'f',2) + ",\n";
-                    htmlUtils.createCell(incomeAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-                    htmlUtils.createCell(paymentAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-
-
-
-                } else {
-                    htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-                    htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
-                    csvLine += ",,\n";
-
-                }
-                htmlUtils.closeRow();
-            }
-
-            m_csvTrans.push_back(csvLine);
-            csvLine = "";
-        }
-        m_totalIncome += localIncome;
-        m_totalPayment += localPayment;
-
-    }
-    htmlUtils.createRow();
-    htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
-    htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
-    htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
-    htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);
-    htmlUtils.createCell("", HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_NO_BORDER, HTML_NORMAL_BORDER_STYLE);// ref
-
-    QString incomeAmount = CsdUtils::convertAmountToStringWithSign(m_totalIncome);
-    QString paymentAmount = CsdUtils::convertAmountToStringWithSign(m_totalPayment);
-
-    htmlUtils.createCell(incomeAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_TOP_BOTTOM_BORDER, HTML_DOUBLE_BOTTOM_STYLE);
-    htmlUtils.createCell(paymentAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_TOP_BOTTOM_BORDER, HTML_DOUBLE_BOTTOM_STYLE);
-    htmlUtils.createCell(incomeAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_TOP_BOTTOM_BORDER, HTML_DOUBLE_BOTTOM_STYLE);
-    htmlUtils.createCell(paymentAmount, HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, HTML_TOP_BOTTOM_BORDER, HTML_DOUBLE_BOTTOM_STYLE);
-    htmlUtils.closeRow();
-    htmlUtils.closeTable();
-    //{"Date", "Particular", "Receipt", "Mode", "Reference No", "Income", "Payment", "Total Income", "Total Payment"};
-
-    csvLine = ",";
-    if (addDeptInCSV) {
-        csvLine += ",,";
-    }
-    //QString line;
-    line = ", , , Total," + CsdUtils::converAmountToString(m_totalIncome,'f',2);
-    line += "," +  CsdUtils::converAmountToString(m_totalPayment,'f',2);
-    line += "," + CsdUtils::converAmountToString(m_totalIncome,'f',2);
-    line += "," +  CsdUtils::converAmountToString(m_totalPayment,'f',2) + "\n";
-    csvLine += line;
-    m_csvTrans.push_back(csvLine);
-
-    html = htmlUtils.getHtml();
-
-    //qDebug()<<"HTML is "<<html;
-    html += "<p></p>" + ChtmlUtils::getTwoSignator();
-    html += ChtmlUtils::getPageBreak();
-
-    return html;
 }
