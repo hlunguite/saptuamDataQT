@@ -171,7 +171,6 @@ void CremittanceSetupDlg::populateAllAccount()
         return;
     }
 
-    //TODO also dlg for payment account
     QString msg = "Select account to add in new remittance list. Add percentage detail";
     ui->m_selectAccountLbl->setText(msg);
     QStringList accountWithHqReceipt = CaccountMap::Object()->getAccountListWithHqReceipt();

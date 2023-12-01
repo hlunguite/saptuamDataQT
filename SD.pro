@@ -44,6 +44,7 @@ SOURCES += main.cpp\
     DLG/cimporttransdlg.cpp \
     DLG/cledgerreportdlg.cpp \
     DLG/cpassworddlg.cpp \
+    DLG/cpaymentaccountdlg.cpp \
     DLG/creceiptsetupdlg.cpp \
     DLG/cremittancedlg.cpp \
     DLG/cremittancepercentsetup.cpp \
@@ -57,6 +58,7 @@ SOURCES += main.cpp\
     MISC/cprintUtils.cpp \
     MISC/creadbankstatement.cpp \
     MISC/cremittancedetails.cpp \
+    TAB/cpaymentaccounttab.cpp \
     mainwindow.cpp \
     DB/cdbtablebase.cpp \
     DB/caccounttable.cpp \
@@ -117,6 +119,7 @@ HEADERS  += mainwindow.h \
     DLG/cimporttransdlg.h \
     DLG/cledgerreportdlg.h \
     DLG/cpassworddlg.h \
+    DLG/cpaymentaccountdlg.h \
     DLG/creceiptsetupdlg.h \
     DLG/cremittancedlg.h \
     DLG/cremittancepercentsetup.h \
@@ -131,6 +134,7 @@ HEADERS  += mainwindow.h \
     MISC/cprintUtils.h \
     MISC/creadbankstatement.h \
     MISC/cremittancedetails.h \
+    TAB/cpaymentaccounttab.h \
     csdutils.h \
     DB/cpasswordtable.h \
     DB/cpersontable.h \
@@ -181,6 +185,7 @@ FORMS    += mainwindow.ui \
     DLG/cnewtransactiondlg.ui \
     DLG/cedittransactiondlg.ui \
     DLG/cpassworddlg.ui \
+    DLG/cpaymentaccountdlg.ui \
     DLG/creceiptsetupdlg.ui \
     DLG/cremittancedlg.ui \
     DLG/cremittancepercentsetup.ui \

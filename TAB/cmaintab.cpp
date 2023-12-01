@@ -2,6 +2,7 @@
 #include "caccounttab.h"
 #include "ccontacttab.h"
 #include "ctransactiontab.h"
+#include "cpaymentaccounttab.h"
 CmainTab::CmainTab(QTabWidget * parent):
     QTabWidget(parent)
 {
@@ -12,6 +13,8 @@ CmainTab::CmainTab(QTabWidget * parent):
     m_directoryTab = new CcontactTab();
     addTab(m_directoryTab, tr("Contact"));
     connect(m_transactionTab, SIGNAL(signalFromTransactionTab(int)), this, SLOT(processSignal(int)));
+    m_paymentAccountTab = new CpaymentAccountTab();
+    addTab(m_paymentAccountTab, tr("Payment Account"));
 }
 
 CmainTab::~CmainTab()
@@ -19,6 +22,7 @@ CmainTab::~CmainTab()
     delete m_accountTab;
     delete m_directoryTab;
     delete m_transactionTab;
+    delete m_paymentAccountTab;
 }
 
 void CmainTab::setTabWidth(int width)

@@ -5,6 +5,7 @@
 class CaccountTab;
 class CcontactTab;
 class CtransactionTab;
+class CpaymentAccountTab;
 class CmainTab : public QTabWidget
 {
     Q_OBJECT
@@ -24,9 +25,10 @@ public slots:
 private slots:
     void processSignal(int val);
 private:
-    CaccountTab*	m_accountTab;
-    CcontactTab*	m_directoryTab;
-    CtransactionTab* m_transactionTab;
+    CaccountTab*        m_accountTab;
+    CcontactTab*        m_directoryTab;
+    CtransactionTab*    m_transactionTab;
+    CpaymentAccountTab* m_paymentAccountTab;
 };
 
 #endif // CMAINTAB_H
