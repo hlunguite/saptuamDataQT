@@ -75,19 +75,23 @@ void CpaymentAccountTab::customContextMenu(QPoint pos)
 
 void CpaymentAccountTab::newPaymentAccount()
 {
-    qDebug()<<"new payment account";
     CpaymentAccountDlg dlg;
     dlg.setWindowTitle("New Payment Acccount");
     dlg.exec();
+    m_tableModel->select();
+
 
 }
 
 void CpaymentAccountTab::editPaymentAccount()
 {
-    qDebug()<<"Edit payment account "<<m_editID;
     CpaymentAccountDlg dlg;
     dlg.setWindowTitle("Edit Payment Acccount");
-    dlg.exec();
+    if (dlg.setIDToEdit(m_editID)) {
+        dlg.exec();
+        m_tableModel->select();
+
+    }
 }
 
 void CpaymentAccountTab::resizeEvent(QResizeEvent *event)

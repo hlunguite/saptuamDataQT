@@ -31,6 +31,8 @@ class CpaymentAccountTable : public CdbTableBase, public CsdSingleton<CpaymentAc
 public:
     QSqlError 	createTable();
     SpaymentAccountData* getPaymentAccountDataForId(int id);
+    SpaymentAccountData* getPaymentAccountDataForPaymentAccountName(QString name);
+
     virtual void serializeTable(QDataStream& out, const Tobjects& obj) override;
     virtual void desserializeTable(QDataStream& in) override;
 

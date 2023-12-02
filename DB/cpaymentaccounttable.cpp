@@ -40,6 +40,29 @@ SpaymentAccountData *CpaymentAccountTable::getPaymentAccountDataForId(int id)
     return data;
 }
 
+SpaymentAccountData *CpaymentAccountTable::getPaymentAccountDataForPaymentAccountName(QString name)
+{
+
+
+    SpaymentAccountData* data = nullptr;
+    if (name.isEmpty() == false) {
+
+        QString condition = getSearchString(name, PAYMENT_ACCOUNT_NAME_IDX);
+        TobjectList values;
+        if (getTableValues(condition, values)) {
+            const Tobjects& obj = values.at(0);
+            data = new SpaymentAccountData;
+            data->m_id = obj.at(PAYMENT_ACCOUNT_ID_IDX).toInt();
+            data->m_paymentAccountName = obj.at(PAYMENT_ACCOUNT_ACCOUNT_NAME_IDX).toString();
+            data->m_accountName = obj.at(PAYMENT_ACCOUNT_NAME_IDX).toString();
+            data->m_natureOfExpense = obj.at(PAYMENT_ACCOUNT_NATURE_OF_EXPENSE_IDX).toString();
+
+        }
+    }
+
+    return data;
+}
+
 void CpaymentAccountTable::serializeTable(QDataStream &out, const Tobjects &obj)
 {
     SpaymentAccountData data;
