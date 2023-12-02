@@ -20,7 +20,7 @@ struct SdbObject
    // QString 	m_error;
     SdbObject(){}
     virtual ~SdbObject() {}
-    virtual int save() { Q_ASSERT(0);}
+    virtual int save() { Q_ASSERT(0); return 0;}
     virtual void deleteObj() { Q_ASSERT(0);}
     virtual void serialize(QDataStream& out) {Q_ASSERT(0);}
     virtual void desserialize(QDataStream& in){Q_ASSERT(0);}

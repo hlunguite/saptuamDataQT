@@ -145,6 +145,7 @@ int
 CdepartmentAccountTable::addAccountToDeptAccount(int accountId, int parentId)
 {
     parentId = addDepartmentAccount(accountId, false, parentId);
+    return parentId;
 }
 
 
