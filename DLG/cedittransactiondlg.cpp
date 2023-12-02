@@ -55,9 +55,9 @@ bool CeditTransactionDlg::checkAndSave()
     m_newTransID = 0;
     if (checkValue()) {
         StransactionData* transData = m_idForEdit > 0?  CtransactionTable::Object()->getTransaction(m_idForEdit) : nullptr;
-        int slNo = transData ? transData->m_receiptSlNo.toInt() : 0;
-        int bookNo = transData ? transData->m_reeiptBook.toInt() : 0;
-        SreceiptBook receiptBook = CreceiptBookMap::Object()->getReceiptBookFromBookNo(bookNo);
+        int slNoCurrent = transData ? transData->m_receiptSlNo.toInt() : 0;
+        int bookNoCurrent = transData ? transData->m_reeiptBook.toInt() : 0;
+        SreceiptBook receiptBook = CreceiptBookMap::Object()->getReceiptBookFromBookNo(bookNoCurrent);
 
         if (m_markInvalid && ui->m_invalidCheckbox->isChecked()) {
             invalidateRemittance();
@@ -65,8 +65,8 @@ bool CeditTransactionDlg::checkAndSave()
             m_currentTrans->m_status = false;
             m_currentTrans->m_particular = ui->m_invalidReason->text().simplified() +
                                            ";" + m_currentTrans->m_particular;
-            if (receiptBook.isValid() && receiptBook.isReceiptUsed(slNo)) {
-                receiptBook.markReceiptCancelled(slNo);
+            if (receiptBook.isValid() && receiptBook.isReceiptUsed(slNoCurrent)) {
+                receiptBook.markReceiptCancelled(slNoCurrent);
                 receiptBook.save();
             }
         } else {
@@ -82,26 +82,40 @@ bool CeditTransactionDlg::checkAndSave()
             m_currentTrans->m_particular = ui->m_particular->text().simplified();
             m_currentTrans->m_date = ui->m_dateEdit->date();
             m_currentTrans->m_type = CtransactionUtils::Object()->getTransactionType(ui->m_typeCombo->currentText());
-            int book =  m_currentTrans->m_reeiptBook.toInt();
-            if (m_idForEdit > 0 && (receiptBook.isValid() && receiptBook.isReceiptUsed(slNo))) {
+            int bookNew =  m_currentTrans->m_reeiptBook.toInt();
+            int slNew = m_currentTrans->m_receiptSlNo.toInt();
+            SreceiptBook receiptBookNew = CreceiptBookMap::Object()->getReceiptBookFromBookNo(bookNew);
+
+            if (m_idForEdit > 0 ){
+                if (receiptBook.isValid() && receiptBook.isReceiptUsed(slNoCurrent)) {
+                    updateReceipt = true;
+                }
+                if (receiptBookNew.isValid() && (receiptBookNew.isReceiptAvailable(slNew) == false)) {
+                    if (!((bookNew == bookNoCurrent) && (slNoCurrent == slNew) )) {
+                        QString msg = "Receipt " + QString::number(bookNew) + ":" + QString::number(slNew) + " already use";
+                        QMessageBox::warning(this, "Error", msg);
+                        return false;
+                    }
+                }
+                if (receiptBookNew.isValid()) {
+                    updateReceipt = true;
+                }
+            } else  if (bookNew > 0 && m_import) {
                 updateReceipt = true;
-            }else  if (book > 0 && m_import) {
-                updateReceipt = true;
-                slNo = 0;
-                bookNo = 0;
+                slNoCurrent = 0;
+                bookNoCurrent = 0;
             }
 
             if (updateReceipt) {
-                int sl = m_currentTrans->m_receiptSlNo.toInt();
-                if ((book != bookNo) || (slNo != sl )) {
-                    if (slNo > 0) {
-                        receiptBook.markReceiptCancelled(slNo);
+                if ((bookNew != bookNoCurrent) || (slNoCurrent != slNew )) {
+                    if (slNoCurrent > 0 && receiptBook.isValid()) {
+                        receiptBook.markReceiptCancelled(slNoCurrent);
                         receiptBook.save();
                     }
-                    SreceiptBook receiptBookNew = CreceiptBookMap::Object()->getReceiptBookFromBookNo(book);
                     if (receiptBookNew.isValid()) {
-                        receiptBookNew.markReceiptUse(sl);
+                        receiptBookNew.markReceiptUse(slNew);
                         receiptBookNew.save();
+
                     }
 
                 }
