@@ -90,7 +90,7 @@ bool CremittanceSetupDlg::addEditRemittancePcForAccount(QString accountName, dou
 
 
     }
-
+    return true;
 }
 
 
