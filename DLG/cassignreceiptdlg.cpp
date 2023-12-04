@@ -340,7 +340,7 @@ void CassignReceiptDlg::populateTransTable()
                 }
             }
         } else {
-            accountIDs.insert(accountWithHq.begin(), accountWithHq.end());
+            //accountIDs.insert(accountWithHq.begin(), accountWithHq.end());
         }
     }
 
