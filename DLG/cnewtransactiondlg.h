@@ -59,6 +59,8 @@ private slots:
     void on_m_skipBtn_clicked();
 
     void on_m_rejectBtn_clicked();
+signals:
+    void updateTransaction();
 
 private:
     struct SaccountSummary {

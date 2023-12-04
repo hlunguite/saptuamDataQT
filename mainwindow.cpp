@@ -126,7 +126,9 @@ void MainWindow::receiptSetup()
 
 void MainWindow::newTransaction()
 {
-    QDialog* dlg = new CnewTransactionDlg;
+    CnewTransactionDlg* dlg = new CnewTransactionDlg;
+    connect(dlg, SIGNAL(updateTransaction()), m_mainTab, SLOT(refreshTabs()));
+
     addDlgToDock(dlg, "New Transaction");
     delete dlg;
 }
@@ -145,7 +147,9 @@ void MainWindow::importBankStatement()
 
         int importID = bs.read();
 
-        QDialog* dlg = new CnewTransactionDlg(true, importID);
+        CnewTransactionDlg* dlg = new CnewTransactionDlg(true, importID);
+        connect(dlg, SIGNAL(updateTransaction()), m_mainTab, SLOT(refreshTabs()));
+
         addDlgToDock(dlg, "Process Bank Transaction");
         delete dlg;
     }
@@ -155,7 +159,9 @@ void MainWindow::importBankStatement()
 
 void MainWindow::processBankStatement()
 {
-    QDialog* dlg = new CnewTransactionDlg(true, 0);
+    CnewTransactionDlg* dlg = new CnewTransactionDlg(true, 0);
+    connect(dlg, SIGNAL(updateTransaction()), m_mainTab, SLOT(refreshTabs()));
+
     addDlgToDock(dlg, "Process Bank Transaction");
     delete dlg;
 }
