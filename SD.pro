@@ -136,7 +136,6 @@ HEADERS  += mainwindow.h \
     MISC/cremittancedetails.h \
     TAB/cpaymentaccounttab.h \
     csdutils.h \
-    DB/cpasswordtable.h \
     DB/cpersontable.h \
     DB/cothercontacttable.h \
     DB/ccontacttable.h \

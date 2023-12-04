@@ -36,11 +36,15 @@ private slots:
 
     void on_m_autoFillBtn_clicked();
 
+    void on_m_sameReceiptAccount_clicked();
+
 private:
     Ui::CassignReceiptDlg *ui;
     CtransactionTableModel*		m_transationTableModel;
     QMap<QString, QStringList> 	m_departmentAccount;
     QMap<int, std::set<int> >	m_accountReceipts;
+    QMap<int, std::set<int> >	m_accountWithSameReceipt;
+
     QVector<int>        		m_currentReceiptBooks;
     std::set<int>               m_transAccounts;
     void resize();

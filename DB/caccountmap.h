@@ -22,7 +22,7 @@ public:
     const QStringList& getIncomeAccountList() { return m_incomeAccountList;}
     const QStringList& getPaymentAccountList() { return m_paymentAccountList;}
     const QStringList& getAccountListWithHqReceipt() { return m_accountListWithHqReceipt;}
-    const QSet<int>& getAccountIDListWithHqReceipt() { return m_accountIDListWithHqReceipt;}
+    const std::set<int>& getAccountIDListWithHqReceipt() { return m_accountIDListWithHqReceipt;}
     const QStringList& getDeptList() { return m_departmentList;}
     QString getDeptName(int id) const;
     int		getDeptId(const QString& deptName) const;
@@ -46,7 +46,7 @@ private:
     QStringList         m_incomeAccountList;
     QStringList         m_paymentAccountList;
     QStringList			m_accountListWithHqReceipt;
-    QSet<int>           m_accountIDListWithHqReceipt;
+    std::set<int>           m_accountIDListWithHqReceipt;
     std::set<int>       m_allAccount;
 
 

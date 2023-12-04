@@ -93,17 +93,21 @@ void CassignReceiptDlg::resize()
     ui->m_accountComboBox->setGeometry(x, y + GAP + DEPT_ACCOUNT_COMBO_SIZE.height(),
                                        DEPT_ACCOUNT_COMBO_SIZE.width(),
                                        DEPT_ACCOUNT_COMBO_SIZE.height());
-
-    ui->m_autoFillBtn->setGeometry(x + GAP + DEPT_ACCOUNT_COMBO_SIZE.width(),
-                                   y + DEPT_ACCOUNT_COMBO_SIZE.height()/2,
+    x = x + GAP + DEPT_ACCOUNT_COMBO_SIZE.width();
+    int y1 = y + DEPT_ACCOUNT_COMBO_SIZE.height()/2;
+    ui->m_autoFillBtn->setGeometry(x,
+                                   y1,
                                    BUTTON_SIZE.width(),
                                    BUTTON_SIZE.height());
+    x +=  BUTTON_SIZE.width() + GAP;
+    int width = BUTTON_SIZE.width()*2;
+    ui->m_sameReceiptAccount->setGeometry(x, y1, width, DEFAULT_HEIGHT);
 
     y = y + GAP + DEPT_ACCOUNT_COMBO_SIZE.height() + GAP + DEPT_ACCOUNT_COMBO_SIZE.height();
     x =  ui->m_startDateLbl->geometry().x();
 
 
-    int width = windowwidth*.25;//ui->m_availableReceiptTable->geometry().width();
+    width = windowwidth*.25;//ui->m_availableReceiptTable->geometry().width();
     
     
     int height = windowheight - y - (2*DEFAULT_HEIGHT);
@@ -151,11 +155,41 @@ void CassignReceiptDlg::populateDeptAccountReceiptDetail()
          deptAcc.sort();
      }
      QVector<SaccountReceipt> accountReceipt =  CreceiptBookMap::Object()->getAllAccountReceipt() ;
-
+     std::map<int, std::set<int>> receiptAccounts;
      for (SaccountReceipt& accReceipt: accountReceipt ) {
          std::set<int>& receipts = m_accountReceipts[accReceipt.m_accountTableID];
          receipts.insert(accReceipt.m_receiptBoookTableID);
-         //m_receiptBooks.insert(accReceipt.m_receiptBoookTableID, receiptBook);
+         std::set<int>& accountWithSameReceipt = receiptAccounts[accReceipt.m_receiptBoookTableID];//m_accountWithSameReceipt[accReceipt.m_receiptBoookTableID];
+         accountWithSameReceipt.insert(accReceipt.m_accountTableID);
+     }
+
+     std::set<std::set<int> > accountGroup;
+     for (auto receiptAccount: receiptAccounts) {
+         accountGroup.insert(receiptAccount.second);
+     }
+
+     for (auto group: accountGroup) {
+         //qDebug()<<"Account with same receipts:";
+         std::set<int> accounts(group);
+         //check if all account have the same receipt;
+         std::set<int> receipts;
+         bool first = true;
+         bool isIgnore = false;
+         for (auto account: group) {
+             //qDebug()<<CaccountMap::Object()->getAccountName(account);
+             std::set<int>& accountReceipt = m_accountReceipts[account];
+             if (first) {
+                 receipts.insert(accountReceipt.begin(), accountReceipt.end());
+                 first = false;
+             } else if (receipts != accountReceipt){
+                 isIgnore = true;
+             }
+         }
+         if (isIgnore == false) {
+             for (auto account: group) {
+                 m_accountWithSameReceipt[account] = accounts;
+             }
+         }
      }
 
 }
@@ -168,14 +202,54 @@ void CassignReceiptDlg::populateReceiptTable()
      //get all acccount id
      QSet<int> accountIDs;
      QString accountName = ui->m_accountComboBox->currentText();
+     //const std::set<int>& accountWithHq = CaccountMap::Object()->getAccountIDListWithHqReceipt();
+
      if (accountName.isEmpty() == false) {
-         accountIDs.insert(CaccountMap::Object()->getAccountID(accountName));
+         int accountID = CaccountMap::Object()->getAccountID(accountName);
+         accountIDs.insert(accountID);
+         //qDebug()<<"select account "<<accountName;
+         bool populateAccountWithSameReceipt = true;
+         if (ui->m_sameReceiptAccount->isChecked() == false) {
+             populateAccountWithSameReceipt = false;
+         }
+         if (populateAccountWithSameReceipt == true) {
+             const std::set<int> accountWithSameReceipt = m_accountWithSameReceipt[accountID];
+             for (auto id: accountWithSameReceipt) {
+                 accountIDs.insert(id);
+                 //qDebug()<<"Other account "<<CaccountMap::Object()->getAccountName(id);
+             }
+         }
      } else {
          QString deptName = ui->m_departmentComboBox->currentText();
          QMap<QString, QStringList>::iterator fn = m_departmentAccount.find(deptName);
          if (fn != m_departmentAccount.end()) {
+             std::map<int, std::set<int> > receiptForAccount;
             for (QString & accountName: fn.value()) {
-                accountIDs.insert(CaccountMap::Object()->getAccountID(accountName));
+                int accountID = CaccountMap::Object()->getAccountID(accountName);
+                auto fn = m_accountReceipts.find(accountID);
+                if (fn != m_accountReceipts.end()) {
+                    for (const int & receiptTableID : fn.value()) {
+                        receiptForAccount[receiptTableID].insert(accountID);
+                    }
+                }
+                accountIDs.insert(accountID);
+            }
+            if (receiptForAccount.size() > 1) {
+                std::set<int> accounts;
+                bool selectAccount = false;
+                for (auto receiptacc: receiptForAccount) {
+                    if (accounts.empty()) {
+                        accounts.insert(receiptacc.second.begin(), receiptacc.second.end());
+                    } else {
+                        if (accounts != receiptacc.second) {
+                            selectAccount = true;
+                        }
+                    }
+                }
+
+                if (selectAccount) {
+                    accountIDs.clear();
+                }
             }
          }
      }
@@ -231,7 +305,7 @@ void CassignReceiptDlg::populateTransTable()
         return;
     }
 
-    const QSet<int>& accountWithHq = CaccountMap::Object()->getAccountIDListWithHqReceipt();
+    const std::set<int>& accountWithHq = CaccountMap::Object()->getAccountIDListWithHqReceipt();
     QString filter = CtransactionTable::Object()->getColName(TRANSACTION_STATUS_IDX) + "=1";
     QString startdate = ui->m_startDate->date().toString("yyyy-MM-dd");
     QString enddate = ui->m_endDate->date().toString("yyyy-MM-dd");
@@ -499,5 +573,12 @@ void CassignReceiptDlg::on_m_autoFillBtn_clicked()
 
     }
 
+}
+
+
+void CassignReceiptDlg::on_m_sameReceiptAccount_clicked()
+{
+    populateReceiptTable();
+    populateTransTable();
 }
 
