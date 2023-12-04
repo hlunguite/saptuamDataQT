@@ -21,6 +21,8 @@ void CaccountMap::populateAccountMap()
 
 void CaccountMap::populateAccountMapInt()
 {
+    m_incomeAccountList.clear();;
+    m_paymentAccountList.clear();
     m_defaultDept = 0;
     m_accountIdNameMap.clear();
     m_accountNameIdMap.clear();
