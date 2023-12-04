@@ -216,7 +216,6 @@ void CassignReceiptDlg::populateReceiptTable()
              const std::set<int> accountWithSameReceipt = m_accountWithSameReceipt[accountID];
              for (auto id: accountWithSameReceipt) {
                  accountIDs.insert(id);
-                 //qDebug()<<"Other account "<<CaccountMap::Object()->getAccountName(id);
              }
          }
      } else {
@@ -319,7 +318,18 @@ void CassignReceiptDlg::populateTransTable()
     std::set<int> accountIDs;
     QString accountName = ui->m_accountComboBox->currentText();
     if (accountName.isEmpty() == false) {
-        accountIDs.insert(CaccountMap::Object()->getAccountID(accountName));
+        int accountID = CaccountMap::Object()->getAccountID(accountName);
+        accountIDs.insert(accountID);
+        bool populateAccountWithSameReceipt = true;
+        if (ui->m_sameReceiptAccount->isChecked() == false) {
+            populateAccountWithSameReceipt = false;
+        }
+        if (populateAccountWithSameReceipt == true) {
+            const std::set<int> accountWithSameReceipt = m_accountWithSameReceipt[accountID];
+            for (auto id: accountWithSameReceipt) {
+                accountIDs.insert(id);
+            }
+        }
     } else {
         QString deptName = ui->m_departmentComboBox->currentText();
         if (deptName.isEmpty() == false) {
