@@ -356,6 +356,8 @@ void CassignReceiptDlg::populateTransTable()
         }
         filter += ")";
 
+    } else {
+        filter = CtransactionTable::Object()->getColName(TRANSACTION_ACCOUNT_IDX) + ">10000000";
     }
     //filter += " ORDER BY " + CtransactionTable::Object()->getColName(TRANSACTION_ACCOUNT_IDX) + " ASC";
 
