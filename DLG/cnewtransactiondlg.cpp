@@ -1141,7 +1141,10 @@ void CnewTransactionDlg::on_m_okButton_clicked()
         transData.m_particular = rowData.at(TRANS_PARTICULAR_REMARK_COL).toString();
         transData.save();
 
+
     }
+    emit updateTransaction();
+
     if (m_bankImport) {
         SbanktransDetail bankTrans = m_bankTransDetail.at(m_currentBankTransDetailIdx);
         QString bankName = bankTrans.m_min;
