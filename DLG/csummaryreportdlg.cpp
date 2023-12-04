@@ -63,6 +63,8 @@ void CsummaryReportDlg::resize()
     ui->m_fromDate->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
     x += GAP + DATE_SIZE.width();
     ui->m_toDate->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    x += GAP + DATE_SIZE.width();
+    ui->m_useAccountNameCkbox->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
     y += GAP + DATE_SIZE.height();
     x = XCORD;
 
@@ -135,6 +137,7 @@ void CsummaryReportDlg::populateTable()
     std::map<QString, double> requestAmount;
     std::map<QString, QPair<double,double> > loanAmount;
 
+    bool useAccountName = ui->m_useAccountNameCkbox->isChecked();
     for (auto data: results) {
         double amount = data->m_amount;
         int account = data->m_accountId;
@@ -145,26 +148,31 @@ void CsummaryReportDlg::populateTable()
         int deptID = CaccountMap::Object()->getDeptForAccount(account);
         QString deptName = CaccountMap::Object()->getDeptName(deptID);
         if (accountType == INCOME_ACCOUNT_TYPE) {
-            std::map<int, std::pair<float, float>>::iterator fn =  accountPct.find(account);
             QString name = accountName;
-            if (fn != accountPct.end()) {
-                double hq = fn->second.first;
-                double local = fn->second.second;
-                if (local > 99) {
-                    name = deptName;
-                }else {
-                    if (local <1) {
-                        continue;
+            if (useAccountName == false) {
+                std::map<int, std::pair<float, float>>::iterator fn =  accountPct.find(account);
+
+                if (fn != accountPct.end()) {
+                    double hq = fn->second.first;
+                    double local = fn->second.second;
+                    if (local > 99) {
+                        name = deptName;
+                    }else {
+                        if (local <1) {
+                            continue;
+                        }
+                        amount = amount*(local/100);
+                        name += " " +QString::number(local) + "%";
                     }
-                    amount = amount*(local/100);
-                    name += " " +QString::number(local) + "%";
                 }
             }
             incomeAmount[name] += amount;
 
         } else if (accountType == PAYMENT_ACCOUNT_TYPE) {
-            QString paymentAccount =  CaccountMap::Object()->getPaymentAccountNameForAccountDepID(account);
-            paymentAmount[paymentAccount] += amount;
+            QString accountName = useAccountName ? CaccountMap::Object()->getAccountName(account) : CaccountMap::Object()->getPaymentAccountNameForAccountDepID(account);
+
+            //QString paymentAccount =  CaccountMap::Object()->getPaymentAccountNameForAccountDepID(account);
+            paymentAmount[accountName] += amount;
 
         } else if (accountType == REMITTANCE_ACCOUNT_TYPE) {
             remitanceAmount[accountName] += amount;
@@ -378,5 +386,11 @@ void CsummaryReportDlg::on_m_toDate_dateChanged(const QDate &date)
 {
     populateTable();
 
+}
+
+
+void CsummaryReportDlg::on_m_useAccountNameCkbox_clicked()
+{
+    populateTable();
 }
 

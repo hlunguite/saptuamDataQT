@@ -24,6 +24,8 @@ private slots:
 
     void on_m_toDate_dateChanged(const QDate &date);
 
+    void on_m_useAccountNameCkbox_clicked();
+
 private:
     Ui::CsummaryReportDlg *ui;
     bool m_canpopulate;

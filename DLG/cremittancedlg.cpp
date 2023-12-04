@@ -1031,7 +1031,7 @@ void CremittanceDlg::resize()
 
 
     x += tableWidth + GAP;
-    height = DEFAULT_WIDTH*1.5;
+    height = DEFAULT_WIDTH*0.8;
     ui->m_toAddressBox->setGeometry(x, y, width, height);
     y += height + GAP;
     ui->m_submitByBox->setGeometry(x, y, width, height);
