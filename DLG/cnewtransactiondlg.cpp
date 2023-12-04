@@ -250,6 +250,9 @@ EtransErrorType CnewTransactionDlg::calcTotal()
         totalAmount += rowData.at(TRANS_AMOUNT_COL).toDouble();
     }
 
+    displatBankTotal();
+
+
     if (status != TRANS_NO_ERROR) {
         m_calcTotalCall = false;
         return status;
@@ -390,6 +393,20 @@ EtransErrorType CnewTransactionDlg::checkForValidityOfRow(int row,  QVector<QVar
     if (amount == nullptr) {
         return TRANS_AMOUNT_EMPTY_ERROR;
     }
+    double  value = amount->text().toDouble();
+
+    if (ref){
+        QString refernce = ref->text().trimmed();
+
+        if (refernce.isEmpty() == false) {
+            if (m_bankTotalMap.contains(refernce)) {
+                m_bankTotalMap[refernce] += value;
+            } else {
+                m_bankTotalMap.insert(refernce, value);
+            }
+        }
+    }
+
     status = checkAccount(account);
     if (status != TRANS_NO_ERROR) {
         return status;
@@ -418,7 +435,6 @@ EtransErrorType CnewTransactionDlg::checkForValidityOfRow(int row,  QVector<QVar
     QString accountName = account->text().trimmed();
     QString transType = type->text().trimmed();
     EtransactionType tType =  CtransactionUtils::Object()->getTransactionType(transType);
-    double  value = amount->text().toDouble();
 
     bool isIncome = true;
     //bool isPayment = true;
@@ -493,13 +509,7 @@ EtransErrorType CnewTransactionDlg::checkForValidityOfRow(int row,  QVector<QVar
     if (ref){
         QString refernce = ref->text().trimmed();
         rowData[TRANS_REF_COL] = refernce;
-        if (refernce.isEmpty() == false) {
-            if (m_bankTotalMap.contains(refernce)) {
-                m_bankTotalMap[refernce] += value;
-            } else {
-                m_bankTotalMap.insert(refernce, value);
-            }
-        }
+
     } else {
         rowData[TRANS_REF_COL] = "";
     }
@@ -656,9 +666,9 @@ void CnewTransactionDlg::displayCurrentBankImport()
         }
 
         ui->m_importLine->setText(line);
-        m_bankTotalMap.clear();
-        m_bankTotalMap[bankTransDetail.m_refID] = bankTransDetail.m_amount;
-        displatBankTotal();
+        //m_bankTotalMap.clear();
+        //m_bankTotalMap[bankTransDetail.m_refID] = bankTransDetail.m_amount;
+        //displatBankTotal();
         if (bankTransDetail.m_isIncome) {
            m_deligateForTransaction->setUseAccount(USE_INCOME_ACOUNT);
         } else {
