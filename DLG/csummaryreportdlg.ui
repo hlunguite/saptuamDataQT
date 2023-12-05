@@ -110,6 +110,22 @@
     <string>To</string>
    </property>
   </widget>
+  <widget class="QCheckBox" name="m_useAccountNameCkbox">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>30</y>
+     <width>181</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string> Use Account Name</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
