@@ -187,7 +187,7 @@ void CsmsDlg::on_m_save_clicked()
                 }
                 msg += "Kris a unau ";
                 msg += "*" + name + "*";
-                msg += ", Pathian gam nasepna diang a na thilpiak \n";
+                msg += ", Pathian gam nasepna ding a na thilpiak \n";
                 for (auto amount: keyValueDate.second) {
                     msg += amount + " \r";
                 }
