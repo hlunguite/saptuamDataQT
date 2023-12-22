@@ -15,6 +15,7 @@
 #include "cselectremittance.h"
 //#include <QRegularExpression>
 #include "MISC/CdlgDefine.h"
+#include <QScrollArea>
 CremittanceDlg::CremittanceDlg(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CremittanceDlg)
@@ -60,6 +61,8 @@ void CremittanceDlg::populateAccount()
     if (m_constructor) {
         return;
     }
+
+
     QVBoxLayout *vbox = nullptr;
     m_accountPct.clear();
     if (ui->m_accountBox->layout()) {
@@ -130,7 +133,19 @@ void CremittanceDlg::populateAccount()
 
     }
     vbox->addStretch(1);
-    ui->m_accountBox->setLayout(vbox);
+
+
+    QWidget* sw = new QWidget();
+    QScrollArea* scrollArea = new QScrollArea();
+    scrollArea->setWidgetResizable(true);
+    sw->setLayout(vbox);
+    scrollArea->setWidget(sw);
+    QVBoxLayout* bl = new QVBoxLayout();
+    bl->addWidget(scrollArea);
+    ui->m_accountBox->setLayout(bl);
+
+    //setCentralWidget();
+
     accountList.sort();
     m_customDeligateForRemittance->setAccountList(accountList);
 
@@ -1031,28 +1046,35 @@ void CremittanceDlg::resize()
 
 
     x += tableWidth + GAP;
+
+    int remainHeight = windowheight - y - (DEFAULT_HEIGHT*8);
     height = DEFAULT_WIDTH*0.8;
+    if (remainHeight < (2*height)) {
+        height = remainHeight/2;
+    }
+
     ui->m_toAddressBox->setGeometry(x, y, width, height);
-    y += height + GAP;
+    y += height ;//+ GAP;
     ui->m_submitByBox->setGeometry(x, y, width, height);
-    y += height + GAP;
+    y += height ;//+ GAP;
+
     ui->m_modeLbl->setGeometry(x, y, width, DEFAULT_HEIGHT);
-    y += DEFAULT_HEIGHT + GAP;
+    y += DEFAULT_HEIGHT;// + GAP;
     ui->m_modeCombo->setGeometry(x, y, width, DEFAULT_HEIGHT);
-    y += DEFAULT_HEIGHT + GAP;
+    y += DEFAULT_HEIGHT ;//+ GAP;
     ui->m_referene->setGeometry(x, y, width, DEFAULT_HEIGHT);
-    y += DEFAULT_HEIGHT + GAP;
+    y += DEFAULT_HEIGHT;// + GAP;
     ui->m_transDateLbl->setGeometry(x, y, width, DEFAULT_HEIGHT);
-    y += DEFAULT_HEIGHT + GAP;
+    y += DEFAULT_HEIGHT ;//+ GAP;
 
     ui->m_transDate->setGeometry(x, y, width, DEFAULT_HEIGHT);
-    y += DEFAULT_HEIGHT + GAP;
+    y += DEFAULT_HEIGHT ;//+ GAP;
 
     ui->m_pdfBtn->setGeometry(x, y, width, DEFAULT_HEIGHT);
-    y += DEFAULT_HEIGHT + GAP;
+    y += DEFAULT_HEIGHT;// + GAP;
 
     ui->m_csvBtn->setGeometry(x, y, width, DEFAULT_HEIGHT);
-    y += DEFAULT_HEIGHT + GAP;
+    y += DEFAULT_HEIGHT;// + GAP;
 
     ui->m_cancelBtn->setGeometry(x, y, width, DEFAULT_HEIGHT);
 

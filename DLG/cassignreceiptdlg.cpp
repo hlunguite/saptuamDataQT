@@ -270,6 +270,9 @@ void CassignReceiptDlg::populateReceiptTable()
                     int rowcount = ui->m_availableReceiptTable->rowCount();
                     ui->m_availableReceiptTable->insertRow(rowcount);
                     QString receiptName = receiptBook.name();
+                    int available = receiptBook.getAvailableCount();
+                    QString tooltip = "Available " + QString::number(available);
+
                     QTableWidgetItem *item1 = new QTableWidgetItem();
                     if (receiptName.isEmpty() == false) {
                         const std::set<int>& accounts = CreceiptBookMap::Object()->getAccountIDsForReceiptBook(receiptBook.m_bookNo);
@@ -281,12 +284,14 @@ void CassignReceiptDlg::populateReceiptTable()
                             accountName += CaccountMap::Object()->getAccountName(i);
                         }
                         if (accountName.isEmpty() == false) {
+                            tooltip += " for " + accountName;
                             receiptName += " : " + accountName;
                         }
 
                         item1->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
                         item1->setCheckState(Qt::Unchecked);
                         item1->setText(receiptName);
+                        item1->setToolTip(tooltip);
                     } else {
                         item1->setFlags(item1->flags() & ~Qt::ItemIsEditable);
                     }

@@ -34,7 +34,11 @@ private:
     std::vector<int> m_allID;
     QVector<QRadioButton*>  m_remitRadioBox;
 
+    void resize();
 
+    // QWidget interface
+protected:
+    virtual void resizeEvent(QResizeEvent *event) {resize();}
 };
 
 #endif // CSELECTREMITTANCE_H

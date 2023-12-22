@@ -59,12 +59,12 @@ void CsummaryReportDlg::resize()
     x += GAP + DATE_SIZE.width();
     ui->m_toLbl->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
     x = XCORD;
-    y += GAP + DATE_SIZE.height();
+    y +=  DATE_SIZE.height();
     ui->m_fromDate->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
     x += GAP + DATE_SIZE.width();
     ui->m_toDate->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
     x += GAP + DATE_SIZE.width();
-    ui->m_useAccountNameCkbox->setGeometry(x, y, DATE_SIZE.width(), DATE_SIZE.height());
+    ui->m_useAccountNameCkbox->setGeometry(x, y, DATE_SIZE.width()*2, DATE_SIZE.height());
     y += GAP + DATE_SIZE.height();
     x = XCORD;
 

@@ -2,6 +2,7 @@
 #include "ui_cselectremittance.h"
 #include <QVBoxLayout>
 #include "cremittancetable.h"
+#include "MISC/CdlgDefine.h"
 
 CselectRemittance::CselectRemittance(QWidget *parent) :
     QDialog(parent),
@@ -9,6 +10,7 @@ CselectRemittance::CselectRemittance(QWidget *parent) :
 {
     ui->setupUi(this);
     m_selectID = -1;
+    resize();
 }
 
 CselectRemittance::~CselectRemittance()
@@ -97,4 +99,20 @@ void CselectRemittance::on_m_okBtn_clicked()
     }
     emit accept();
 }
+
+void CselectRemittance::resize()
+{
+    int windowwidth = geometry().size().width();
+    int windowheight = geometry().size().height();
+
+    int x = windowwidth/2 - BUTTON_SIZE.width() - GAP/2;
+    int y = windowheight - GAP*2 - BUTTON_SIZE.height();
+
+    ui->m_okBtn->setGeometry(x, y, BUTTON_SIZE.width(), BUTTON_SIZE.height());
+    x += BUTTON_SIZE.width() + GAP;
+    ui->m_cancelBtn->setGeometry(x, y, BUTTON_SIZE.width(), BUTTON_SIZE.height());
+
+}
+
+
 

@@ -60,7 +60,7 @@ struct SreceiptBook {
     bool isReceiptUsed(int receiptSl);
     bool isReceiptCancelled(int receiptSl);
     bool isValid() { return m_id > 0 && m_bookNo > 0;}
-    bool getAvailableCount() const { return m_receiptNo.size();}
+    int getAvailableCount() const { return m_receiptNo.size();}
     int save();
     void deleteObj();
 };
