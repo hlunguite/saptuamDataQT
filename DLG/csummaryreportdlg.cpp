@@ -21,6 +21,7 @@ CsummaryReportDlg::CsummaryReportDlg(QWidget *parent) :
     ui->m_toDate->setDate(date);
 
     m_canpopulate = true;
+    populateTable();
 
 }
 
