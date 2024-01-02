@@ -323,7 +323,11 @@ void CclosingBalanceDlg::populateTable(QDate date)
 
     if (abs(diff) > 0.009) {
 
-        diffStr = "Difference amount " + CsdUtils::convertAmountToStringWithSign(diff);
+        QString cash = CsdUtils::convertAmountToStringWithSign(cashBankTotal);
+        QString other = CsdUtils::convertAmountToStringWithSign(otherTotal);
+        diffStr = "Cash/Bank " + cash;
+        diffStr += " Others " + other + " Difference amount " + CsdUtils::convertAmountToStringWithSign(diff);
+
         if (fabs(diff) > 1) {
             bgColor.setRgb(255, 0,0);
         } else {
