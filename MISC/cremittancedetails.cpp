@@ -3,6 +3,8 @@
 #include "cremittancetable.h"
 #include "csdutils.h"
 #include "ccontactmap.h"
+#include <cmath>
+
 #include "caccountmap.h"
 SremitTransDetail::SremitTransDetail(QString str)
 {
@@ -72,8 +74,8 @@ CremittanceDetails::CremittanceDetails(int remittanceID):m_remittanceTableID(rem
             //QString accountName = CaccountMap::Object()->getAccountName(transAccountID);
         }
 
-        double hq = (amount*hqPC)/(double)100;
-        double local = (amount*localPC)/(double)100;
+        double hq = round((amount*hqPC)/(double)100);
+        double local = round((amount*localPC)/(double)100);
         std::pair<double, double> & amt = m_accountDeptLocalHqAmt[transAccountID];
         amt.second += hq;
         amt.first += local;
@@ -105,8 +107,8 @@ CremittanceDetails::CremittanceDetails(int remittanceID):m_remittanceTableID(rem
                 hqPC = fn->second.first;
                 localPC = fn->second.second;
             }
-            double hq = (amount*hqPC)/(double)100;
-            double local = (amount*localPC)/(double)100;
+            double hq = round((amount*hqPC)/(double)100);
+            double local = round((amount*localPC)/(double)100);
             std::pair<double, double> & amt = m_accountDeptLocalHqAmt[id];
             amt.second += hq;
             amt.first += local;

@@ -16,6 +16,8 @@
 //#include <QRegularExpression>
 #include "MISC/CdlgDefine.h"
 #include <QScrollArea>
+#include <cmath>
+
 CremittanceDlg::CremittanceDlg(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CremittanceDlg)
@@ -764,8 +766,8 @@ bool CremittanceDlg::populateTableUsingTransaction()
         localPC = fn->second.second;
     }
     QString amountStr = CsdUtils::converAmountToString(amount,'f',2);
-    double local = (amount*localPC)/100;
-    double hq = (amount*hqPC)/100;
+    double local = round((amount*localPC)/100);
+    double hq = round((amount*hqPC)/100);
 
     int rowCount = ui->m_table->rowCount();
     ui->m_table->insertRow(rowCount);
@@ -861,8 +863,8 @@ bool CremittanceDlg::populateTableUsingTransaction()
 
         double amount = amountItem->text().toDouble();
         m_remittanceAmount += amount;
-        double local = (amount*localPC)/100;
-        double hq = (amount*hqPC)/100;
+        double local = round((amount*localPC)/100);
+        double hq = round((amount*hqPC)/100);
        // QString amountStr = CsdUtils::converAmountToString(amount,'f',2);
 
         if (localPC > 0) {

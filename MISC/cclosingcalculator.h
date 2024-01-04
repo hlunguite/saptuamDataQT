@@ -11,6 +11,9 @@ class CclosingCalculator
 public:
 
     CclosingCalculator();
+    void closingBetween(QDate fromDate, QDate toDate);
+    void closingAsOn(QDate toDate);
+
     void calculateClosing(QDate fromDate, QDate toDate);
     void calculateClosing(QDate fromDate, QString query);
     void calculateClosingAsOn(QDate openingDate);

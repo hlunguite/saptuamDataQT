@@ -9,6 +9,7 @@
 #include "csdutils.h"
 #include "MISC/cprintUtils.h"
 #include "MISC/CdlgDefine.h"
+#include <cmath>
 
 CsummaryReportDlg::CsummaryReportDlg(QWidget *parent) :
     QDialog(parent),
@@ -162,7 +163,7 @@ void CsummaryReportDlg::populateTable()
                         if (local <1) {
                             continue;
                         }
-                        amount = amount*(local/100);
+                        amount = round(amount*(local/100));
                         name += " " +QString::number(local) + "%";
                     }
                 }

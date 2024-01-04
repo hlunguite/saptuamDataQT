@@ -192,6 +192,8 @@ void CclosingBalanceDlg::populateTable(QDate date)
         if (fn != accountDeptClosing.end()) {
             amtStr = QString::number(fn->second, 'f', 2);
             otherTotal += fn->second;
+
+            //qDebug()<<"Other "<<deptID<<" "<<QString::number(otherTotal, 'f', 2)<<" "<<QString::number(fn->second, 'f', 2);
         } else {
             //qDebug()<<"not found for "<<dept;
         }
@@ -248,7 +250,11 @@ void CclosingBalanceDlg::populateTable(QDate date)
         if (fn != accountDeptClosing.end()) {
             double amount = fn->second;
             amtStr = QString::number(amount, 'f', 2);
+
             otherTotal += amount;
+           // qDebug()<<"Other1 "<<accountID<<" "<<QString::number(otherTotal, 'f', 2)<<" "<<QString::number(amount, 'f', 2);
+
+
         } else {
             qDebug()<<"not found for "<<accountName;
         }

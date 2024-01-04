@@ -53,8 +53,10 @@ SOURCES += main.cpp\
     DLG/csettingdlg.cpp \
     DLG/csmsdlg.cpp \
     DLG/csummaryreportdlg.cpp \
+    MISC/caccountledger.cpp \
     MISC/cclosingcalculator.cpp \
     MISC/chtmlutils.cpp \
+    MISC/cledger.cpp \
     MISC/cprintUtils.cpp \
     MISC/creadbankstatement.cpp \
     MISC/cremittancedetails.cpp \
@@ -129,8 +131,10 @@ HEADERS  += mainwindow.h \
     DLG/csmsdlg.h \
     DLG/csummaryreportdlg.h \
     MISC/CdlgDefine.h \
+    MISC/caccountledger.h \
     MISC/cclosingcalculator.h \
     MISC/chtmlutils.h \
+    MISC/cledger.h \
     MISC/cprintUtils.h \
     MISC/creadbankstatement.h \
     MISC/cremittancedetails.h \

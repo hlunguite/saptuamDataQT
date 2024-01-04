@@ -47,6 +47,19 @@ CclosingCalculator::CclosingCalculator()
 
 }
 
+void CclosingCalculator::closingBetween(QDate fromDate, QDate toDate)
+{
+    QString query = getQeryStr(fromDate, toDate);
+}
+
+void CclosingCalculator::closingAsOn(QDate toDate)
+{
+
+}
+
+
+
+
 void CclosingCalculator::calculateClosing(QDate fromDate, QDate toDate)
 {
     m_cashOpening = 0;
@@ -156,9 +169,13 @@ void CclosingCalculator::calculateClosingAsOnInternal(QDate openingDate,
     SclosingData closingData = CclosingBalanceTable::Object()->getClosingForDate(openingDate, true);
     if (closingData.m_id > 0) { // found a closing
         m_lastTransDate = closingData.m_closingDate;
+        //qDebug()<<"closing date "<<m_lastTransDate;
         QVector<SclosingDetailData*> closingDetail = CclosingBalanceDetailTable::Object()->getClosingDetailForID(closingData.m_id);
         double prevRemittance = 0;
         double prevRequest = 0;
+
+        double total = 0;
+        double cashbanktot = 0;
         for (auto detail : closingDetail) {
             int accountOrDepID = detail->m_accountOrDeptTableID;
             double amount = detail->m_amount;
@@ -171,6 +188,8 @@ void CclosingCalculator::calculateClosingAsOnInternal(QDate openingDate,
                 } else {
                     cashBankValue[gBankAccountName] += amount;
                 }
+                cashbanktot += amount;
+                //qDebug()<<"Cash bank:"<<QString::number(cashbanktot, 'f', 2);
                 continue;
             }
             if (accountOrDepID == m_remittanceID) {
@@ -179,9 +198,12 @@ void CclosingCalculator::calculateClosingAsOnInternal(QDate openingDate,
                 prevRequest += amount;
             }
             closingValue[accountOrDepID] += amount;
+            total += amount;
+            //qDebug()<<"Total:"<<accountOrDepID<<" "<<QString::number(total, 'f', 2)<<" "<<QString::number(amount, 'f', 2) ;
 
         }
-
+        //double bankcsh = cashBankValue[gCashAccountName] + cashBankValue[gBankAccountName];
+        //qDebug()<<"Total:"<<QString::number(total, 'f', 2)<<" bank+ cash "<<QString::number(bankcsh, 'f', 2);
         QDate prevClosing = closingData.m_closingDate;
         if (prevClosing < openingDate) {
             prevClosing = CsdUtils::getNextDay(prevClosing);
@@ -202,11 +224,20 @@ void CclosingCalculator::calculateClosingAsOnInternal(QDate openingDate,
                 int idToUse = accountID;
                 if (fn != m_accountDeptMap.end()) {
                     idToUse = fn->second;
+                } else {
+                    QString accountName = CaccountMap::Object()->getAccountName(accountID);
+                    if (accountName == gBankAccountName) {
+                        idToUse = CaccountMap::Object()->getDefaultDept();
+                    }
+                    //qDebug()<<"no dept "<<accountName;
                 }
                 closingValue[idToUse] += incomeAmt;
                 closingValue[idToUse] -= paymentAmt;
+                total += (incomeAmt - paymentAmt);
+                //qDebug()<<"Total1:"<<QString::number(total, 'f', 2)<<" "<<QString::number(incomeAmt, 'f', 2)<<" "<<QString::number(paymentAmt, 'f', 2);
             }
-
+            //double bankcsh = cashBankValue[gCashAccountName] + cashBankValue[gBankAccountName];
+            //qDebug()<<"Total2:"<<QString::number(total, 'f', 2)<<" bank+ cash "<<QString::number(bankcsh, 'f', 2);
 
         } else {
 
@@ -259,6 +290,7 @@ void CclosingCalculator::getAccountIncomePaymentForQuery(QString query,
         if (accType == REQUEST_ACCOUNT_TYPE) {
             std::pair<double, double> & amt = processedDate[accountID];
             amt.first += amount;
+
             if (mode == CASH_TRANSACTION_MODE) {
                 cashBankValue[gCashAccountName] += amount;
             } else {
@@ -268,19 +300,27 @@ void CclosingCalculator::getAccountIncomePaymentForQuery(QString query,
         } else if (type == BANK_CASH_DEPOSIT_TRANSACTION_TYPE || mode == BANK_CASH_DEPOSIT_TRANSACTION_MODE) {
              cashBankValue[gCashAccountName] -= amount;
              cashBankValue[gBankAccountName] += amount;
+
         } else if (type == BANK_INTEREST_TRANSACTION_TYPE || mode == BANK_INTEREST_TRANSACTION_MODE){
              cashBankValue[gBankAccountName] += amount;
+             std::pair<double, double> & amt = processedDate[accountID];
+             amt.first += amount;
+
         } else if (type == BANK_CHARGES_TRANSACTION_TYPE || mode == BANK_CHARGES_TRANSACTION_MODE){
              cashBankValue[gBankAccountName] -= amount;
+             std::pair<double, double> & amt = processedDate[accountID];
+             amt.second += amount;
         } else if (isIncome) {
             std::pair<double, double> & amt = processedDate[accountID];
             amt.first += amount;
+
             if (mode == CASH_TRANSACTION_MODE) {
                 cashBankValue[gCashAccountName] += amount;
             } else {
                 cashBankValue[gBankAccountName] += amount;
             }
         } else if (isPayment) {
+
             if (mode == CASH_TRANSACTION_MODE) {
                 cashBankValue[gCashAccountName] -= amount;
             } else {
@@ -289,6 +329,7 @@ void CclosingCalculator::getAccountIncomePaymentForQuery(QString query,
             std::pair<double, double> & amt = processedDate[accountID];
             amt.second += amount;
         } else if (accType == REMITTANCE_ACCOUNT_TYPE) {
+
             if (mode == CASH_TRANSACTION_MODE) {
                 cashBankValue[gCashAccountName] -= amount;
             } else {
