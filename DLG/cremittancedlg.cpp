@@ -431,7 +431,7 @@ void CremittanceDlg::populateSummaryTable(ChtmlUtils& htmlUtils,
         data += QString::number(receipts.first);
         QString number = CsdUtils::makeReceiptString(receipts.second);
         if (number.isEmpty() == false) {
-            data += "- " + number;
+            data += ":" + number;
         }
     }
     htmlUtils.createCell(data, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
