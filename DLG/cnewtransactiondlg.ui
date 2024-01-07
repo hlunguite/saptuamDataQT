@@ -243,7 +243,7 @@
     <rect>
      <x>150</x>
      <y>20</y>
-     <width>661</width>
+     <width>171</width>
      <height>21</height>
     </rect>
    </property>
@@ -302,6 +302,48 @@
    </property>
    <property name="text">
     <string>Reject</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="m_incomeBtn">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>20</y>
+     <width>131</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Income Transaction</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="m_paymentBtn">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>20</y>
+     <width>141</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Payment Transaction</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="m_bothBtn">
+   <property name="geometry">
+    <rect>
+     <x>620</x>
+     <y>20</y>
+     <width>201</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Income and Payment Transaction</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>

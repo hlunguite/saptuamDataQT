@@ -45,10 +45,10 @@ CnewTransactionDlg::CnewTransactionDlg(bool bankImport, int importID, QWidget *p
     ui->m_transactionTable->setItemDelegate(m_deligateForTransaction);
 
     ui->m_summaryTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
+    resize();
     populateBankImport(importID);
     populateBankTransDetail();
-    resize();
+
 
 }
 
@@ -102,6 +102,22 @@ void CnewTransactionDlg::resize()
                                   y,
                                   windowwidth - (2*x) - GAP - DATE_SIZE.width(),
                                   DEFAULT_HEIGHT);
+    int wth = DATE_SIZE.width()*1.5;//(windowwidth - (2*x) - GAP - DATE_SIZE.width());
+    int x1 = x + GAP +DATE_SIZE.width();
+    ui->m_bothBtn->setGeometry( x1,
+                               y,
+                               wth,
+                               DEFAULT_HEIGHT );
+    x1 += GAP + wth;
+    ui->m_incomeBtn->setGeometry( x1,
+                               y,
+                               wth,
+                               DEFAULT_HEIGHT );
+    x1 += GAP + wth;
+    ui->m_paymentBtn->setGeometry( x1,
+                                 y,
+                                 wth,
+                                 DEFAULT_HEIGHT );
 
     y = y + DATE_SIZE.height() + GAP;
     int width = windowwidth - x -x;
@@ -124,6 +140,9 @@ void CnewTransactionDlg::resize()
     //int y1 = 0;
     //int x1 = 0;
     if (m_bankImport == false) {
+        ui->m_incomeBtn->show();
+        ui->m_paymentBtn->show();
+        ui->m_bothBtn->show();
         width = windowwidth *.40;
         ui->m_importLine->hide();
         ui->m_bankImportLbl->hide();
@@ -140,6 +159,9 @@ void CnewTransactionDlg::resize()
         ui->m_summaryTable->horizontalHeader()->resizeSection(2,width*0.20);
 
     } else {
+        ui->m_incomeBtn->hide();
+        ui->m_paymentBtn->hide();
+        ui->m_bothBtn->hide();
         ui->m_importLine->show();
         width = windowwidth *.20;
         ui->m_summaryLbl->hide();
@@ -178,7 +200,7 @@ void CnewTransactionDlg::resize()
         x = (windowwidth - x - width)/2 + x + width - buttonwidth - GAP;
 
     }
-    int x1 = x;
+    x1 = x;
     ui->m_okButton->setGeometry(x,y,buttonwidth,buttonheight);
     x += buttonwidth + GAP;
     ui->m_cancelButton->setGeometry(x,y,buttonwidth,buttonheight);
@@ -1254,5 +1276,26 @@ void CnewTransactionDlg::on_m_skipBtn_clicked()
 void CnewTransactionDlg::on_m_rejectBtn_clicked()
 {
    moveToNextImport(false);
+}
+
+
+void CnewTransactionDlg::on_m_incomeBtn_clicked()
+{
+    m_deligateForTransaction->setUseAccount(USE_INCOME_ACOUNT);
+
+}
+
+
+void CnewTransactionDlg::on_m_paymentBtn_clicked()
+{
+    m_deligateForTransaction->setUseAccount(USE_PAYMENT_ACCOUNT);
+
+}
+
+
+void CnewTransactionDlg::on_m_bothBtn_clicked()
+{
+    m_deligateForTransaction->setUseAccount(USE_FULL_ACCOUNT);
+
 }
 

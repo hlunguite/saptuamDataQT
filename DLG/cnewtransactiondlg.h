@@ -59,6 +59,12 @@ private slots:
     void on_m_skipBtn_clicked();
 
     void on_m_rejectBtn_clicked();
+    void on_m_incomeBtn_clicked();
+
+    void on_m_paymentBtn_clicked();
+
+    void on_m_bothBtn_clicked();
+
 signals:
     void updateTransaction();
 
