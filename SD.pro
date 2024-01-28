@@ -210,3 +210,5 @@ QMAKE_CXXFLAGS += -std=c++17
 #-std=c++11
 RESOURCES += \
     icon.qrc
+#Deploying : https://www.ics.com/blog/your-guide-deploying-qt-applications-macos
+#/Users/hlunboiguite/Qt/6.6.0/macos/bin/macdeployqt SaptuamData.app -dmg
