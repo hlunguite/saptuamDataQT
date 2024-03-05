@@ -399,6 +399,7 @@ QDate CsdUtils::getNextDay(QDate date)
         day = 1;
         if (month == 12) {
            month = 1;
+            year +=1;
         }else {
            ++month;
         }
