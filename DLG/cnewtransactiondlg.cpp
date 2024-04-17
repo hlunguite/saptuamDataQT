@@ -674,13 +674,20 @@ void CnewTransactionDlg::displayCurrentBankImport()
         }
         for (auto contact : constact2) {
             ids.insert(contact->m_idx);
+
             delete contact;
         }
         for (auto id: ids) {
+            QString contactName = CcontactMap::Object()->getContactNameOnly(id);
+            if (contactName == gBankCashDepositName ||
+                contactName == gBankInterestName ||
+                contactName == gBankChargesName) {
+                continue;
+            }
             if (name.isEmpty() == false) {
                 name += "/";
             }
-            name += CcontactMap::Object()->getContactNameOnly(id);
+            name += contactName;
         }
         if (name.isEmpty() == false) {
             name = "[" + name + "]";
@@ -762,6 +769,12 @@ void CnewTransactionDlg::moveToNextImport(bool skip)
 void CnewTransactionDlg::addBankName(QSet<int> &fromIDs, QString bankName)
 {
     for (int id : fromIDs) {
+        QString contactName = CcontactMap::Object()->getContactNameOnly(id);
+        if (contactName == gBankCashDepositName ||
+            contactName == gBankInterestName ||
+            contactName == gBankChargesName) {
+            continue;
+        }
         CcontactTable::Object()->addBankName(id, bankName);
 
     }
@@ -775,21 +788,35 @@ bool CnewTransactionDlg::checkRefAlreadyHasTrans()
         const SbanktransDetail& bankTransDetail = m_bankTransDetail.at(m_currentBankTransDetailIdx);
         //double amount = bankTransDetail.m_amount;
         QString ref = bankTransDetail.m_refID;
-
+        QDate bankDate = QDate::fromString(bankTransDetail.m_date, "dd-MMM-yy");
+        int year = bankDate.year();
+        QDate modifyYear(year + 100, bankDate.month(), bankDate.day());
+       // qDebug()<<"checking  ref alreadh has trans "<<bankDate<<" "<<modifyYear;
         QVector<StransactionData*> allTrns = CtransactionTable::Object()->getAllTransactionForRefId(ref);
         if (allTrns.isEmpty() == false) {
             addInPrevTable(allTrns);
-            double total = 0;
+            bool isFlag = true;
+
             for (StransactionData* data : allTrns) {
-                total += data->m_amount;
-                delete data;
+
+                if (data->m_date < modifyYear ) {
+                    isFlag = false;
+                    delete data;
+                } else {
+                    isFlag = true;
+                    delete data;
+                    break;
+                }
+                //delete data;
             }
-            QMessageBox::StandardButton reply;
-            QString msg = "Bank transaction with reference \"" + ref + "\" already process. Ignore this transaction?";
-            reply = QMessageBox::question(this, "SaptuamData", msg ,
+            if (isFlag) {
+                QMessageBox::StandardButton reply;
+                QString msg = "Bank transaction \"" +  bankTransDetail.toString() + "\" already process. Ignore this transaction?";
+                reply = QMessageBox::question(this, "SaptuamData", msg ,
                                                QMessageBox::Yes|QMessageBox::No);
-            if (reply == QMessageBox::Yes) {
-                ret = true;
+                if (reply == QMessageBox::Yes) {
+                    ret = true;
+                }
             }
         }
     }
