@@ -215,3 +215,4 @@ RESOURCES += \
     icon.qrc
 #Deploying : https://www.ics.com/blog/your-guide-deploying-qt-applications-macos
 #/Users/hlunboiguite/Qt/6.6.0/macos/bin/macdeployqt SaptuamData.app -dmg
+#C:\Qt\QtIFW-4.6.1\bin\binarycreator.exe -c config/config.xml -p packages SaptuamDataInstaller.exe
