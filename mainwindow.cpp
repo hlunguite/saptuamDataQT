@@ -30,6 +30,7 @@
 #include "cremittancesetuptable.h"
 #include "cremittancetable.h"
 #include "cclosingbalancedlg.h"
+#include "cbulkupdatedlg.h"
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     /*ui(new Ui::MainWindow),*/ m_saptuamDB(nullptr),
@@ -314,6 +315,17 @@ void MainWindow::closing()
     delete dlg;
 }
 
+void MainWindow::bulkUpdate()
+{
+    CbulkUpdateDlg* dlg = new CbulkUpdateDlg();
+    connect(dlg, SIGNAL(updateContactTable()), m_mainTab, SLOT(updateDirectory()));
+    connect(dlg, SIGNAL(updateTransaction()), m_mainTab, SLOT(refreshTabs()));
+
+
+    addDlgToDock(dlg, "Bulk Update");
+    delete dlg;
+}
+
 
 void MainWindow::createMenu()
 {
@@ -322,6 +334,7 @@ void MainWindow::createMenu()
     m_fileMenu->addAction(m_minImport);
     m_fileMenu->addAction(m_accountImport);
     m_fileMenu->addAction(m_transImport);
+    m_fileMenu->addAction(m_bulkUpdate);
     m_actionMenu = menuBar()->addMenu(tr("Action"));
     m_receiptMenu = m_actionMenu->addMenu(tr("Receipt"));
     m_receiptMenu->addAction(m_receiptSetup);
@@ -428,7 +441,7 @@ void MainWindow::createAction()
     m_minImport = new QAction("Import Min", this);
     m_accountImport = new QAction("Import Account", this);
     m_transImport = new QAction("Import Trans" , this);
-
+    m_bulkUpdate = new QAction("Bulk Updae", this);
 
     connect(m_newAccount, SIGNAL(triggered()), this, SLOT(newAccountSlot()));
     connect(m_newDept, SIGNAL(triggered()), this, SLOT(newDeptSlot()));
@@ -449,6 +462,7 @@ void MainWindow::createAction()
     connect(m_sendSms, SIGNAL(triggered()), this, SLOT(sendSMS()));
     connect(m_saveAll, SIGNAL(triggered()), this, SLOT(saveAll()));
     connect(m_closingReport, SIGNAL(triggered()), this, SLOT(closing()));
+    connect(m_bulkUpdate, SIGNAL(triggered()), this, SLOT(bulkUpdate()));
 }
 
 
@@ -556,3 +570,4 @@ void MainWindow::writeSettings(){
 
 }
 
+//TODO 1. Option to merge name, bulk update,

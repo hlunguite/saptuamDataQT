@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CbulkUpdateDlg</class>
+ <widget class="QDialog" name="CbulkUpdateDlg">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1070</width>
+    <height>410</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QGroupBox" name="m_updateOptBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>571</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Update Options</string>
+   </property>
+   <widget class="QRadioButton" name="m_mergeNameOpt">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Merge Name</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="m_changeTransDateOpt">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>20</y>
+      <width>161</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Change Transaction Date</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="m_changeTrannsactionNameOpt">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>20</y>
+      <width>171</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Change Transaction Name</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="m_noOpt">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>20</y>
+      <width>89</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>None</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QLineEdit" name="m_nameToChangeLineEdit">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>20</y>
+     <width>221</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Name to Merge</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="m_changedName">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>50</y>
+     <width>251</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Name merge to</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="m_okBtn">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>380</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>OK</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="m_cancelBtn">
+   <property name="geometry">
+    <rect>
+     <x>470</x>
+     <y>380</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+  </widget>
+  <widget class="QDateEdit" name="m_dateFrom">
+   <property name="geometry">
+    <rect>
+     <x>860</x>
+     <y>40</y>
+     <width>110</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="displayFormat">
+    <string>dd/MM/yyyy</string>
+   </property>
+   <property name="calendarPopup">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QDateEdit" name="m_dateTo">
+   <property name="geometry">
+    <rect>
+     <x>860</x>
+     <y>10</y>
+     <width>110</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="displayFormat">
+    <string>dd/MM/yyyy</string>
+   </property>
+   <property name="calendarPopup">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="m_accountCombo">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>80</y>
+     <width>201</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_fromDateLbl">
+   <property name="geometry">
+    <rect>
+     <x>820</x>
+     <y>90</y>
+     <width>91</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>From Date</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_toDateLbl">
+   <property name="geometry">
+    <rect>
+     <x>900</x>
+     <y>80</y>
+     <width>49</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>To Date</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="m_accountLbl">
+   <property name="geometry">
+    <rect>
+     <x>960</x>
+     <y>80</y>
+     <width>49</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Account</string>
+   </property>
+  </widget>
+  <widget class="QTableWidget" name="m_transTable">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>120</y>
+     <width>751</width>
+     <height>192</height>
+    </rect>
+   </property>
+   <column>
+    <property name="text">
+     <string>Min</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Date</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Account</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Amount</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>ID</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QPushButton" name="m_selectAllBtn">
+   <property name="geometry">
+    <rect>
+     <x>870</x>
+     <y>130</y>
+     <width>75</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select All</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

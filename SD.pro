@@ -36,6 +36,7 @@ SOURCES += main.cpp\
     DELIGATE/ccustomdeligateforremittance.cpp \
     DELIGATE/cformatforamountdeligate.cpp \
     DLG/cassignreceiptdlg.cpp \
+    DLG/cbulkupdatedlg.cpp \
     DLG/cclosingbalancedlg.cpp \
     DLG/cdlgbase.cpp \
     DLG/cfiltertransactiondlg.cpp \
@@ -113,6 +114,7 @@ HEADERS  += mainwindow.h \
     DELIGATE/ccustomdeligateforremittance.h \
     DELIGATE/cformatforamountdeligate.h \
     DLG/cassignreceiptdlg.h \
+    DLG/cbulkupdatedlg.h \
     DLG/cclosingbalancedlg.h \
     DLG/cdlgbase.h \
     DLG/cfiltertransactiondlg.h \
@@ -176,6 +178,7 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui \
     DLG/cassignreceiptdlg.ui \
+    DLG/cbulkupdatedlg.ui \
     DLG/cclosingbalancedlg.ui \
     DLG/cfiltertransactiondlg.ui \
     DLG/cimportaccountdlg.ui \

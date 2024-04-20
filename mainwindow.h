@@ -40,6 +40,7 @@ private slots:
     void transImport();
     void saveAll();
     void closing();
+    void bulkUpdate();
 private:
     //Ui::MainWindow *ui;
     CsaptuamDataDBMgr*	m_saptuamDB;
@@ -81,6 +82,7 @@ private:
     //receipt action
     QAction*			m_receiptSetup;
     QAction*			m_assignReceiptToTransaction;
+    QAction*            m_bulkUpdate;
 
     QDockWidget* 		m_transactionDock;
 
