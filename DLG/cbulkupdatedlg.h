@@ -56,6 +56,7 @@ private:
     QMap<QString, int>  m_nameContactIDMap;
     QMap<int, QString>  m_contactIDNameMap;
     QMap<QString, int>  m_namePersonIDMap;
+    QMap<int, QSet<int> > m_parentChildMap;
 
 
 

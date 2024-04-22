@@ -56,7 +56,7 @@ void CcontactMap::populateContactMap()
                     QString lastName = data->m_lastName;
                     QString fullName = CsdUtils::createFullName(title, firstName, lastName);
                     int parentSouseID = data->m_parentOrSpousePersonId;
-
+                    m_personIDNameMap.insert(personTableID, fullName);
                     delete data;
                     data = CpersonTable::Object()->getPersonData(parentSouseID);
                     if (data) {
@@ -304,6 +304,15 @@ QString CcontactMap::getContactPhone(int contactID)
 {
     auto fn = m_contactPhone.find(contactID);
     if (fn != m_contactPhone.end()) {
+        return fn.value();
+    }
+    return "";
+}
+
+QString CcontactMap::getPersonName(int personID)
+{
+    auto fn = m_personIDNameMap.find(personID);
+    if (fn != m_personIDNameMap.end()) {
         return fn.value();
     }
     return "";

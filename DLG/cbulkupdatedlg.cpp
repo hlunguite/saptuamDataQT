@@ -6,6 +6,7 @@
 #include "csdutils.h"
 #include "ctransactiontable.h"
 #include "caccountmap.h"
+#include "ccontactmap.h"
 CbulkUpdateDlg::CbulkUpdateDlg(QWidget *parent)
     : CdlgBase(parent)
     , ui(new Ui::CbulkUpdateDlg)
@@ -27,6 +28,8 @@ CbulkUpdateDlg::CbulkUpdateDlg(QWidget *parent)
         if (parentID > 0) {
             nameIDParentIDMap[id] = parentID;
             relationShipMap[id] = relationshi;
+            m_parentChildMap[parentID].insert(id);
+
         }
         idNameMap[id].push_back(title);
         idNameMap[id].push_back(firstName);
@@ -60,11 +63,15 @@ CbulkUpdateDlg::CbulkUpdateDlg(QWidget *parent)
                 if (fn != nameIDParentIDMap.end()) {
                     int parentID = fn->second;
                     QVector<QString>& n = idNameMap[parentID];
-                    parentTitle = n.at(0);
-                    parentFirstName = n.at(1);
-                    parentLastName = n.at(2);
-                    //parentName = idNameMap[parentID];
-                    relationship = relationShipMap[id];
+                    if (n.size() > 0) {
+                        parentTitle = n.at(0);
+                        parentFirstName = n.at(1);
+                        parentLastName = n.at(2);
+                        //parentName = idNameMap[parentID];
+                        relationship = relationShipMap[id];
+                    } else {
+                        //qDebug()<<"no parent "<<fullName;
+                    }
                 }
                 QString parentFullName;
                 QString parentFullNameWithoutTitle;
@@ -243,10 +250,18 @@ bool CbulkUpdateDlg::mergeName()
     QString nameToChange = ui->m_nameToChangeLineEdit->text().trimmed();
     int nameToChangeContactID = m_nameContactIDMap[nameToChange];
     int nameToChangePersonID = m_namePersonIDMap[nameToChange];
+
     QString mergeName = ui->m_changedName->text().trimmed();
     int mergeNameContactID = m_nameContactIDMap[mergeName];
+    int mergeNamePersonID = m_namePersonIDMap[mergeName];
     if (nameToChangeContactID > 0 && mergeNameContactID > 0) {
         //qDebug()<<"Replace "<<nameToChange<<" contactid "<<nameToChangeContactID<<" person id "<<nameToChangePersonID<<" with "<<mergeName;
+        QSet<int>& child = m_parentChildMap[nameToChangePersonID];
+        for (auto id : child) {
+            qDebug()<<"\t child "<<CcontactMap::Object()->getPersonName(id);
+             CpersonTable::Object()->updateValue(mergeNamePersonID, PERSON_PARENT_OR_SPOUSE_PERSON_ID_IDX, id, PERSON_ID_IDX);
+        }
+
         QVector<StransactionData*> allTrans = CtransactionTable::Object()->getAllTransactionForContact(nameToChangeContactID);
         for (StransactionData* data : allTrans)  {
            // qDebug()<<data->m_fromId<<" "<<data->m_amount;
@@ -265,6 +280,8 @@ bool CbulkUpdateDlg::mergeName()
 
         emit updateContactTable();
         emit updateTransaction();
+        CcontactMap::Object()->populateContactMap();
+
 
         return true;
     } else {

@@ -20,6 +20,7 @@ public:
     const QStringList& getNameList() const { return m_fullNameList;}
     int addEditContact(CcontactDLG* contactDlg);
     QString getContactPhone(int contactID);
+    QString getPersonName(int personID);
 private:
     CcontactMap();
     ~CcontactMap();
@@ -32,6 +33,7 @@ private:
     QMap<int, int>      m_contactToOtherID;
     QStringList			m_fullNameList;
     QMap<int, QString>  m_contactPhone;
+    QMap<int, QString> m_personIDNameMap;
 
 };
 
