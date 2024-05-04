@@ -441,7 +441,7 @@ void MainWindow::createAction()
     m_minImport = new QAction("Import Min", this);
     m_accountImport = new QAction("Import Account", this);
     m_transImport = new QAction("Import Trans" , this);
-    m_bulkUpdate = new QAction("Bulk Updae", this);
+    m_bulkUpdate = new QAction("Bulk Update", this);
 
     connect(m_newAccount, SIGNAL(triggered()), this, SLOT(newAccountSlot()));
     connect(m_newDept, SIGNAL(triggered()), this, SLOT(newDeptSlot()));
