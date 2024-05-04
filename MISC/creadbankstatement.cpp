@@ -429,14 +429,20 @@ CreadBankStatement::processDescription(QString description)
         transDetail.m_piakChan = match.captured(2).trimmed().simplified();
         return transDetail;
     }
-
+    //BY TRANSFER-SBIYA24121084303999177105-Sawm a khat--
+    rx.setPattern("BY TRANSFER-SBIYA(\\d+)-(.*)");
+    match = rx.match(description);
+    if (match.hasMatch()) {
+        transDetail.m_refID  = match.captured(1).trimmed().simplified();
+        transDetail.m_piakChan = match.captured(2).trimmed().simplified();
+        return transDetail;
+    }
     rx.setPattern("BY TRANSFER-(.*)");
     match = rx.match(description);
     if (match.hasMatch()) {
         transDetail.m_piakChan = match.captured(1).trimmed().simplified();
         return transDetail;
     }
-
 
     //TO TRANSFER-INB Donation--
     rx.setPattern("TO TRANSFER-(\\S+)\\s+(.*)");
