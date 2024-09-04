@@ -204,6 +204,7 @@ int CreadBankStatement::read()
     if (dateStr.isEmpty()) {
         dateStr = startDate + " - " + endDate;
     }
+
     SimportBankTransactionData importData;
     importData.m_dateRange = dateStr;
 
@@ -385,6 +386,7 @@ CreadBankStatement::processDescription(QString description)
     match = rx.match(description);
     rx.setPattern("BY TRANSFER-INB IMPS/(.*)/(.*)/(.*)");
     if (match.hasMatch()) {
+
         transDetail.m_refID = match.captured(2).trimmed().simplified();
         return transDetail;
     }
@@ -392,19 +394,36 @@ CreadBankStatement::processDescription(QString description)
 
     //BY TRANSFER-INB IMPS328315835340/7005582124/XX2261/Missionary--
     //BY TRANSFER-INB IMPS/P2A/UA0549031434/XXXXXXX505SBIN--
+    //BY TRANSFER-INB IMPS/421410137822/CNB-XX820-S GINMUA/IMPS--
+
     rx.setPattern("BY TRANSFER-INB IMPS(.*)/(.*)/(.*)/(.*)");
     match = rx.match(description);
     if (match.hasMatch()) {
+
        transDetail.m_refID =  match.captured(1).trimmed().simplified();
        transDetail.m_phone = match.captured(2).trimmed().simplified();
-       if (transDetail.m_refID.isEmpty() == false) {
-            transDetail.m_refID = "IMPS" +  transDetail.m_refID;
+       if (transDetail.m_phone.length() > 13) {
+           transDetail.m_phone = "";
+       }
+       QString min =  match.captured(3).trimmed().simplified();
+       QString piakchan = match.captured(4).trimmed().simplified();
+
+       rx.setPattern("(.*)-(.*)-(.*)");
+       match = rx.match(min);
+       if (match.hasMatch()) {
+           //BY TRANSFER-INB IMPS/421410137822/CNB-XX820-S GINMUA/IMPS--
+           transDetail.m_min = match.captured(3).trimmed().simplified();
        } else {
-            transDetail.m_refID =  match.captured(3).trimmed().simplified();
+
+        if (transDetail.m_refID.isEmpty() == false) {
+             transDetail.m_refID = "IMPS" +  transDetail.m_refID;
+        } else {
+             transDetail.m_refID =  min;
             transDetail.m_phone = "";
 
-       }
-       QString piakchan = match.captured(4).trimmed().simplified();
+            }
+        }
+
 
        if (not IGNORE.contains(piakchan))  {
            transDetail.m_piakChan = piakchan;
@@ -415,6 +434,7 @@ CreadBankStatement::processDescription(QString description)
     rx.setPattern("BY TRANSFER-INB (.*)");
     match = rx.match(description);
     if (match.hasMatch()) {
+
         QString ref = match.captured(1).trimmed().simplified();
         if (not IGNORE.contains(ref)) {
             transDetail.m_piakChan = ref;
