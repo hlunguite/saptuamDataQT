@@ -67,6 +67,10 @@ QStringList CtransactionUtils::getTransectionModeForTransactionType(Etransaction
         transModes.push_back(m_modeModeStrMap[BANK_CASH_DEPOSIT_TRANSACTION_MODE]);
 
         break;
+    case BANK_CASH_WITHDRAW_TRANSACTION_TYPE:
+        transModes.push_back(m_modeModeStrMap[BANK_CASH_WITHDRAW_TRANSACTION_MODE]);
+
+        break;
     default:
         break;
     }
@@ -87,6 +91,8 @@ CtransactionUtils::CtransactionUtils()
     m_modeModeStrMap.insert(BANK_CASH_DEPOSIT_TRANSACTION_MODE, "Bank Cash Deposit");
     m_modeModeStrMap.insert(BANK_CHARGES_TRANSACTION_MODE, "Bank Charges");
     m_modeModeStrMap.insert(BANK_INTEREST_TRANSACTION_MODE, "Bank Interest");
+    m_modeModeStrMap.insert(BANK_CASH_WITHDRAW_TRANSACTION_MODE, "Bank Cash Withdrawal");
+
 
     //m_modeModeTwoTypeStrMap
     m_modeModeTwoTypeStrMap.insert(CASH_TRANSACTION_MODE, "Cash");
@@ -95,6 +101,8 @@ CtransactionUtils::CtransactionUtils()
     m_modeModeTwoTypeStrMap.insert(BANK_CASH_DEPOSIT_TRANSACTION_MODE, "Bank");
     m_modeModeTwoTypeStrMap.insert(BANK_CHARGES_TRANSACTION_MODE, "Bank");
     m_modeModeTwoTypeStrMap.insert(BANK_INTEREST_TRANSACTION_MODE, "Bank");
+    m_modeModeTwoTypeStrMap.insert(BANK_CASH_WITHDRAW_TRANSACTION_MODE, "Bank");
+
 
 
     QMapIterator<EtransactionMode, QString > iterator1(m_modeModeStrMap);
@@ -113,6 +121,8 @@ CtransactionUtils::CtransactionUtils()
     m_transTypeMap.insert(BANK_CHARGES_TRANSACTION_TYPE, gBankChargeTransactionType);
     m_transTypeMap.insert(BANK_INTEREST_TRANSACTION_TYPE, gBankInterestTransactionType);
     m_transTypeMap.insert(BANK_CASH_DEPOSIT_TRANSACTION_TYPE, gBankCashDepositTransactionType);
+    m_transTypeMap.insert(BANK_CASH_WITHDRAW_TRANSACTION_TYPE, gBankCashWithdrawalTransactionType);
+
 
     QMapIterator<EtransactionType, QString> iterator2(m_transTypeMap);
 
@@ -166,6 +176,7 @@ QStringList CtransactionUtils::getTransactionTypesForAccountType(int accountType
     case BANK_ACCOUNT_TYPE:transTypes.push_back(getTransactionTypeStr(BANK_CHARGES_TRANSACTION_TYPE));
         transTypes.push_back(getTransactionTypeStr(BANK_INTEREST_TRANSACTION_TYPE));
         transTypes.push_back(getTransactionTypeStr(BANK_CASH_DEPOSIT_TRANSACTION_TYPE));
+        transTypes.push_back(getTransactionTypeStr(BANK_CASH_WITHDRAW_TRANSACTION_TYPE));
         break;
     default: break;
     }
@@ -180,7 +191,8 @@ bool CtransactionUtils::getIsTransactionIncome(EtransactionType type)
     case INCOME_TRANSACTION_TYPE:
     case LOAN_RECOVERY_TRANSACTION_TYPE:
     case BANK_INTEREST_TRANSACTION_TYPE:
-    case BANK_CASH_DEPOSIT_TRANSACTION_TYPE: ret = true; break;
+    case BANK_CASH_DEPOSIT_TRANSACTION_TYPE:
+        ret = true; break;
     default: ret = false; break;
     }
 

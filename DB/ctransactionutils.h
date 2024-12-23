@@ -15,6 +15,7 @@ const QString gLoanDisburseTransactionType = "Loan Disburse";
 const QString gBankChargeTransactionType = "Bank Charges";
 const QString gBankInterestTransactionType = "Bank Interest";
 const QString gBankCashDepositTransactionType = "Bank Cash deposit";
+const QString gBankCashWithdrawalTransactionType = "Bank Cash withdraw";
 
 enum EtransactionType {
     INVALID_TRANSACTION_TYPE = 0,
@@ -25,6 +26,8 @@ enum EtransactionType {
     BANK_CHARGES_TRANSACTION_TYPE, //BANK_ACCOUNT_TYPE
     BANK_INTEREST_TRANSACTION_TYPE, // BANK_ACCOUNT_TYPE
     BANK_CASH_DEPOSIT_TRANSACTION_TYPE, // BANK_ACCOUNT_TYPE
+    BANK_CASH_WITHDRAW_TRANSACTION_TYPE, // BANK_ACCOUNT_TYPE
+
 };
 
 enum EtransactionMode {
@@ -34,6 +37,7 @@ enum EtransactionMode {
     BANK_CASH_DEPOSIT_TRANSACTION_MODE,
     BANK_CHARGES_TRANSACTION_MODE,
     BANK_INTEREST_TRANSACTION_MODE,
+    BANK_CASH_WITHDRAW_TRANSACTION_MODE,
 
 };
 class CtransactionUtils : public CsdSingleton<CtransactionUtils>

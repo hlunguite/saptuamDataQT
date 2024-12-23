@@ -166,6 +166,15 @@ void CsaptuamDataDBMgr::addDefaultName()
         delete other;
         other = nullptr;
     }
+    other = CotherContactTable::Object()->findName(gBankCashWithdrawalName);
+    if (other == nullptr) {
+        other = new SotherContactData;
+        other->m_idx = 0;
+        other->m_name = gBankCashWithdrawalName;
+        other->m_phone = "";
+        other->save();
+    }
+    delete other;
 
 
 }

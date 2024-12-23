@@ -152,7 +152,10 @@ void CaddressTab::customContextMenu(QPoint pos)
         QString min = record.value(CONTACT_FULL_NAME_IDX).toString();
         m_getAllTransaction->setText(QString("Get all transaction for ") +min);
         menu->addAction(m_getAllTransaction);
-        if (!(min == gBankCashDepositName || min == gBankChargesName || min == gBankInterestName)) {
+        if (!(min == gBankCashDepositName ||
+              min == gBankChargesName ||
+              min == gBankInterestName ||
+              min == gBankCashWithdrawalName)) {
             m_editContact->setText(QString("Edit ") + min);
             menu->addAction(m_editContact);
         }

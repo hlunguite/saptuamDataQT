@@ -104,5 +104,6 @@ const QString gBankAccountName = "Bank Account";
 const QString gCashAccountName = "Cash Account";
 const QString gLoanAccountName = "Loan Account";
 const QString gReceipSeprator = ";";
+const QString gBankCashWithdrawalName = "Bank Cash Withdrawal";
 #endif // CDBDEFINE
 

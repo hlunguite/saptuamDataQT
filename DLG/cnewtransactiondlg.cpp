@@ -289,7 +289,7 @@ EtransErrorType CnewTransactionDlg::calcTotal()
                 status = TRANS_AMOUNT_NOT_MATCH_ERROR;
             } else {
                 int type = bankTransDetail.m_type;
-                if (type == BANK_CASH_DEPOSIT || type == BANK_CHARGES || type == BANK_INTEREST){
+                if (type == BANK_CASH_DEPOSIT || type == BANK_CHARGES || type == BANK_INTEREST || type == BANK_CASH_WITHDRAW){
 
                 } else {
                     if (bankTransDetail.m_isIncome) {
@@ -308,6 +308,7 @@ EtransErrorType CnewTransactionDlg::calcTotal()
                         status = TRANS_PAYMENT_ACCOUNT_FOR_INCOME;
                     } else if (bankTransDetail.m_isIncome == false && m_incomeTotal > 0) {
                         status = TRANS_INCOME_ACCOUNT_FOR_PAYMENT;
+                        //qDebug()<<"Error1 type "<<type<< "bankTransDetail.m_isIncome " << bankTransDetail.m_isIncome;
                     }
                 }
             }
@@ -479,11 +480,14 @@ EtransErrorType CnewTransactionDlg::checkForValidityOfRow(int row,  QVector<QVar
             isIncome = true;
         } else if (tType == BANK_CASH_DEPOSIT_TRANSACTION_TYPE) {
             isIncome = true;
+        }else if (tType == BANK_CASH_WITHDRAW_TRANSACTION_TYPE) {
+            isIncome = false;
         }
     }
     if (accountType > REMITTANCE_ACCOUNT_TYPE) {
         if (accountName == gBankChargeTransactionType ||
-            accountName == gLoanDisburseTransactionType) {
+            accountName == gLoanDisburseTransactionType ||
+            accountName == gBankCashWithdrawalName) {
                 isIncome = false;
         } else if (accountName == gBankInterestTransactionType ||
                    accountName == gBankCashDepositTransactionType ||
@@ -580,7 +584,11 @@ void CnewTransactionDlg::addRefAndModeForRow(int row)
         } else if (bankTransDetail.m_type == BANK_CASH_DEPOSIT){
             modeStr = CtransactionUtils::Object()->getTransactionModeStr(BANK_CASH_DEPOSIT_TRANSACTION_MODE);
             //modeStr = "Bank Cash Deposit";
-        } else if (bankTransDetail.m_type == BANK_CHARGES) {
+        } else if (bankTransDetail.m_type == BANK_CASH_WITHDRAW){
+            modeStr = CtransactionUtils::Object()->getTransactionModeStr(BANK_CASH_WITHDRAW_TRANSACTION_MODE);
+            //modeStr = "Bank Cash Deposit";
+        }
+        else if (bankTransDetail.m_type == BANK_CHARGES) {
             modeStr = CtransactionUtils::Object()->getTransactionModeStr(BANK_CHARGES_TRANSACTION_MODE);
             //modeStr = "Bank Charges";
         } else if (bankTransDetail.m_type == BANK_INTEREST) {
@@ -595,7 +603,11 @@ void CnewTransactionDlg::addRefAndModeForRow(int row)
             if (transType == (int)BANK_CASH_DEPOSIT_TRANSACTION_TYPE) {
                 modeStr = CtransactionUtils::Object()->getTransactionModeStr(BANK_CASH_DEPOSIT_TRANSACTION_MODE);
                 updateMode = true;
-            } else if (transType == (int)BANK_CHARGES_TRANSACTION_TYPE) {
+            } else if (transType == (int)BANK_CASH_WITHDRAW_TRANSACTION_TYPE) {
+                modeStr = CtransactionUtils::Object()->getTransactionModeStr(BANK_CASH_WITHDRAW_TRANSACTION_MODE);
+                updateMode = true;
+            }
+            else if (transType == (int)BANK_CHARGES_TRANSACTION_TYPE) {
                 modeStr = CtransactionUtils::Object()->getTransactionModeStr(BANK_CHARGES_TRANSACTION_MODE);
                 updateMode = true;
             }
@@ -681,7 +693,8 @@ void CnewTransactionDlg::displayCurrentBankImport()
             QString contactName = CcontactMap::Object()->getContactNameOnly(id);
             if (contactName == gBankCashDepositName ||
                 contactName == gBankInterestName ||
-                contactName == gBankChargesName) {
+                contactName == gBankChargesName ||
+                contactName == gBankCashWithdrawalName) {
                 continue;
             }
             if (name.isEmpty() == false) {
@@ -772,7 +785,8 @@ void CnewTransactionDlg::addBankName(QSet<int> &fromIDs, QString bankName)
         QString contactName = CcontactMap::Object()->getContactNameOnly(id);
         if (contactName == gBankCashDepositName ||
             contactName == gBankInterestName ||
-            contactName == gBankChargesName) {
+            contactName == gBankChargesName ||
+            contactName == gBankCashWithdrawalName) {
             continue;
         }
         CcontactTable::Object()->addBankName(id, bankName);
@@ -1007,7 +1021,8 @@ EtransErrorType CnewTransactionDlg::checkMode(QTableWidgetItem *item)
                 bool isBankMode = false;
                 if (mode == "Bank Cash Deposit" ||
                         mode == "Bank Charges" ||
-                        mode == "Bank Interest") {
+                        mode == "Bank Interest" ||
+                        mode == "Bank Cash Withdrawal") {
                     isBankMode = true;
                 }
 
@@ -1015,10 +1030,12 @@ EtransErrorType CnewTransactionDlg::checkMode(QTableWidgetItem *item)
                 int accountType = CaccountMap::Object()->getAccountType(accountName);
                 if (BANK_ACCOUNT_TYPE == accountType) {
                     if (isBankMode == false) {
+                        //qDebug()<<"Mismatch1 accountName"<<accountName<<" isBankMode "<<isBankMode<< " mode "<<mode ;
                         status = TRANS_MODE_AND_ACCOUNT_TYPE_MISMATCH;
                     }
                 } else {
                     if (isBankMode) {
+                        //qDebug()<<"Mismatch1 accountName"<<accountName<<" isBankMode "<<isBankMode <<" mod "<<mode ;
                         status =TRANS_MODE_AND_ACCOUNT_TYPE_MISMATCH;
                     }
                 }
@@ -1099,6 +1116,8 @@ EtransErrorType CnewTransactionDlg::checkType(QTableWidgetItem *item)
         }
 
         if (isIncome && !bankTrans.m_isIncome) {
+            //qDebug()<<"Error12 bankTransDetail.m_isIncome " << bankTrans.m_isIncome;
+
             return TRANS_INCOME_ACCOUNT_FOR_PAYMENT;
         }
 
@@ -1106,6 +1125,12 @@ EtransErrorType CnewTransactionDlg::checkType(QTableWidgetItem *item)
         if (!(type == BANK_CASH_DEPOSIT_TRANSACTION_TYPE && bankTransType == NOTASIGN)) {
             if ((bankTransType == BANK_CASH_DEPOSIT && type != BANK_CASH_DEPOSIT_TRANSACTION_TYPE) ||
                 (bankTransType != BANK_CASH_DEPOSIT && type == BANK_CASH_DEPOSIT_TRANSACTION_TYPE))  {
+                return TRANS_TYPE_MISMATCH;
+            }
+        }
+        if (!(type == BANK_CASH_WITHDRAW_TRANSACTION_TYPE && bankTransType == NOTASIGN)) {
+            if ((bankTransType == BANK_CASH_WITHDRAW && type != BANK_CASH_WITHDRAW_TRANSACTION_TYPE) ||
+                (bankTransType != BANK_CASH_WITHDRAW && type == BANK_CASH_WITHDRAW_TRANSACTION_TYPE))  {
                 return TRANS_TYPE_MISMATCH;
             }
         }

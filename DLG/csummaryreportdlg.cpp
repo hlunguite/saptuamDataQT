@@ -192,6 +192,10 @@ void CsummaryReportDlg::populateTable()
                 QPair<double, double> & val = bankAmount[gBankCashDepositName];
                 val.first += amount;
             }
+            else if (transType == BANK_CASH_WITHDRAW_TRANSACTION_TYPE) {
+                QPair<double, double> & val = bankAmount[gBankCashWithdrawalName];
+                val.second += amount;
+            }
 
         }else if (LOAN_ACCOUNT_TYPE == accountType){
             QString name = CcontactMap::Object()->getContanceName(data->m_fromId);

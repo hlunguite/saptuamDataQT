@@ -46,6 +46,9 @@ EtransactionType CcustomDeligateForTransaction::getTransTypeFromParticular(const
         if (name == gBankInterestName) {
             return BANK_INTEREST_TRANSACTION_TYPE;
         }
+        if (name == gBankCashWithdrawalName) {
+            return BANK_CASH_WITHDRAW_TRANSACTION_TYPE;
+        }
     }
     return INVALID_TRANSACTION_TYPE;
 }

@@ -380,6 +380,11 @@ void CimportTransDlg::on_m_processBtn_clicked()
             accountID = CaccountMap::Object()->getAccountID(gBankAccountName);
 
         }
+        if (name == gBankCashWithdrawalName) {
+            type = BANK_CASH_WITHDRAW_TRANSACTION_TYPE;
+            mode = BANK_CASH_WITHDRAW_TRANSACTION_MODE;
+            accountID = CaccountMap::Object()->getAccountID(gBankAccountName);
+        }
         if (type == INVALID_TRANSACTION_TYPE) {
             toCheck = true;
             type = INCOME_TRANSACTION_TYPE;

@@ -234,6 +234,16 @@ CreadBankStatement::processDescription(QString description)
         transDetail.m_refID = "CASH DEPOSIT SELF";
         return transDetail;
     }
+    rx.setPattern(".*CASH WITHDRAWAL.*");
+    match = rx.match(description);
+    if (match.hasMatch()) {
+
+        transDetail.m_piakChan = "CASH WITHDRAWAL";
+        transDetail.m_type = BANK_CASH_WITHDRAW;
+        transDetail.m_refID = "CASH WITHDRAWAL";
+        return transDetail;
+    }
+
     //CAS DEP CDM-xxx--yyyy
     rx.setPattern("CSH DEP CDM-(.*)--.*");
     match = rx.match(description);

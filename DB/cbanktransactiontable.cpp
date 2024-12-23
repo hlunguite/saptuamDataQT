@@ -90,7 +90,7 @@ QString SbanktransDetail::toString() const
         txt += m_date + " ";
     }
     if (m_type > INVALID && m_type < NOTASIGN) {
-        QString type [] = {"INVALID",  "Bank Cash Deposit", "Cheque", "Bank Charges", "Bank Interest", "NOTASIGN"};
+        QString type [] = {"INVALID",  "Bank Cash Deposit", "Cheque", "Bank Charges", "Bank Interest", "Bank Cash Withdrawal", "NOTASIGN"};
         txt += "Type:"+ type[m_type];
     }
 

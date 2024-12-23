@@ -129,6 +129,8 @@ QString CaccountLedger::getHTMLTable(int accountID, bool addDeptInCSV, bool indi
             case BANK_CHARGES_TRANSACTION_TYPE: isIncome = false; break;
             case BANK_INTEREST_TRANSACTION_TYPE: break;
             case BANK_CASH_DEPOSIT_TRANSACTION_TYPE: isIncome = true; isContra = true; break;
+            case BANK_CASH_WITHDRAW_TRANSACTION_TYPE: isIncome = false; isContra = true; break;
+
             default: break;
             }
             QString mode = CtransactionUtils::Object()->getTransactionModeTwoTypeStr((EtransactionMode)transData->m_mode);

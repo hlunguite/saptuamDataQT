@@ -75,7 +75,22 @@ void Cledger::populateLedger(QString startDate,
                 m_bankAccount.addTransaction(bank);
                 m_cashAccount.addTransaction(cash);
 
-            } else {
+            } else if (BANK_CASH_WITHDRAW_TRANSACTION_TYPE == transData->m_type) {
+                StransactionData* bank = new StransactionData(*transData);
+                bank->m_type = PAYMENT_TRANSACTION_TYPE;
+                bank->m_mode = INTERNET_TRANSACTION_MODE;
+                StransactionData* cash = new StransactionData(*transData);
+                cash->m_type = INCOME_TRANSACTION_TYPE;
+                cash->m_mode = CASH_TRANSACTION_MODE;
+                if (bank->m_ref.isEmpty()) {
+                    bank->m_ref = gBankCashDepositName;
+                    cash->m_ref = gBankCashDepositName;
+                }
+                m_bankAccount.addTransaction(bank);
+                m_cashAccount.addTransaction(cash);
+
+            }
+            else {
 
                 if (mode == "Bank") {
                     m_bankAccount.addTransaction(new StransactionData(*transData));

@@ -17,7 +17,7 @@ enum EbankTransactionTableFieldId {
     BANK_TRANSACTION_TABLE_MAX_IDX
 };
 
-enum EbankTransType {INVALID,  BANK_CASH_DEPOSIT, CHEQUE, BANK_CHARGES, BANK_INTEREST, NOTASIGN};
+enum EbankTransType {INVALID,  BANK_CASH_DEPOSIT, CHEQUE, BANK_CHARGES, BANK_INTEREST,BANK_CASH_WITHDRAW, NOTASIGN};
 enum EbankTransStatus{IMPORT, PROCESSED, SKIPPED,};
 struct SbanktransDetail {
     int			m_transID;

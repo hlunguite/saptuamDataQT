@@ -301,7 +301,12 @@ void CclosingCalculator::getAccountIncomePaymentForQuery(QString query,
              cashBankValue[gCashAccountName] -= amount;
              cashBankValue[gBankAccountName] += amount;
 
-        } else if (type == BANK_INTEREST_TRANSACTION_TYPE || mode == BANK_INTEREST_TRANSACTION_MODE){
+        }  else if (type == BANK_CASH_WITHDRAW_TRANSACTION_TYPE || mode == BANK_CASH_WITHDRAW_TRANSACTION_MODE) {
+            cashBankValue[gCashAccountName] += amount;
+            cashBankValue[gBankAccountName] -= amount;
+
+        }
+        else if (type == BANK_INTEREST_TRANSACTION_TYPE || mode == BANK_INTEREST_TRANSACTION_MODE){
              cashBankValue[gBankAccountName] += amount;
              std::pair<double, double> & amt = processedDate[accountID];
              amt.first += amount;
