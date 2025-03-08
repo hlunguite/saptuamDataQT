@@ -436,18 +436,21 @@ void CremittanceDlg::populateSummaryTable(ChtmlUtils& htmlUtils,
     }
     htmlUtils.createCell(data, HTML_LEFT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
     csvLine += data + ",";
-    double total = keyvalue->second.m_hqShare +  keyvalue->second.m_localShare;
+    double total = keyvalue->second.m_amount;
     totalAll += total;
-    local +=  keyvalue->second.m_localShare;
-    hq += keyvalue->second.m_hqShare;
+    double localShareVal  = round((keyvalue->second.m_localSharePC*total));
+    local += localShareVal;
+    double hqShareValue = round(keyvalue->second.m_hqSharePC*total);
+    hq += hqShareValue;
+
     QString totalStr = CsdUtils::convertAmountToStringWithSign(total);
     QString totalStrCSV = CsdUtils::converAmountToString(total,'f',2);
 
-    QString localStr = CsdUtils::convertAmountToStringWithSign(keyvalue->second.m_localShare);
-    QString localStrCSV = CsdUtils::converAmountToString(keyvalue->second.m_localShare,'f',2);
+    QString localStr = CsdUtils::convertAmountToStringWithSign(localShareVal);
+    QString localStrCSV = CsdUtils::converAmountToString(localShareVal,'f',2);
 
-    QString hqStr = CsdUtils::convertAmountToStringWithSign(keyvalue->second.m_hqShare);
-    QString hqStrCSV = CsdUtils::converAmountToString(keyvalue->second.m_hqShare,'f',2);
+    QString hqStr = CsdUtils::convertAmountToStringWithSign(hqShareValue);
+    QString hqStrCSV = CsdUtils::converAmountToString(hqShareValue,'f',2);
 
     htmlUtils.createCell(totalStr + " ", HTML_RIGHT_ALIGN, HTML_V_MIDDLE_ALIGN, borderType, HTML_NORMAL_BORDER_STYLE, bgcolor);
     csvLine += totalStrCSV + ",";
@@ -836,6 +839,7 @@ bool CremittanceDlg::populateTableUsingTransaction()
     if (m_constructor) {
         return;
     }
+
     int rowCount = ui->m_table->rowCount();
     for (int row  = 0 ; row < rowCount; ++row) {
         QTableWidgetItem* idItem = ui->m_table->item(row, REMIT_DLG_TABLE_ID);
@@ -863,8 +867,8 @@ bool CremittanceDlg::populateTableUsingTransaction()
 
         double amount = amountItem->text().toDouble();
         m_remittanceAmount += amount;
-        double local = round((amount*localPC)/100);
-        double hq = round((amount*hqPC)/100);
+       // double local = ((amount*localPC)/100);
+       // double hq = ((amount*hqPC)/100);
        // QString amountStr = CsdUtils::converAmountToString(amount,'f',2);
 
         if (localPC > 0) {
@@ -900,9 +904,9 @@ bool CremittanceDlg::populateTableUsingTransaction()
         }
         if (localPC > 99) { // all local
             StransForRemittance & remits = m_deptRemittance[deptID];
-            remits.m_localShare += local;
-            remits.m_hqShare += hq;
-
+            remits.m_localSharePC = 100;
+            remits.m_hqSharePC = 0;
+            remits.m_amount += amount;
 
             remits.m_allTrans.push_back(SremitTransDetail(id,
                                                           min,
@@ -917,9 +921,9 @@ bool CremittanceDlg::populateTableUsingTransaction()
 
         } else {
             StransForRemittance& remits = m_accountRemittance[accountID];
-            remits.m_localShare += local;
-            remits.m_hqShare += hq;
-
+            remits.m_localSharePC = localPC;
+            remits.m_hqSharePC = hqPC;
+            remits.m_amount += amount;
             remits.m_allTrans.push_back(SremitTransDetail(id,
                                                           min,
                                                           amount,
@@ -1376,8 +1380,8 @@ int CremittanceDlg::saveRemittance()
             float localPC = 100;
             std::map<int, std::pair<float, float> >::iterator fn = m_accountPct.find(begin->first);
             if (fn != m_accountPct.end()) {
-               hqPC = fn->second.first;
-               localPC = fn->second.second;
+                hqPC = fn->second.first;
+                localPC = fn->second.second;
             }
             accountIDPC.insert({begin->first, {hqPC, localPC}});
             StransForRemittance& transRemit = begin->second;

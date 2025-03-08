@@ -20,14 +20,15 @@ struct SremitTransDetail {
 
 };
 struct StransForRemittance{
-    double                          m_hqShare;
-    double                          m_localShare;
-
+    double                          m_hqSharePC;
+    double                          m_localSharePC;
+    double                           m_amount;
     std::map<int, std::set<int> >   m_receipts;
     std::vector<SremitTransDetail>  m_allTrans;
     StransForRemittance() {
-        m_hqShare = 0;
-        m_localShare = 0;
+        m_hqSharePC = 0;
+        m_localSharePC = 0;
+        m_amount = 0;
         m_receipts.clear();
         m_allTrans.clear();
     }

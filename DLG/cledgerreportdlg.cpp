@@ -223,8 +223,8 @@ void CledgerReportDlg::populateTable()
 
 void CledgerReportDlg::printForOpeningClosing(CclosingCalculator *calc)
 {
-    printForSummary(calc);
-    printForClosingSummary(calc);
+   // printForSummary(calc);
+   // printForClosingSummary(calc);
     printDeptSummary(calc);
 
     //qDebug()<<openingCash<<" "<<openingBank<<" "<<closingCash<<" "<<closingBank;
